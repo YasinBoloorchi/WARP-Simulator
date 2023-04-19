@@ -1,8 +1,5 @@
 release (F0,BA)
 release (F1,AC)
-pull (F0,#0)
-
-if !has(𝐹0) then pull(𝐹0 , #1) else pull (F1,#1)
 
 drop (F0)
 drop (F1)

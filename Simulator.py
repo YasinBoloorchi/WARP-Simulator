@@ -1,5 +1,6 @@
 from graphviz import Graph
 from time import sleep
+import re
 
 class State:
     def __init__(self, data='S', left=None, right=None, prob=1):
@@ -113,7 +114,6 @@ class StatesTree:
             self._visualize_tree_helper(g, state.right)
 
 
-
 # Parsing the Warp instruction from a file
 def parse_instructions(instruction_file_path):
     with open(instruction_file_path, 'r') as instructions_file:
@@ -124,16 +124,24 @@ def parse_instructions(instruction_file_path):
         
         instructions_file.close()
 
-    for ins in instructions:
-        print(ins)
         
-    # return instructions
+    return instructions
+
+
+def inst_parser(instruction):
+    parsed_inst = re.findall('^(\w*)\s*\((\w\d),*(\W*\d*\w*)\)$', instruction)[0]
+    
+    return parsed_inst
+
+def if_inst_parser(instruction):
+    parsd_if_inst = re.findall('^\w*\s*\W\w*\((\w\d)\)\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+\))\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+\))*$', instruction)[0]
+    
+    return parsd_if_inst
 
 # Running the instructions that been parsed from the file
 def run_instruction(instruction_file_path):
-    
     # initial variables
-    instructions = parse_instruction(instruction_file_path)
+    instructions = parse_instructions(instruction_file_path)
     workload = {}
     
     # Generate States tree and initial state
@@ -142,36 +150,53 @@ def run_instruction(instruction_file_path):
 
     # warp code execution loop
     for inst in instructions:
-        command = inst[0]
-        parameters = inst[1]
+        inst_type = inst[0]
+        instruction = inst[1]
         
-        print('command: ', command, '-- parameters: ', parameters)
+        # print('instruction type: ', inst_type, '-- instruction: ', instruction)
         
-        if command == 'pull':
+        if inst_type == 'release':
+            # Parse release command => ('release', 'F1', 'AC')
+            parsed_instruction = inst_parser(instruction)
+            
+            flow_name = parsed_instruction[1]
+            address = parsed_instruction[2]
+            
+            workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
+            
+            
+        elif inst_type == 'pull':
+            # Parse pull command = >('pull', 'F0', '#0')
+            parsed_instruction = inst_parser(instruction)
+                      
             tree.add_state()
             
             
-        elif command == 'if':
+        elif inst_type == 'if':
+            # Parse if command => ('F0', 'pull(F0,#1)', 'pull(F0,#1)')
+            parsed_instruction = if_inst_parser(instruction)
+            
             tree.add_conditional_state()
+        
+        
+        elif inst_type == 'drop':
+            # Parse drop command
+            parsed_instruction = inst_parser(instruction)
             
             
-        elif command == 'release':
-            flow_name = parameters[0]
-            address = parameters[1]
-            
-            workload[flow_name] = {'source':address[0], 'target':address[1]}
-            
-        elif command == 'drop':
-            flow_name = parameters[0]
-            print('dropping flow',flow_name ,workload[flow_name])
+            flow_name = parsed_instruction[1]
             workload.pop(flow_name)
             
             
         print('Workload: ', workload)
+        
         # tree.print_tree()
-    tree.all_paths()
+        
+        
+    # tree.all_paths()
 
-    tree.visualize_tree()
+    # tree.visualize_tree()
+
 
 # A dummy function for running a set of instructions
 def test_instructions():
@@ -190,11 +215,18 @@ def test_instructions():
     tree.all_paths()
     tree.print_tree()
     
+def test_parsers():
+    print(inst_parser('pull (F0,#0)'))
+    print(inst_parser('release (F1,AC)'))
+    print(inst_parser('drop (F0)'))
+    print(if_inst_parser('if !has(F0) then pull(F0,#1) else pull(F0,#1)'))
+        
     
 def main():
-    # run_instruction('./Instructions.wrp')
-    test_instructions()
-
+    run_instruction('./Instructions.wrp')
+    # test_instructions()
+    # test_parsers()
+    
 if __name__ == "__main__":
-    parse_instructions('./Instructions.wrp')
-    # main()
+    # parse_instructions('./Instructions.wrp')
+    main()
