@@ -113,14 +113,21 @@ class StatesTree:
             self._visualize_tree_helper(g, state.right)
 
 
+
 # Parsing the Warp instruction from a file
-def parse_instruction(instruction_file_path):
-    with open(instruction_file_path, 'r+') as instructions_file:
-        instructions = [inst.strip().split(' ') for inst in instructions_file.readlines()]
-        instructions = [[inst[0], inst[1].replace(')', '').replace('(', '').split(',')] for inst in instructions]
+def parse_instructions(instruction_file_path):
+    with open(instruction_file_path, 'r') as instructions_file:
+
+        instructions = [[inst.split(' ', maxsplit=1)[0], inst.strip()] for inst in instructions_file.readlines() if inst.strip()]
+        print(instructions)
+        # instructions = [[inst[0], inst[1].replace(')', '').replace('(', '').split(',')] for inst in instructions]
+        
         instructions_file.close()
 
-    return instructions
+    for ins in instructions:
+        print(ins)
+        
+    # return instructions
 
 # Running the instructions that been parsed from the file
 def run_instruction(instruction_file_path):
@@ -142,6 +149,7 @@ def run_instruction(instruction_file_path):
         
         if command == 'pull':
             tree.add_state()
+            
             
         elif command == 'if':
             tree.add_conditional_state()
@@ -188,4 +196,5 @@ def main():
     test_instructions()
 
 if __name__ == "__main__":
-    main()
+    parse_instructions('./Instructions.wrp')
+    # main()

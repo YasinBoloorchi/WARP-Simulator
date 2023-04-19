@@ -1,15 +1,8 @@
 release (F0,BA)
 release (F1,AC)
+pull (F0,#0)
 
-x = pull (F0,#0)
-if x == True: 
-    y = pull (F0,#0) 
-    
-else: 
-    z = pull (F1,#1)
-
-if y:
-    g = pull (F1,#2)
+if !has(𝐹0) then pull(𝐹0 , #1) else pull (F1,#1)
 
 drop (F0)
 drop (F1)
