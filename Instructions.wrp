@@ -1,7 +1,7 @@
 release (F0,BA)
-release (F1,AC)
-
 pull (F0, #0)
-if !has(F0) then pull(F0,#1) else pull (F1,#1)
-pull (F1, #2)
 
+release (F1,AC)
+if !has(F0) then pull(F0,#1)
+
+pull (F1, #2)

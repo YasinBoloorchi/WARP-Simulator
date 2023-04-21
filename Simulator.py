@@ -1,13 +1,20 @@
 from graphviz import Graph
 from time import sleep
 import re
+import warnings
+
+# ignore warning messages
+# warnings.filterwarnings("ignore", category=Warning, module="your_module_name", lineno=your_line_number, append=False)
+# set warning filter to "ignore"
+warnings.filterwarnings("ignore")
 
 class State:
-    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}):
+    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}, inst=''):
         self.data = data
         self.left = left
         self.right = right
         self.prob = prob
+        self.inst = inst
         self.work_load = work_load
 
 class StatesTree:
@@ -15,42 +22,68 @@ class StatesTree:
         self.root = root
     
     # Adding state after a pull 
-    def add_state(self, prob=1, flow_name=''):
+    def add_state(self, prob=1, flow_name='', inst=''):
         if not self.root:
             self.root = State()
             return
         
-        self._add_state_helper(self.root, prob, flow_name)
+        self._add_state_helper(self.root, prob, flow_name, inst)
         
-    def _add_state_helper(self, state, prob, flow_name):
+    def _add_state_helper(self, state, prob, flow_name, inst):
         if not state.left:
-            state.left = State(data='F', prob=round(1-prob, 2), work_load=state.work_load.copy())  #main line for pull - for left node (failed attempt)
+            state.left = State(data='F', prob=round(1-prob, 2), work_load=state.work_load.copy(), inst=inst)  #main line for pull - for left node (failed attempt)
         else:
-            self._add_state_helper(state.left, prob, flow_name)
+            self._add_state_helper(state.left, prob, flow_name, inst=inst)
         
         if not state.right:
             right_work_load = state.work_load.copy()
             right_work_load[flow_name] = True
             state.right = State(data='S', prob=prob, work_load=right_work_load) # main line for pull - for right node (successful attempt)
         else:
-            self._add_state_helper(state.right, prob, flow_name)
+            self._add_state_helper(state.right, prob, flow_name, inst=inst)
             
     
     # Adding state after a conditional pull (Assuming the previous pull was not successful)
-    def add_conditional_state(self, prob=1):
+    def add_conditional_state(self, condition, condition_is_true, condition_is_false, prob=1, inst=''):
         if not self.root:
-            self.root = State()
             return
         
-        self._add_conditional_state_helper(self.root, prob)
+        self._add_conditional_state_helper(self.root, condition, condition_is_true, condition_is_false, prob, inst)
     
-    def _add_conditional_state_helper(self, state, prob):
-        if not state.left:
-            state.left = State(data='F', prob=round(1-prob, 2))
-        else:
-            self._add_state_helper(state.left, prob)
+    def _add_conditional_state_helper(self, state, condition, condition_is_true, condition_is_false, prob, inst):
+        if not state.left:  
+            if not state.work_load.get(condition):  # !has(condition)
+                # condition is true
+                print(f'If condition !has({condition}) is true')
+                
+                instruction, flow_name, channel_number = inst_parser(condition_is_true)
+                
+                self._add_state_helper(state, prob, flow_name, inst=condition_is_true)
+                
+                
+                
+            elif state.work_load[condition] and condition_is_false:
+                #condition is false
+                print(f'If condition !has({condition}) is false')
+                print(inst_parser(condition_is_false))
+                instruction, flow_name, channel_number = inst_parser(condition_is_false)
+                
+                self._add_state_helper(state, prob, flow_name, inst=condition_is_false)
         
-    
+        
+        else:   # if not, continue looking for leaf nodes
+            if state.left:
+                self._add_conditional_state_helper(state.left, condition, condition_is_true, condition_is_false, prob, inst=inst)
+            
+            if state.right:
+                self._add_conditional_state_helper(state.right, condition, condition_is_true, condition_is_false, prob, inst=inst)
+
+
+                
+            # state.left = State(data='F', prob=round(1-prob, 2))
+            
+        
+    # Releasing and dropping flows in the tree
     def release_flow(self, flow_name):
         if not self.root:
             return
@@ -124,6 +157,7 @@ class StatesTree:
             if state.right:
                 queue.append([state.right, path + [state.data], round(prob * state.prob, 3)])
 
+
     # Visualizing the graph with the help of graphviz
     def visualize_tree(self):
         if not self.root:
@@ -139,17 +173,19 @@ class StatesTree:
             return
         
         g.node(str(id(state)), label=str(state.data)+'\n'+str(state.work_load))  
-        print('visualize_tree_helper', state.work_load)
         
         if state.left:
             g.node(str(id(state.left)), label=str(state.data)+'\n'+str(state.left.work_load))
-            g.edge(str(id(state)), str(id(state.left)), label=str(round(1-state.right.prob, 2)))
+            g.edge(str(id(state)), str(id(state.left)), label=str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
             self._visualize_tree_helper(g, state.left)
         
         if state.right:
             g.node(str(id(state.right)), label=str(state.right.work_load))
-            g.edge(str(id(state)), str(id(state.right)), label=str(state.data)+'\n'+str(state.right.prob))
+            g.edge(str(id(state)), str(id(state.right)), label=str(state.data)+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
             self._visualize_tree_helper(g, state.right)
+
+
+# ================================================================
 
 
 # Parsing the Warp instruction from a file
@@ -165,7 +201,7 @@ def parse_instructions(instruction_file_path):
         
     return instructions
 
-
+# Parser function for different types of instructions
 def inst_parser(instruction):
     parsed_inst = re.findall('^(\w*)\s*\((\w\d),*(\W*\d*\w*)\)$', instruction)[0]
     
@@ -176,6 +212,7 @@ def if_inst_parser(instruction):
     parsd_if_inst = re.findall('^\w*\s*\W\w*\((\w\d)\)\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+\))\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+\))*$', instruction)[0]
     
     return parsd_if_inst
+
 
 # Running the instructions that been parsed from the file
 def run_instruction(instruction_file_path):
@@ -216,31 +253,25 @@ def run_instruction(instruction_file_path):
 
         elif inst_type == 'pull':
             # Parse pull command = >('pull', 'F0', '#0')
-            parsed_instruction = inst_parser(instruction)
-            inst = parsed_instruction[0]
-            flow_name = parsed_instruction[1]
-            channel_number = parsed_instruction[2]
+
+            instruc, flow_name, channel_number = inst_parser(instruction)
+            print(inst, flow_name, channel_number)
             
-            print(parsed_instruction)
-            
-            tree.add_state(prob=0.8, flow_name=flow_name)
+            tree.add_state(prob=0.8, flow_name=flow_name, inst=instruction)
             
             
         elif inst_type == 'if':
             # Parse if command => ('F0', 'pull(F0,#1)', 'pull(F0,#1)')
-            parsed_instruction = if_inst_parser(instruction)
-            condition = parsed_instruction[0]
-            condition_is_true = parsed_instruction[1]
-            condition_is_false = parsed_instruction[2]
+            condition, condition_is_true, condition_is_false = if_inst_parser(instruction)            
             
-                     
-            print(parsed_instruction)
-            # tree.add_conditional_state()
+            print(condition, condition_is_true, condition_is_false)
+            
+            tree.add_conditional_state(condition, condition_is_true, condition_is_false, prob=0.8)
 
             
 
-        # tree.print_tree()
-        # print('='*30)
+        tree.print_tree()
+        print('='*30)
         
         
     # tree.all_paths()
@@ -265,13 +296,20 @@ def test_instructions():
     tree.all_paths()
     tree.print_tree()
 
-    
+# A dummy function to test parsers
 def test_parsers():
-    print(inst_parser('pull (F0,#0)'))
-    print(inst_parser('release (F1,AC)'))
-    print(inst_parser('drop (F0)'))
-    print(if_inst_parser('if !has(F0) then pull(F0,#1) else pull(F0,#1)'))
-        
+    # instruction = 'pull (F0,#0)'
+    # instruction = 'release (F1,AC)'
+    # instruction = 'drop (F0)'
+    
+    # inst, flow_name, channel_number = inst_parser(instruction)
+    # print(inst, flow_name, channel_number)
+
+
+    instruction = 'if !has(F0) then pull(F0,#1) else pull(F1,#1)'
+    condition, condition_is_true, condition_is_false = if_inst_parser(instruction)            
+    print(condition, condition_is_true, condition_is_false)
+
     
 def main():
     run_instruction('./Instructions.wrp')
