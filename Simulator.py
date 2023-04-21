@@ -1,12 +1,6 @@
 from graphviz import Graph
 from time import sleep
 import re
-import warnings
-
-# ignore warning messages
-# warnings.filterwarnings("ignore", category=Warning, module="your_module_name", lineno=your_line_number, append=False)
-# set warning filter to "ignore"
-warnings.filterwarnings("ignore")
 
 class State:
     def __init__(self, data='S', left=None, right=None, prob=1, work_load={}, inst=''):
@@ -268,10 +262,7 @@ def run_instruction(instruction_file_path):
             
             tree.add_conditional_state(condition, condition_is_true, condition_is_false, prob=0.8)
 
-            
-
-        tree.print_tree()
-        print('='*30)
+    tree.print_tree()
         
         
     # tree.all_paths()
