@@ -3,37 +3,35 @@ from time import sleep
 import re
 
 class State:
-    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}):
+    def __init__(self, data='S', left=None, right=None, prob=1):
         self.data = data
         self.left = left
         self.right = right
         self.prob = prob
-        self.work_load = work_load
 
 class StatesTree:
     def __init__(self, root=None):
         self.root = root
     
     # Adding state after a pull 
-    def add_state(self, prob=1, flow_name=''):
+    def add_state(self, prob=1):
         if not self.root:
             self.root = State()
             return
         
-        self._add_state_helper(self.root, prob, flow_name)
+        self._add_state_helper(self.root, prob)
         
-    def _add_state_helper(self, state, prob, flow_name):
+    
+    def _add_state_helper(self, state, prob):
         if not state.left:
-            state.left = State(data='F', prob=round(1-prob, 2), work_load=state.work_load.copy())  #main line for pull - for left node (failed attempt)
+            state.left = State(data='F', prob=round(1-prob, 2))
         else:
-            self._add_state_helper(state.left, prob, flow_name)
+            self._add_state_helper(state.left, prob)
         
         if not state.right:
-            right_work_load = state.work_load.copy()
-            right_work_load[flow_name] = True
-            state.right = State(data='S', prob=prob, work_load=right_work_load) # main line for pull - for right node (successful attempt)
+            state.right = State(data='S', prob=prob)
         else:
-            self._add_state_helper(state.right, prob, flow_name)
+            self._add_state_helper(state.right, prob)
             
     
     # Adding state after a conditional pull (Assuming the previous pull was not successful)
@@ -51,41 +49,6 @@ class StatesTree:
             self._add_state_helper(state.left, prob)
         
     
-    def release_flow(self, flow_name):
-        if not self.root:
-            return
-        
-        self._release_flow_helper(self.root, flow_name)
-    
-    def _release_flow_helper(self, state, flow_name):
-        if not state.left and not state.right:  # if state is a leaf node
-            state.work_load[flow_name] = False  
-       
-        else:                                   # if not, look for leafs
-            if state.left:
-                self._release_flow_helper(state.left, flow_name)
-            
-            if state.right:
-                self._release_flow_helper(state.right, flow_name)
-                
-    def drop_flow(self, flow_name):
-        if not self.root:
-            return False
-        
-        self._drop_flow_helper(self.root, flow_name)
-    
-    def _drop_flow_helper(self, state, flow_name):
-        if not state.left and not state.right:  # if state is a leaf node
-            state.work_load.pop(flow_name)
-        
-        else:                                   # if not, look for leafs
-            if state.left:
-                self._drop_flow_helper(state.left, flow_name)
-            
-            if state.right:
-                self._drop_flow_helper(state.right, flow_name)
-
-
     # A function to print the tree in the CLI
     def print_tree(self):
         if not self.root:
@@ -99,7 +62,7 @@ class StatesTree:
             return
         
         self._print_tree_helper(state.right, level+1)
-        print("    "*level + str(state.data) + str(state.work_load))
+        print("    "*level + str(state.data))
         self._print_tree_helper(state.left, level+1)
     
     
@@ -138,17 +101,16 @@ class StatesTree:
         if not state:
             return
         
-        g.node(str(id(state)), label=str(state.data)+'\n'+str(state.work_load))  
-        print('visualize_tree_helper', state.work_load)
+        g.node(str(id(state)), label=str(state.data))  
         
         if state.left:
-            g.node(str(id(state.left)), label=str(state.data)+'\n'+str(state.left.work_load))
+            g.node(str(id(state.left)), label=str(state.left.data))
             g.edge(str(id(state)), str(id(state.left)), label=str(round(1-state.right.prob, 2)))
             self._visualize_tree_helper(g, state.left)
         
         if state.right:
-            g.node(str(id(state.right)), label=str(state.right.work_load))
-            g.edge(str(id(state)), str(id(state.right)), label=str(state.data)+'\n'+str(state.right.prob))
+            g.node(str(id(state.right)), label=str(state.right.data))
+            g.edge(str(id(state)), str(id(state.right)), label=str(state.right.prob))
             self._visualize_tree_helper(g, state.right)
 
 
@@ -171,7 +133,6 @@ def inst_parser(instruction):
     
     return parsed_inst
 
-
 def if_inst_parser(instruction):
     parsd_if_inst = re.findall('^\w*\s*\W\w*\((\w\d)\)\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+\))\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+\))*$', instruction)[0]
     
@@ -181,6 +142,7 @@ def if_inst_parser(instruction):
 def run_instruction(instruction_file_path):
     # initial variables
     instructions = parse_instructions(instruction_file_path)
+    workload = {}
     
     # Generate States tree and initial state
     tree = StatesTree()
@@ -196,56 +158,44 @@ def run_instruction(instruction_file_path):
         if inst_type == 'release':
             # Parse release command => ('release', 'F1', 'AC')
             parsed_instruction = inst_parser(instruction)
-        
+            
             flow_name = parsed_instruction[1]
             address = parsed_instruction[2]
             
-            # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
+            workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
             
-            tree.release_flow(flow_name)
             
-        
-        elif inst_type == 'drop':
-            # Parse drop command
-            parsed_instruction = inst_parser(instruction)
-            
-            flow_name = parsed_instruction[1]
-            
-            tree.drop_flow(flow_name)
-
-
         elif inst_type == 'pull':
             # Parse pull command = >('pull', 'F0', '#0')
             parsed_instruction = inst_parser(instruction)
-            inst = parsed_instruction[0]
-            flow_name = parsed_instruction[1]
-            channel_number = parsed_instruction[2]
-            
-            print(parsed_instruction)
-            
-            tree.add_state(prob=0.8, flow_name=flow_name)
+                      
+            tree.add_state()
             
             
         elif inst_type == 'if':
             # Parse if command => ('F0', 'pull(F0,#1)', 'pull(F0,#1)')
             parsed_instruction = if_inst_parser(instruction)
-            condition = parsed_instruction[0]
-            condition_is_true = parsed_instruction[1]
-            condition_is_false = parsed_instruction[2]
             
-                     
-            print(parsed_instruction)
-            # tree.add_conditional_state()
-
+            tree.add_conditional_state()
+        
+        
+        elif inst_type == 'drop':
+            # Parse drop command
+            parsed_instruction = inst_parser(instruction)
             
-
+            
+            flow_name = parsed_instruction[1]
+            workload.pop(flow_name)
+            
+            
+        print('Workload: ', workload)
+        
         # tree.print_tree()
-        # print('='*30)
         
         
     # tree.all_paths()
 
-    tree.visualize_tree()
+    # tree.visualize_tree()
 
 
 # A dummy function for running a set of instructions
@@ -264,7 +214,6 @@ def test_instructions():
     sleep(0.1) 
     tree.all_paths()
     tree.print_tree()
-
     
 def test_parsers():
     print(inst_parser('pull (F0,#0)'))
@@ -277,8 +226,7 @@ def main():
     run_instruction('./Instructions.wrp')
     # test_instructions()
     # test_parsers()
-
-
+    
 if __name__ == "__main__":
     # parse_instructions('./Instructions.wrp')
     main()
