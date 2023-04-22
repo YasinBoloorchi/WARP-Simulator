@@ -1,74 +1,81 @@
 graph G {
-	140528443336944 [label="S
+	S [label="Path: S
 {'F0': False, 'F1': False}"]
 	SF [label="S
 {'F0': False, 'F1': False}"]
-	S -- SF [label="0.2--pull (F0, #0)"]
-	140528443336752 [label="F
+	S -- SF [label="F
+0.2--pull (F0, #0)"]
+	SF [label="Path: SF
 {'F0': False, 'F1': False}"]
 	SFF [label="SF
 {'F0': False, 'F1': False}"]
-	SF -- SFF [label="0.2--pull(F0,#1)"]
-	140528441378080 [label="F
+	SF -- SFF [label="F
+0.2--pull(F0,#1)"]
+	SFF [label="Path: SFF
 {'F0': False, 'F1': False}"]
 	SFFF [label="SFF
 {'F0': False, 'F1': False}"]
-	SFF -- SFFF [label="0.2--pull (F1, #2)"]
-	140528441378032 [label="F
+	SFF -- SFFF [label="F
+0.2--pull (F1, #2)"]
+	SFFF [label="Path: SFFF
 {'F0': False, 'F1': False}"]
 	SFFS [label="SFF{'F0': False, 'F1': True}"]
-	SFF -- SFFS [label="F
+	SFF -- SFFS [label="S
 0.8--pull (F1, #2)"]
-	140528441377936 [label="S
+	SFFS [label="Path: SFFS
 {'F0': False, 'F1': True}"]
 	SFS [label="SF{'F0': True, 'F1': False}"]
-	SF -- SFS [label="F
+	SF -- SFS [label="S
 0.8--pull(F0,#1)"]
-	140528441378320 [label="S
+	SFS [label="Path: SFS
 {'F0': True, 'F1': False}"]
 	SFSF [label="SFS
 {'F0': True, 'F1': False}"]
-	SFS -- SFSF [label="0.2--pull (F1, #2)"]
-	140528441378224 [label="F
+	SFS -- SFSF [label="F
+0.2--pull (F1, #2)"]
+	SFSF [label="Path: SFSF
 {'F0': True, 'F1': False}"]
 	SFSS [label="SFS{'F0': True, 'F1': True}"]
 	SFS -- SFSS [label="S
 0.8--pull (F1, #2)"]
-	140528441378272 [label="S
+	SFSS [label="Path: SFSS
 {'F0': True, 'F1': True}"]
 	SS [label="S{'F0': True, 'F1': False}"]
 	S -- SS [label="S
 0.8--pull (F0, #0)"]
-	140528443336800 [label="S
+	SS [label="Path: SS
 {'F0': True, 'F1': False}"]
 	SSF [label="SS
 {'F0': True, 'F1': False}"]
-	SS -- SSF [label="0.2--pull (F1,#1)"]
-	140528441378128 [label="F
+	SS -- SSF [label="F
+0.2--pull (F1,#1)"]
+	SSF [label="Path: SSF
 {'F0': True, 'F1': False}"]
 	SSFF [label="SSF
 {'F0': True, 'F1': False}"]
-	SSF -- SSFF [label="0.2--pull (F1, #2)"]
-	140528441378368 [label="F
+	SSF -- SSFF [label="F
+0.2--pull (F1, #2)"]
+	SSFF [label="Path: SSFF
 {'F0': True, 'F1': False}"]
 	SSFS [label="SSF{'F0': True, 'F1': True}"]
-	SSF -- SSFS [label="F
+	SSF -- SSFS [label="S
 0.8--pull (F1, #2)"]
-	140528441378416 [label="S
+	SSFS [label="Path: SSFS
 {'F0': True, 'F1': True}"]
 	SSS [label="SS{'F0': True, 'F1': True}"]
 	SS -- SSS [label="S
 0.8--pull (F1,#1)"]
-	140528441378176 [label="S
+	SSS [label="Path: SSS
 {'F0': True, 'F1': True}"]
 	SSSF [label="SSS
 {'F0': True, 'F1': True}"]
-	SSS -- SSSF [label="0.2--pull (F1, #2)"]
-	140528441378464 [label="F
+	SSS -- SSSF [label="F
+0.2--pull (F1, #2)"]
+	SSSF [label="Path: SSSF
 {'F0': True, 'F1': True}"]
 	SSSS [label="SSS{'F0': True, 'F1': True}"]
 	SSS -- SSSS [label="S
 0.8--pull (F1, #2)"]
-	140528441378512 [label="S
+	SSSS [label="Path: SSSS
 {'F0': True, 'F1': True}"]
 }
