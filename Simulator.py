@@ -153,31 +153,41 @@ class StatesTree:
 
 
     # Visualizing the graph with the help of graphviz
+    
+    # vvvvvvvvvvvvvvvvvvvvvvvvvvv UNDER CONSTRUCTION vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     def visualize_tree(self):
         if not self.root:
             print("Empty tree!")
             return
         
         g = Graph('G', format='png')
-        self._visualize_tree_helper(g, self.root)
+        self._visualize_tree_helper(g, self.root, path='')
         g.view()
     
-    def _visualize_tree_helper(self, g, state):
+    def _visualize_tree_helper(self, g, state, path):
         if not state:
             return
         
+        
+        path += str(state.data)
+        
         g.node(str(id(state)), label=str(state.data)+'\n'+str(state.work_load))  
         
+        print(path)
         if state.left:
-            g.node(str(id(state.left)), label=str(state.data)+'\n'+str(state.left.work_load))
-            g.edge(str(id(state)), str(id(state.left)), label=str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-            self._visualize_tree_helper(g, state.left)
+            print(path + str(state.left.data))
+            
+            g.node(path + state.left.data, label= path+'\n'+str(state.left.work_load))
+            g.edge(path, path + state.left.data, label=str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+            self._visualize_tree_helper(g, state.left, path)
         
         if state.right:
-            g.node(str(id(state.right)), label=str(state.right.work_load))
-            g.edge(str(id(state)), str(id(state.right)), label=str(state.data)+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
-            self._visualize_tree_helper(g, state.right)
-
+            print(path + str(state.right.data))
+            g.node(path + state.right.data, label= path + str(state.right.work_load))
+            g.edge(path, path + state.right.data, label= state.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
+            self._visualize_tree_helper(g, state.right, path)
+    
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 # ================================================================
 

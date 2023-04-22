@@ -1,74 +1,74 @@
 graph G {
-	140558885841280 [label="S
+	140528443336944 [label="S
 {'F0': False, 'F1': False}"]
-	140558885841088 [label="S
+	SF [label="S
 {'F0': False, 'F1': False}"]
-	140558885841280 -- 140558885841088 [label="0.2--pull (F0, #0)"]
-	140558885841088 [label="F
+	S -- SF [label="0.2--pull (F0, #0)"]
+	140528443336752 [label="F
 {'F0': False, 'F1': False}"]
-	140558883914128 [label="F
+	SFF [label="SF
 {'F0': False, 'F1': False}"]
-	140558885841088 -- 140558883914128 [label="0.2--pull(F0,#1)"]
-	140558883914128 [label="F
+	SF -- SFF [label="0.2--pull(F0,#1)"]
+	140528441378080 [label="F
 {'F0': False, 'F1': False}"]
-	140558883914080 [label="F
+	SFFF [label="SFF
 {'F0': False, 'F1': False}"]
-	140558883914128 -- 140558883914080 [label="0.2--pull (F1, #2)"]
-	140558883914080 [label="F
+	SFF -- SFFF [label="0.2--pull (F1, #2)"]
+	140528441378032 [label="F
 {'F0': False, 'F1': False}"]
-	140558883913984 [label="{'F0': False, 'F1': True}"]
-	140558883914128 -- 140558883913984 [label="F
+	SFFS [label="SFF{'F0': False, 'F1': True}"]
+	SFF -- SFFS [label="F
 0.8--pull (F1, #2)"]
-	140558883913984 [label="S
+	140528441377936 [label="S
 {'F0': False, 'F1': True}"]
-	140558883914368 [label="{'F0': True, 'F1': False}"]
-	140558885841088 -- 140558883914368 [label="F
+	SFS [label="SF{'F0': True, 'F1': False}"]
+	SF -- SFS [label="F
 0.8--pull(F0,#1)"]
-	140558883914368 [label="S
+	140528441378320 [label="S
 {'F0': True, 'F1': False}"]
-	140558883914272 [label="S
+	SFSF [label="SFS
 {'F0': True, 'F1': False}"]
-	140558883914368 -- 140558883914272 [label="0.2--pull (F1, #2)"]
-	140558883914272 [label="F
+	SFS -- SFSF [label="0.2--pull (F1, #2)"]
+	140528441378224 [label="F
 {'F0': True, 'F1': False}"]
-	140558883914320 [label="{'F0': True, 'F1': True}"]
-	140558883914368 -- 140558883914320 [label="S
+	SFSS [label="SFS{'F0': True, 'F1': True}"]
+	SFS -- SFSS [label="S
 0.8--pull (F1, #2)"]
-	140558883914320 [label="S
+	140528441378272 [label="S
 {'F0': True, 'F1': True}"]
-	140558885841136 [label="{'F0': True, 'F1': False}"]
-	140558885841280 -- 140558885841136 [label="S
+	SS [label="S{'F0': True, 'F1': False}"]
+	S -- SS [label="S
 0.8--pull (F0, #0)"]
-	140558885841136 [label="S
+	140528443336800 [label="S
 {'F0': True, 'F1': False}"]
-	140558883914176 [label="S
+	SSF [label="SS
 {'F0': True, 'F1': False}"]
-	140558885841136 -- 140558883914176 [label="0.2--pull (F1,#1)"]
-	140558883914176 [label="F
+	SS -- SSF [label="0.2--pull (F1,#1)"]
+	140528441378128 [label="F
 {'F0': True, 'F1': False}"]
-	140558883914416 [label="F
+	SSFF [label="SSF
 {'F0': True, 'F1': False}"]
-	140558883914176 -- 140558883914416 [label="0.2--pull (F1, #2)"]
-	140558883914416 [label="F
+	SSF -- SSFF [label="0.2--pull (F1, #2)"]
+	140528441378368 [label="F
 {'F0': True, 'F1': False}"]
-	140558883914464 [label="{'F0': True, 'F1': True}"]
-	140558883914176 -- 140558883914464 [label="F
+	SSFS [label="SSF{'F0': True, 'F1': True}"]
+	SSF -- SSFS [label="F
 0.8--pull (F1, #2)"]
-	140558883914464 [label="S
+	140528441378416 [label="S
 {'F0': True, 'F1': True}"]
-	140558883914224 [label="{'F0': True, 'F1': True}"]
-	140558885841136 -- 140558883914224 [label="S
+	SSS [label="SS{'F0': True, 'F1': True}"]
+	SS -- SSS [label="S
 0.8--pull (F1,#1)"]
-	140558883914224 [label="S
+	140528441378176 [label="S
 {'F0': True, 'F1': True}"]
-	140558883914512 [label="S
+	SSSF [label="SSS
 {'F0': True, 'F1': True}"]
-	140558883914224 -- 140558883914512 [label="0.2--pull (F1, #2)"]
-	140558883914512 [label="F
+	SSS -- SSSF [label="0.2--pull (F1, #2)"]
+	140528441378464 [label="F
 {'F0': True, 'F1': True}"]
-	140558883914560 [label="{'F0': True, 'F1': True}"]
-	140558883914224 -- 140558883914560 [label="S
+	SSSS [label="SSS{'F0': True, 'F1': True}"]
+	SSS -- SSSS [label="S
 0.8--pull (F1, #2)"]
-	140558883914560 [label="S
+	140528441378512 [label="S
 {'F0': True, 'F1': True}"]
 }

@@ -1,6 +1,7 @@
-release (F0,BA)
-release (F1,AC)
+release (F0,BCD)
+release (F1,ACE)
 
 pull (F0, #0)
 if !has(F0) then pull(F0,#1) else pull (F1,#1)
 pull (F1, #2)
+
