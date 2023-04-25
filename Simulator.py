@@ -3,13 +3,13 @@ from time import sleep
 import re
 
 class State:
-    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}, inst=''):
+    def __init__(self, data='S', left=None, right=None, prob=1, workload={}, inst=''):
         self.data = data
         self.left = left
         self.right = right
         self.prob = prob
         self.inst = inst
-        self.work_load = work_load
+        self.workload = workload
 
 class StatesTree:
     def __init__(self, root=None):
@@ -25,14 +25,14 @@ class StatesTree:
         
     def _add_state_helper(self, state, prob, flow_name, inst):
         if not state.left:
-            state.left = State(data='F', prob=round(1-prob, 2), work_load=state.work_load.copy(), inst=inst)  #main line for pull - for left node (failed attempt)
+            state.left = State(data='F', prob=round(1-prob, 2), workload=state.workload.copy(), inst=inst)  #main line for pull - for left node (failed attempt)
         else:
             self._add_state_helper(state.left, prob, flow_name, inst=inst)
         
         if not state.right:
-            right_work_load = state.work_load.copy()
+            right_work_load = state.workload.copy()
             right_work_load[flow_name] = True
-            state.right = State(data='S', prob=prob, work_load=right_work_load) # main line for pull - for right node (successful attempt)
+            state.right = State(data='S', prob=prob, workload=right_work_load) # main line for pull - for right node (successful attempt)
         else:
             self._add_state_helper(state.right, prob, flow_name, inst=inst)
             
@@ -46,7 +46,7 @@ class StatesTree:
     
     def _add_conditional_state_helper(self, state, condition, condition_is_true, condition_is_false, prob, inst):
         if not state.left:  
-            if not state.work_load.get(condition):  # !has(condition)
+            if not state.workload.get(condition):  # !has(condition)
                 # condition is true
                 print(f'If condition !has({condition}) is true')
                 
@@ -56,7 +56,7 @@ class StatesTree:
                 
                 
                 
-            elif state.work_load[condition] and condition_is_false:
+            elif state.workload[condition] and condition_is_false:
                 #condition is false
                 print(f'If condition !has({condition}) is false')
                 print(inst_parser(condition_is_false))
@@ -86,7 +86,7 @@ class StatesTree:
     
     def _release_flow_helper(self, state, flow_name):
         if not state.left and not state.right:  # if state is a leaf node
-            state.work_load[flow_name] = False  
+            state.workload[flow_name] = False  
        
         else:                                   # if not, look for leafs
             if state.left:
@@ -103,7 +103,7 @@ class StatesTree:
     
     def _drop_flow_helper(self, state, flow_name):
         if not state.left and not state.right:  # if state is a leaf node
-            state.work_load.pop(flow_name)
+            state.workload.pop(flow_name)
         
         else:                                   # if not, look for leafs
             if state.left:
@@ -126,7 +126,7 @@ class StatesTree:
             return
         
         self._print_tree_helper(state.right, level+1)
-        print("    "*level + str(state.data) + str(state.work_load))
+        print("    "*level + str(state.data) + str(state.workload))
         self._print_tree_helper(state.left, level+1)
     
     
@@ -168,26 +168,32 @@ class StatesTree:
         if not state:
             return
         
-        
         path += str(state.data)
         
-        g.node(path, label='Path: '+path+'\n'+str(state.work_load))  
+        node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
+        print(f'node_id: ({node_id})')
         
-        print(f'path ({path}) += str(state.data ({state.data}))')
+        g.node(str(state.workload), label='Path: '+path+'\n'+str(state.workload))  
+        
+        # print(f'path ({path}) += str(state.data ({state.data}))')
         
         if state.left:
+            left_node_id = ''.join([ str(b)[0] for b in list(state.left.workload.values())])
+            print(f'left_node_id: ({left_node_id})')
             print(f"path ({path}) + str(state.left.data) ({state.left.data})")
             
-            g.node(path + state.left.data, label= path+'\n'+str(state.left.work_load))
-            g.edge(path, path + state.left.data, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+            g.node(left_node_id, label= path+'\n'+str(state.left.workload))
+            g.edge(node_id, left_node_id, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
             self._visualize_tree_helper(g, state.left, path)
         
         if state.right:
+            right_node_id = ''.join([ str(b)[0] for b in list(state.right.workload.values())])
+            print(f'right_node_id: ({right_node_id})')
             print(f"path ({path}) + str(state.right.data) ({state.right.data})")
             
-            g.node(path + state.right.data, label= path + str(state.right.work_load))
+            g.node(right_node_id, label= path + str(state.right.workload))
             
-            g.edge(path, path + state.right.data, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
+            g.edge(node_id, right_node_id, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
             self._visualize_tree_helper(g, state.right, path)
     
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
