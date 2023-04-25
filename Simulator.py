@@ -169,26 +169,26 @@ class StatesTree:
             return
         
         
-        path += str(state.data)
         
         g.node(path, label='Path: '+path+'\n'+str(state.work_load))  
-        
         print(f'path ({path}) += str(state.data ({state.data}))')
+        
+        # path += str(state.data)
         
         if state.left:
             print(f"path ({path}) + str(state.left.data) ({state.left.data})")
             
-            g.node(path + state.left.data, label= path+'\n'+str(state.left.work_load))
+            g.node(path + state.left.data, label= 'Path: '+path+'\n'+str(state.work_load))
             g.edge(path, path + state.left.data, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-            self._visualize_tree_helper(g, state.left, path)
+            self._visualize_tree_helper(g, state.left, path+str(state.left.data))
         
         if state.right:
             print(f"path ({path}) + str(state.right.data) ({state.right.data})")
             
-            g.node(path + state.right.data, label= path + str(state.right.work_load))
+            g.node(path + state.right.data, label= 'Path: '+path+'\n'+str(state.work_load))
             
             g.edge(path, path + state.right.data, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
-            self._visualize_tree_helper(g, state.right, path)
+            self._visualize_tree_helper(g, state.right, path+str(state.right.data))
     
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

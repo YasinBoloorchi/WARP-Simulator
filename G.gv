@@ -1,81 +1,88 @@
 graph G {
-	S [label="Path: S
+	"" [label="Path: 
 {'F0': False, 'F1': False}"]
-	SF [label="S
+	F [label="Path: 
 {'F0': False, 'F1': False}"]
-	S -- SF [label="F
+	"" -- F [label="F
 0.2--pull (F0, #0)"]
-	SF [label="Path: SF
+	F [label="Path: F
 {'F0': False, 'F1': False}"]
-	SFF [label="SF
+	FF [label="Path: F
 {'F0': False, 'F1': False}"]
-	SF -- SFF [label="F
+	F -- FF [label="F
 0.2--pull(F0,#1)"]
-	SFF [label="Path: SFF
+	FF [label="Path: FF
 {'F0': False, 'F1': False}"]
-	SFFF [label="SFF
+	FFF [label="Path: FF
 {'F0': False, 'F1': False}"]
-	SFF -- SFFF [label="F
+	FF -- FFF [label="F
 0.2--pull (F1, #2)"]
-	SFFF [label="Path: SFFF
+	FFF [label="Path: FFF
 {'F0': False, 'F1': False}"]
-	SFFS [label="SFF{'F0': False, 'F1': True}"]
-	SFF -- SFFS [label="S
+	FFS [label="Path: FF
+{'F0': False, 'F1': False}"]
+	FF -- FFS [label="S
 0.8--pull (F1, #2)"]
-	SFFS [label="Path: SFFS
+	FFS [label="Path: FFS
 {'F0': False, 'F1': True}"]
-	SFS [label="SF{'F0': True, 'F1': False}"]
-	SF -- SFS [label="S
+	FS [label="Path: F
+{'F0': False, 'F1': False}"]
+	F -- FS [label="S
 0.8--pull(F0,#1)"]
-	SFS [label="Path: SFS
+	FS [label="Path: FS
 {'F0': True, 'F1': False}"]
-	SFSF [label="SFS
+	FSF [label="Path: FS
 {'F0': True, 'F1': False}"]
-	SFS -- SFSF [label="F
+	FS -- FSF [label="F
 0.2--pull (F1, #2)"]
-	SFSF [label="Path: SFSF
+	FSF [label="Path: FSF
 {'F0': True, 'F1': False}"]
-	SFSS [label="SFS{'F0': True, 'F1': True}"]
-	SFS -- SFSS [label="S
+	FSS [label="Path: FS
+{'F0': True, 'F1': False}"]
+	FS -- FSS [label="S
 0.8--pull (F1, #2)"]
-	SFSS [label="Path: SFSS
+	FSS [label="Path: FSS
 {'F0': True, 'F1': True}"]
-	SS [label="S{'F0': True, 'F1': False}"]
-	S -- SS [label="S
+	S [label="Path: 
+{'F0': False, 'F1': False}"]
+	"" -- S [label="S
 0.8--pull (F0, #0)"]
-	SS [label="Path: SS
+	S [label="Path: S
 {'F0': True, 'F1': False}"]
-	SSF [label="SS
+	SF [label="Path: S
 {'F0': True, 'F1': False}"]
-	SS -- SSF [label="F
+	S -- SF [label="F
 0.2--pull (F1,#1)"]
-	SSF [label="Path: SSF
+	SF [label="Path: SF
 {'F0': True, 'F1': False}"]
-	SSFF [label="SSF
+	SFF [label="Path: SF
 {'F0': True, 'F1': False}"]
-	SSF -- SSFF [label="F
+	SF -- SFF [label="F
 0.2--pull (F1, #2)"]
-	SSFF [label="Path: SSFF
+	SFF [label="Path: SFF
 {'F0': True, 'F1': False}"]
-	SSFS [label="SSF{'F0': True, 'F1': True}"]
-	SSF -- SSFS [label="S
+	SFS [label="Path: SF
+{'F0': True, 'F1': False}"]
+	SF -- SFS [label="S
 0.8--pull (F1, #2)"]
-	SSFS [label="Path: SSFS
+	SFS [label="Path: SFS
 {'F0': True, 'F1': True}"]
-	SSS [label="SS{'F0': True, 'F1': True}"]
-	SS -- SSS [label="S
+	SS [label="Path: S
+{'F0': True, 'F1': False}"]
+	S -- SS [label="S
 0.8--pull (F1,#1)"]
-	SSS [label="Path: SSS
+	SS [label="Path: SS
 {'F0': True, 'F1': True}"]
-	SSSF [label="SSS
+	SSF [label="Path: SS
 {'F0': True, 'F1': True}"]
-	SSS -- SSSF [label="F
+	SS -- SSF [label="F
 0.2--pull (F1, #2)"]
-	SSSF [label="Path: SSSF
+	SSF [label="Path: SSF
 {'F0': True, 'F1': True}"]
-	SSSS [label="SSS{'F0': True, 'F1': True}"]
-	SSS -- SSSS [label="S
+	SSS [label="Path: SS
+{'F0': True, 'F1': True}"]
+	SS -- SSS [label="S
 0.8--pull (F1, #2)"]
-	SSSS [label="Path: SSSS
+	SSS [label="Path: SSS
 {'F0': True, 'F1': True}"]
 }
