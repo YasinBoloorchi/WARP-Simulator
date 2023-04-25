@@ -167,27 +167,33 @@ class StatesTree:
         node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
         print('='*35, '\n', f'node_id: ({node_id}), path ({path}) += str(state.data ({state.data}))', '\n','='*35)
         
-        g.node(str(state.workload), label='Path: '+path+'\n'+str(state.workload))  
-        path += str(state.data)
+        # g.node(str(state.workload), label='Path: '+path+'\n'+str(state.workload))
+        
+        # g.view()
+        # path += str(state.data)
         
         if state.left:
             left_node_id = ''.join([ str(b)[0] for b in list(state.left.workload.values())])
             print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.data) ({state.left.data})", '\n', '='*35)
             
-            g.node(left_node_id, label= 'Path: '+path+'\n'+str(state.workload))
-            g.edge(node_id, left_node_id, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-          
-            self._visualize_tree_helper(g, state.left, path)
+            g.node(left_node_id, label= 'Path: '+path+str(state.left.data)+'\n'+str(state.left.workload)+'\n\n\n\n')
+            g.edge(node_id, left_node_id, label= state.left.data+'\n'+'['+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst)+']')
+
+            # g.view()
+            self._visualize_tree_helper(g, state.left, path+str(state.left.data))
         
         if state.right:
             right_node_id = ''.join([ str(b)[0] for b in list(state.right.workload.values())])
             print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.data) ({state.right.data})", '\n','='*35)
             
-            g.node(right_node_id, label= 'Path: '+path+'\n'+str(state.workload))
-            g.edge(node_id, right_node_id, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
-           
-            self._visualize_tree_helper(g, state.right, path)
-    
+            g.node(right_node_id, label= 'Path: '+path+str(state.right.data)+'\n'+str(state.right.workload)+'\n\n\n\n')
+            g.edge(node_id, right_node_id, label= state.right.data+'\n'+'['+str(state.right.prob)+'--'+str(state.left.inst)+']')
+
+            # g.view()
+            self._visualize_tree_helper(g, state.right, path+str(state.right.data))
+        
+
+        # g.view()
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 # ================================================================
