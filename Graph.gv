@@ -1,0 +1,47 @@
+// States Tree
+graph {
+	"{'F0': False, 'F1': False}" [label="S
+1"]
+	"{'F0'":" False, 'F1'": False} -- "{'F0'":" False, 'F1'": False} [label=F]
+	"{'F0': False, 'F1': False}" [label="F
+0.2"]
+	"{'F0'":" False, 'F1'": False} -- "{'F0'":" False, 'F1'": False} [label=F]
+	"{'F0': False, 'F1': False}" [label="F
+0.2"]
+	"{'F0'":" False, 'F1'": False} -- "{'F0'":" False, 'F1'": False} [label=F]
+	"{'F0': False, 'F1': False}" [label="F
+0.2"]
+	"{'F0'":" False, 'F1'": False} -- "{'F0'":" False, 'F1'": True} [label=S]
+	"{'F0': False, 'F1': True}" [label="S
+0.8"]
+	"{'F0'":" False, 'F1'": False} -- "{'F0'":" True, 'F1'": False} [label=S]
+	"{'F0': True, 'F1': False}" [label="S
+0.8"]
+	"{'F0'":" True, 'F1'": False} -- "{'F0'":" True, 'F1'": False} [label=F]
+	"{'F0': True, 'F1': False}" [label="F
+0.2"]
+	"{'F0'":" True, 'F1'": False} -- "{'F0'":" True, 'F1'": True} [label=S]
+	"{'F0': True, 'F1': True}" [label="S
+0.8"]
+	"{'F0'":" False, 'F1'": False} -- "{'F0'":" True, 'F1'": False} [label=S]
+	"{'F0': True, 'F1': False}" [label="S
+0.8"]
+	"{'F0'":" True, 'F1'": False} -- "{'F0'":" True, 'F1'": False} [label=F]
+	"{'F0': True, 'F1': False}" [label="F
+0.2"]
+	"{'F0'":" True, 'F1'": False} -- "{'F0'":" True, 'F1'": False} [label=F]
+	"{'F0': True, 'F1': False}" [label="F
+0.2"]
+	"{'F0'":" True, 'F1'": False} -- "{'F0'":" True, 'F1'": True} [label=S]
+	"{'F0': True, 'F1': True}" [label="S
+0.8"]
+	"{'F0'":" True, 'F1'": False} -- "{'F0'":" True, 'F1'": True} [label=S]
+	"{'F0': True, 'F1': True}" [label="S
+0.8"]
+	"{'F0'":" True, 'F1'": True} -- "{'F0'":" True, 'F1'": True} [label=F]
+	"{'F0': True, 'F1': True}" [label="F
+0.2"]
+	"{'F0'":" True, 'F1'": True} -- "{'F0'":" True, 'F1'": True} [label=S]
+	"{'F0': True, 'F1': True}" [label="S
+0.8"]
+}

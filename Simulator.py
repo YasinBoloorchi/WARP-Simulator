@@ -30,13 +30,12 @@ class StatesTree:
             self._add_state_helper(state.left, prob, flow_name, inst=inst)
         
         if not state.right:
-            right_work_load = state.workload.copy()
-            right_work_load[flow_name] = True
-            state.right = State(data='S', prob=prob, workload=right_work_load) # main line for pull - for right node (successful attempt)
+            right_workload = state.workload.copy()
+            right_workload[flow_name] = True
+            state.right = State(data='S', prob=prob, workload=right_workload) # main line for pull - for right node (successful attempt)
         else:
             self._add_state_helper(state.right, prob, flow_name, inst=inst)
             
-    
     # Adding state after a conditional pull (Assuming the previous pull was not successful)
     def add_conditional_state(self, condition, condition_is_true, condition_is_false, prob=1, inst=''):
         if not self.root:
@@ -75,8 +74,7 @@ class StatesTree:
 
                 
             # state.left = State(data='F', prob=round(1-prob, 2))
-            
-        
+              
     # Releasing and dropping flows in the tree
     def release_flow(self, flow_name):
         if not self.root:
@@ -112,7 +110,6 @@ class StatesTree:
             if state.right:
                 self._drop_flow_helper(state.right, flow_name)
 
-
     # A function to print the tree in the CLI
     def print_tree(self):
         if not self.root:
@@ -128,8 +125,7 @@ class StatesTree:
         self._print_tree_helper(state.right, level+1)
         print("    "*level + str(state.data) + str(state.workload))
         self._print_tree_helper(state.left, level+1)
-    
-    
+       
     # Printing out a BF Search on the tree to  show all the possible outcome and their probability
     def all_paths(self):
         print("All possible paths using BFS:")
@@ -168,32 +164,28 @@ class StatesTree:
         if not state:
             return
         
-        path += str(state.data)
-        
         node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
-        print(f'node_id: ({node_id})')
+        print('='*35, '\n', f'node_id: ({node_id}), path ({path}) += str(state.data ({state.data}))', '\n','='*35)
         
         g.node(str(state.workload), label='Path: '+path+'\n'+str(state.workload))  
-        
-        # print(f'path ({path}) += str(state.data ({state.data}))')
+        path += str(state.data)
         
         if state.left:
             left_node_id = ''.join([ str(b)[0] for b in list(state.left.workload.values())])
-            print(f'left_node_id: ({left_node_id})')
-            print(f"path ({path}) + str(state.left.data) ({state.left.data})")
+            print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.data) ({state.left.data})", '\n', '='*35)
             
-            g.node(left_node_id, label= path+'\n'+str(state.left.workload))
+            g.node(left_node_id, label= 'Path: '+path+'\n'+str(state.workload))
             g.edge(node_id, left_node_id, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+          
             self._visualize_tree_helper(g, state.left, path)
         
         if state.right:
             right_node_id = ''.join([ str(b)[0] for b in list(state.right.workload.values())])
-            print(f'right_node_id: ({right_node_id})')
-            print(f"path ({path}) + str(state.right.data) ({state.right.data})")
+            print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.data) ({state.right.data})", '\n','='*35)
             
-            g.node(right_node_id, label= path + str(state.right.workload))
-            
+            g.node(right_node_id, label= 'Path: '+path+'\n'+str(state.workload))
             g.edge(node_id, right_node_id, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
+           
             self._visualize_tree_helper(g, state.right, path)
     
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -287,7 +279,6 @@ def run_instruction(instruction_file_path):
     # tree.all_paths()
 
     tree.visualize_tree()
-
 
 # A dummy function for running a set of instructions
 def test_instructions():
