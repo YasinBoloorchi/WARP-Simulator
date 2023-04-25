@@ -176,7 +176,7 @@ class StatesTree:
             left_node_id = ''.join([ str(b)[0] for b in list(state.left.workload.values())])
             print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.data) ({state.left.data})", '\n', '='*35)
             
-            g.node(left_node_id, label= 'Path: '+path+str(state.left.data)+'\n'+str(state.left.workload)+'\n\n\n\n')
+            g.node(left_node_id, label= 'Path: '+path+str(state.left.data)+'\n'+str(state.left.workload))
             g.edge(node_id, left_node_id, label= state.left.data+'\n'+'['+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst)+']')
 
             # g.view()
@@ -186,7 +186,7 @@ class StatesTree:
             right_node_id = ''.join([ str(b)[0] for b in list(state.right.workload.values())])
             print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.data) ({state.right.data})", '\n','='*35)
             
-            g.node(right_node_id, label= 'Path: '+path+str(state.right.data)+'\n'+str(state.right.workload)+'\n\n\n\n')
+            g.node(right_node_id, label= 'Path: '+path+str(state.right.data)+'\n'+str(state.right.workload))
             g.edge(node_id, right_node_id, label= state.right.data+'\n'+'['+str(state.right.prob)+'--'+str(state.left.inst)+']')
 
             # g.view()
