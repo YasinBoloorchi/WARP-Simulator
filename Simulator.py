@@ -155,46 +155,87 @@ class StatesTree:
                 queue.append([state.right, path + [state.data], round(prob * state.prob, 3)])
 
 
-    # Visualizing the graph with the help of graphviz
-    
-    # vvvvvvvvvvvvvvvvvvvvvvvvvvv UNDER CONSTRUCTION vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    # Visualizing the graph with the help of graphviz (Whole tree version)
     def visualize_tree(self):
         if not self.root:
             print("Empty tree!")
             return
         
         graph = Graph('graph', format='png')
-        self._visualize_tree_helper(graph, self.root, path='')
+        self._visualize_tree_helper(graph, self.root)
         graph.view()
     
-    def _visualize_tree_helper(self, graph, state, path):
+    def _visualize_tree_helper(self, graph, state):
         if not state:
             return
         
-        graph.node(path, label='Path: '+state.path+'\n'+str(state.work_load)) 
+        graph.node(state.path, label='Path: '+state.path+'\n'+str(state.work_load)) 
         
-        print(f'path ({path}) / state.path ({state.path}) += str(state.data ({state.data}))')
+        # print(f'path ({path}) / state.path ({state.path}) += str(state.data ({state.data}))')
         
         # path += str(state.data)
         
         if state.left:
-            print(f"path ({path}) / state.path ({state.path}) + str(state.left.data) ({state.left.data})")
+            # print(f"path ({path}) / state.path ({state.path}) + str(state.left.data) ({state.left.data})")
             
-            graph.node(path + state.left.data, label= 'Path: '+state.path+'\n'+str(state.work_load))
-            graph.edge(path, path + state.left.data, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-            self._visualize_tree_helper(graph, state.left, path+str(state.left.data))
+            graph.node(state.path, label= 'Path: '+state.path+'\n'+str(state.work_load))
+            graph.edge(state.path, state.left.path, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+            self._visualize_tree_helper(graph, state.left)
         
         if state.right:
-            print(f"path ({path}) / state.path ({state.path})+ str(state.right.data) ({state.right.data})")
+            # print(f"path ({path}) / state.path ({state.path})+ str(state.right.data) ({state.right.data})")
             
-            graph.node(path + state.right.data, label= 'Path: '+state.path+'\n'+str(state.work_load))
+            graph.node(state.path, label= 'Path: '+state.path+'\n'+str(state.work_load))
             
-            graph.edge(path, path + state.right.data, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
-            self._visualize_tree_helper(graph, state.right, path+str(state.right.data))
+            graph.edge(state.path, state.right.path, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
+            self._visualize_tree_helper(graph, state.right)
         
 
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    # vvvvvvvvvvvvvvvvvvvvvvvvvvv UNDER CONSTRUCTION vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    def visualize_DAG(self):
+        if not self.root:
+            print("Empty tree!")
+            return
+        
+        DAG = Graph('DAG', format='png')
+        self._visualize_DAG_helper(DAG, self.root, path='')
+        DAG.view()
+    
+    def _visualize_DAG_helper(self, DAG, state, path):
+        if not state:
+            return
+        
+        node_id = ''.join([ str(b)[0] for b in list(state.work_load.values())])
+        print('='*35, '\n', f'node_id: ({node_id}), path ({path}) += str(state.data ({state.data}))', '\n','='*35)
+        
+        # DAG.node(str(state.work_load), label='Path: '+path+'\n'+str(state.work_load))
+        
+        # DAG.view()
+        # path += str(state.data)
+        
+        if state.left:
+            left_node_id = ''.join([ str(b)[0] for b in list(state.left.work_load.values())])
+            print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.data) ({state.left.data})", '\n', '='*35)
+            
+            DAG.node(left_node_id, label= 'Path: '+path+str(state.left.data)+'\n'+str(state.left.work_load))
+            DAG.edge(node_id, left_node_id, label= state.left.data+'\n'+'['+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst)+']')
 
+            # DAG.view()
+            self._visualize_DAG_helper(DAG, state.left, path+str(state.left.data))
+        
+        if state.right:
+            right_node_id = ''.join([ str(b)[0] for b in list(state.right.work_load.values())])
+            print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.data) ({state.right.data})", '\n','='*35)
+            
+            DAG.node(right_node_id, label= 'Path: '+path+str(state.right.data)+'\n'+str(state.right.work_load))
+            DAG.edge(node_id, right_node_id, label= state.right.data+'\n'+'['+str(state.right.prob)+'--'+str(state.left.inst)+']')
+
+            # DAG.view()
+            self._visualize_DAG_helper(DAG, state.right, path+str(state.right.data))
+        
+
+        # DAG.view()
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # ================================================================
 
 
@@ -247,7 +288,7 @@ def run_instruction(instruction_file_path):
             flow_name = parsed_instruction[1]
             address = parsed_instruction[2]
             
-            # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
+            # work_load[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
             
             tree.release_flow(flow_name)
             
@@ -285,6 +326,7 @@ def run_instruction(instruction_file_path):
 
     tree.visualize_tree()
 
+    tree.visualize_DAG()
 
 # A dummy function for running a set of instructions
 def test_instructions():
