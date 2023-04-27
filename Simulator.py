@@ -3,48 +3,51 @@ from time import sleep
 import re
 
 class State:
-    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}, inst=''):
+    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}, inst='', path = ''):
         self.data = data
         self.left = left
         self.right = right
         self.prob = prob
         self.inst = inst
         self.work_load = work_load
+        self.path = path
 
 class StatesTree:
     def __init__(self, root=None):
         self.root = root
     
     # Adding state after a pull 
-    def add_state(self, prob=1, flow_name='', inst=''):
+    def add_state(self, prob=1, flow_name='', inst='', path=''):
         if not self.root:
             self.root = State()
             return
         
-        self._add_state_helper(self.root, prob, flow_name, inst)
+        self._add_state_helper(self.root, prob, flow_name, inst, path)
         
-    def _add_state_helper(self, state, prob, flow_name, inst):
+    def _add_state_helper(self, state, prob, flow_name, inst, path):
+        
         if not state.left:
-            state.left = State(data='F', prob=round(1-prob, 2), work_load=state.work_load.copy(), inst=inst)  #main line for pull - for left node (failed attempt)
+            state.left = State(data='F', prob=round(1-prob, 2), work_load=state.work_load.copy(), inst=inst, path=path+'F')  #main line for pull - for left node (failed attempt)
+            
         else:
-            self._add_state_helper(state.left, prob, flow_name, inst=inst)
+            self._add_state_helper(state.left, prob, flow_name, inst=inst, path=path+'F')
         
         if not state.right:
             right_work_load = state.work_load.copy()
             right_work_load[flow_name] = True
-            state.right = State(data='S', prob=prob, work_load=right_work_load) # main line for pull - for right node (successful attempt)
+            state.right = State(data='S', prob=prob, work_load=right_work_load, inst=inst ,path=path+'S') # main line for pull - for right node (successful attempt)
         else:
-            self._add_state_helper(state.right, prob, flow_name, inst=inst)
+            self._add_state_helper(state.right, prob, flow_name, inst=inst, path=path+'S')
             
     
     # Adding state after a conditional pull (Assuming the previous pull was not successful)
-    def add_conditional_state(self, condition, condition_is_true, condition_is_false, prob=1, inst=''):
+    def add_conditional_state(self, condition, condition_is_true, condition_is_false, prob=1, inst='', path=''):
         if not self.root:
             return
         
-        self._add_conditional_state_helper(self.root, condition, condition_is_true, condition_is_false, prob, inst)
+        self._add_conditional_state_helper(self.root, condition, condition_is_true, condition_is_false, prob, inst, path)
     
-    def _add_conditional_state_helper(self, state, condition, condition_is_true, condition_is_false, prob, inst):
+    def _add_conditional_state_helper(self, state, condition, condition_is_true, condition_is_false, prob, inst, path):
         if not state.left:  
             if not state.work_load.get(condition):  # !has(condition)
                 # condition is true
@@ -52,7 +55,7 @@ class StatesTree:
                 
                 instruction, flow_name, channel_number = inst_parser(condition_is_true)
                 
-                self._add_state_helper(state, prob, flow_name, inst=condition_is_true)
+                self._add_state_helper(state, prob, flow_name, inst=condition_is_true, path=path)
                 
                 
                 
@@ -62,15 +65,15 @@ class StatesTree:
                 print(inst_parser(condition_is_false))
                 instruction, flow_name, channel_number = inst_parser(condition_is_false)
                 
-                self._add_state_helper(state, prob, flow_name, inst=condition_is_false)
+                self._add_state_helper(state, prob, flow_name, inst=condition_is_false, path=path)
         
         
         else:   # if not, continue looking for leaf nodes
             if state.left:
-                self._add_conditional_state_helper(state.left, condition, condition_is_true, condition_is_false, prob, inst=inst)
+                self._add_conditional_state_helper(state.left, condition, condition_is_true, condition_is_false, prob, inst=inst, path=path+'F')
             
             if state.right:
-                self._add_conditional_state_helper(state.right, condition, condition_is_true, condition_is_false, prob, inst=inst)
+                self._add_conditional_state_helper(state.right, condition, condition_is_true, condition_is_false, prob, inst=inst, path=path+'S')
 
 
                 
@@ -126,7 +129,7 @@ class StatesTree:
             return
         
         self._print_tree_helper(state.right, level+1)
-        print("    "*level + str(state.data) + str(state.work_load))
+        print("    "*level + str(state.data) +'|'+str(state.path))
         self._print_tree_helper(state.left, level+1)
     
     
@@ -160,36 +163,36 @@ class StatesTree:
             print("Empty tree!")
             return
         
-        g = Graph('G', format='png')
-        self._visualize_tree_helper(g, self.root, path='')
-        g.view()
+        graph = Graph('graph', format='png')
+        self._visualize_tree_helper(graph, self.root, path='')
+        graph.view()
     
-    def _visualize_tree_helper(self, g, state, path):
+    def _visualize_tree_helper(self, graph, state, path):
         if not state:
             return
         
+        graph.node(path, label='Path: '+state.path+'\n'+str(state.work_load)) 
         
-        
-        g.node(path, label='Path: '+path+'\n'+str(state.work_load))  
-        print(f'path ({path}) += str(state.data ({state.data}))')
+        print(f'path ({path}) / state.path ({state.path}) += str(state.data ({state.data}))')
         
         # path += str(state.data)
         
         if state.left:
-            print(f"path ({path}) + str(state.left.data) ({state.left.data})")
+            print(f"path ({path}) / state.path ({state.path}) + str(state.left.data) ({state.left.data})")
             
-            g.node(path + state.left.data, label= 'Path: '+path+'\n'+str(state.work_load))
-            g.edge(path, path + state.left.data, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-            self._visualize_tree_helper(g, state.left, path+str(state.left.data))
+            graph.node(path + state.left.data, label= 'Path: '+state.path+'\n'+str(state.work_load))
+            graph.edge(path, path + state.left.data, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+            self._visualize_tree_helper(graph, state.left, path+str(state.left.data))
         
         if state.right:
-            print(f"path ({path}) + str(state.right.data) ({state.right.data})")
+            print(f"path ({path}) / state.path ({state.path})+ str(state.right.data) ({state.right.data})")
             
-            g.node(path + state.right.data, label= 'Path: '+path+'\n'+str(state.work_load))
+            graph.node(path + state.right.data, label= 'Path: '+state.path+'\n'+str(state.work_load))
             
-            g.edge(path, path + state.right.data, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
-            self._visualize_tree_helper(g, state.right, path+str(state.right.data))
-    
+            graph.edge(path, path + state.right.data, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
+            self._visualize_tree_helper(graph, state.right, path+str(state.right.data))
+        
+
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 # ================================================================

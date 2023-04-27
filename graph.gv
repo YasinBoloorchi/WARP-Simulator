@@ -1,4 +1,4 @@
-graph G {
+graph "graph" {
 	"" [label="Path: 
 {'F0': False, 'F1': False}"]
 	F [label="Path: 
@@ -52,37 +52,13 @@ graph G {
 	SF [label="Path: S
 {'F0': True, 'F1': False}"]
 	S -- SF [label="F
-0.2--pull (F1,#1)"]
+0.2--pull (F1, #2)"]
 	SF [label="Path: SF
 {'F0': True, 'F1': False}"]
-	SFF [label="Path: SF
-{'F0': True, 'F1': False}"]
-	SF -- SFF [label="F
-0.2--pull (F1, #2)"]
-	SFF [label="Path: SFF
-{'F0': True, 'F1': False}"]
-	SFS [label="Path: SF
-{'F0': True, 'F1': False}"]
-	SF -- SFS [label="S
-0.8--pull (F1, #2)"]
-	SFS [label="Path: SFS
-{'F0': True, 'F1': True}"]
 	SS [label="Path: S
 {'F0': True, 'F1': False}"]
 	S -- SS [label="S
-0.8--pull (F1,#1)"]
-	SS [label="Path: SS
-{'F0': True, 'F1': True}"]
-	SSF [label="Path: SS
-{'F0': True, 'F1': True}"]
-	SS -- SSF [label="F
-0.2--pull (F1, #2)"]
-	SSF [label="Path: SSF
-{'F0': True, 'F1': True}"]
-	SSS [label="Path: SS
-{'F0': True, 'F1': True}"]
-	SS -- SSS [label="S
 0.8--pull (F1, #2)"]
-	SSS [label="Path: SSS
+	SS [label="Path: SS
 {'F0': True, 'F1': True}"]
 }
