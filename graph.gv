@@ -1,117 +1,146 @@
 graph "graph" {
 	"" [label="Path: 
-{'F0': False, 'F1': False}
-1"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 1
+ID: 0FF"]
 	"" [label="Path: 
-{'F0': False, 'F1': False}
-1"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 1
+ID: 0FF"]
 	"" -- F [label="F
 0.2--pull (F0, #0)"]
 	F [label="Path: F
-{'F0': False, 'F1': False}
-0.2"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.2
+ID: 1FF"]
 	F [label="Path: F
-{'F0': False, 'F1': False}
-0.2"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.2
+ID: 1FF"]
 	F -- FF [label="F
 0.2--pull(F0,#1)"]
 	FF [label="Path: FF
-{'F0': False, 'F1': False}
-0.04"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.04
+ID: 2FF"]
 	FF [label="Path: FF
-{'F0': False, 'F1': False}
-0.04"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.04
+ID: 2FF"]
 	FF -- FFF [label="F
 0.2--pull (F1, #2)"]
 	FFF [label="Path: FFF
-{'F0': False, 'F1': False}
-0.008"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.008
+ID: 3FF"]
 	FF [label="Path: FF
-{'F0': False, 'F1': False}
-0.04"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.04
+ID: 2FF"]
 	FF -- FFS [label="S
 0.8--pull (F1, #2)"]
 	FFS [label="Path: FFS
-{'F0': False, 'F1': True}
-0.032"]
+Workload: {'F0': False, 'F1': True}
+Path Prob: 0.032
+ID: 3FT"]
 	F [label="Path: F
-{'F0': False, 'F1': False}
-0.2"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 0.2
+ID: 1FF"]
 	F -- FS [label="S
 0.8--pull(F0,#1)"]
 	FS [label="Path: FS
-{'F0': True, 'F1': False}
-0.16"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.16
+ID: 2TF"]
 	FS [label="Path: FS
-{'F0': True, 'F1': False}
-0.16"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.16
+ID: 2TF"]
 	FS -- FSF [label="F
 0.2--pull (F1, #2)"]
 	FSF [label="Path: FSF
-{'F0': True, 'F1': False}
-0.032"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.032
+ID: 3TF"]
 	FS [label="Path: FS
-{'F0': True, 'F1': False}
-0.16"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.16
+ID: 2TF"]
 	FS -- FSS [label="S
 0.8--pull (F1, #2)"]
 	FSS [label="Path: FSS
-{'F0': True, 'F1': True}
-0.128"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.128
+ID: 3TT"]
 	"" [label="Path: 
-{'F0': False, 'F1': False}
-1"]
+Workload: {'F0': False, 'F1': False}
+Path Prob: 1
+ID: 0FF"]
 	"" -- S [label="S
 0.8--pull (F0, #0)"]
 	S [label="Path: S
-{'F0': True, 'F1': False}
-0.8"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.8
+ID: 1TF"]
 	S [label="Path: S
-{'F0': True, 'F1': False}
-0.8"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.8
+ID: 1TF"]
 	S -- SF [label="F
 0.2--pull (F1,#1)"]
 	SF [label="Path: SF
-{'F0': True, 'F1': False}
-0.16"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.16
+ID: 2TF"]
 	SF [label="Path: SF
-{'F0': True, 'F1': False}
-0.16"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.16
+ID: 2TF"]
 	SF -- SFF [label="F
 0.2--pull (F1, #2)"]
 	SFF [label="Path: SFF
-{'F0': True, 'F1': False}
-0.032"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.032
+ID: 3TF"]
 	SF [label="Path: SF
-{'F0': True, 'F1': False}
-0.16"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.16
+ID: 2TF"]
 	SF -- SFS [label="S
 0.8--pull (F1, #2)"]
 	SFS [label="Path: SFS
-{'F0': True, 'F1': True}
-0.128"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.128
+ID: 3TT"]
 	S [label="Path: S
-{'F0': True, 'F1': False}
-0.8"]
+Workload: {'F0': True, 'F1': False}
+Path Prob: 0.8
+ID: 1TF"]
 	S -- SS [label="S
 0.8--pull (F1,#1)"]
 	SS [label="Path: SS
-{'F0': True, 'F1': True}
-0.64"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.64
+ID: 2TT"]
 	SS [label="Path: SS
-{'F0': True, 'F1': True}
-0.64"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.64
+ID: 2TT"]
 	SS -- SSF [label="F
 0.2--pull (F1, #2)"]
 	SSF [label="Path: SSF
-{'F0': True, 'F1': True}
-0.128"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.128
+ID: 3TT"]
 	SS [label="Path: SS
-{'F0': True, 'F1': True}
-0.64"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.64
+ID: 2TT"]
 	SS -- SSS [label="S
 0.8--pull (F1, #2)"]
 	SSS [label="Path: SSS
-{'F0': True, 'F1': True}
-0.512"]
+Workload: {'F0': True, 'F1': True}
+Path Prob: 0.512
+ID: 3TT"]
 }

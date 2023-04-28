@@ -2,14 +2,23 @@ from graphviz import Graph
 from time import sleep
 import re
 
+class Node:
+    def __init__(self, node_id, label=None):
+        self.node_id = node_id
+        self.label = label
+        self.children = []
+
+    def add_child(self, child_node):
+        self.children.append(child_node)
+
 class State:
-    def __init__(self, data='S', left=None, right=None, prob=1, work_load={}, inst='', path = '', path_prob=1):
+    def __init__(self, data='S', left=None, right=None, prob=1, workload={}, inst='', path = '', path_prob=1):
         self.data = data
         self.left = left
         self.right = right
         self.prob = prob
         self.inst = inst
-        self.work_load = work_load
+        self.workload = workload
         self.path = path
         self.path_prob = path_prob
 
@@ -30,7 +39,7 @@ class StatesTree:
         if not state.left:
             state.left = State(data='F', 
                                prob=round(1-prob, rdigits), 
-                               work_load=state.work_load.copy(), 
+                               workload=state.workload.copy(), 
                                inst=inst, 
                                path=path+'F', 
                                path_prob=round(path_prob*round(1-prob, rdigits), rdigits))  #main line for pull - for left node (failed attempt)
@@ -46,11 +55,11 @@ class StatesTree:
         
         
         if not state.right:
-            right_work_load = state.work_load.copy()
+            right_work_load = state.workload.copy()
             right_work_load[flow_name] = True
             state.right = State(data='S',
                                 prob=prob,
-                                work_load=right_work_load,
+                                workload=right_work_load,
                                 inst=inst ,path=path+'S',
                                 path_prob=round(path_prob*prob, rdigits)) # main line for pull - for right node (successful attempt)
                     #-------------------------------------------------
@@ -73,7 +82,7 @@ class StatesTree:
     def _add_conditional_state_helper(self, state, condition, condition_is_true, condition_is_false, prob, inst, path, path_prob):
         rdigits = 3
         if not state.left:  
-            if not state.work_load.get(condition):  # !has(condition)
+            if not state.workload.get(condition):  # !has(condition)
                 # condition is true
                 print(f'If condition !has({condition}) is true')
                 
@@ -83,7 +92,7 @@ class StatesTree:
             
                 
                 
-            elif state.work_load[condition] and condition_is_false:
+            elif state.workload[condition] and condition_is_false:
                 #condition is false
                 print(f'If condition !has({condition}) is false')
                 print(inst_parser(condition_is_false))
@@ -113,7 +122,7 @@ class StatesTree:
     
     def _release_flow_helper(self, state, flow_name):
         if not state.left and not state.right:  # if state is a leaf node
-            state.work_load[flow_name] = False  
+            state.workload[flow_name] = False  
        
         else:                                   # if not, look for leafs
             if state.left:
@@ -130,7 +139,7 @@ class StatesTree:
     
     def _drop_flow_helper(self, state, flow_name):
         if not state.left and not state.right:  # if state is a leaf node
-            state.work_load.pop(flow_name)
+            state.workload.pop(flow_name)
         
         else:                                   # if not, look for leafs
             if state.left:
@@ -193,7 +202,14 @@ class StatesTree:
         if not state:
             return
         
-        graph.node(state.path, label='Path: '+state.path+'\n'+str(state.work_load)+'\n'+str(state.path_prob)) 
+        node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
+        
+        node_label = str('Path: '+state.path+'\n'+
+                         'Workload: '+str(state.workload)+'\n'+
+                         'Path Prob: '+str(state.path_prob)+'\n'+
+                         'ID: '+ str(len(state.path)) + node_id)
+        
+        graph.node(state.path, label= node_label) 
         
         # print(f'path ({path}) / state.path ({state.path}) += str(state.data ({state.data}))')
         
@@ -202,8 +218,7 @@ class StatesTree:
         if state.left:
             # print(f"path ({path}) / state.path ({state.path}) + str(state.left.data) ({state.left.data})")
             
-            
-            graph.node(state.path, label= 'Path: '+state.path+'\n'+str(state.work_load)+'\n'+str(state.path_prob))
+            graph.node(state.path, label= node_label)
             
             graph.edge(state.path, state.left.path, label=state.left.data+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
             
@@ -212,9 +227,9 @@ class StatesTree:
         if state.right:
             # print(f"path ({path}) / state.path ({state.path})+ str(state.right.data) ({state.right.data})")
             
-            graph.node(state.path, label= 'Path: '+state.path+'\n'+str(state.work_load)+'\n'+str(state.path_prob))
+            graph.node(state.path, label= node_label)
             
-            graph.edge(state.path, state.right.path, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.left.inst))
+            graph.edge(state.path, state.right.path, label= state.right.data+'\n'+str(state.right.prob)+'--'+str(state.right.inst))
             
             self._visualize_tree_helper(graph, state.right)
         
@@ -233,37 +248,64 @@ class StatesTree:
         if not state:
             return
         
-        node_id = ''.join([ str(b)[0] for b in list(state.work_load.values())])
+        node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
+        node_depth = str(len(state.path))
+        node_id = node_depth + node_id
+        
+        node_label = str('Path: '+state.path+'\n'+
+                         'Workload: '+str(state.workload)+'\n'+
+                         'ID: '+ node_id)
+        
+        
         print('='*35, '\n', f'node_id: ({node_id}), path ({path}) += str(state.data ({state.data}))', '\n','='*35)
         
-        # DAG.node(str(state.work_load), label='Path: '+path+'\n'+str(state.work_load))
+        DAG.node(node_id, label= node_label)
         
         # DAG.view()
         # path += str(state.data)
         
         if state.left:
-            left_node_id = ''.join([ str(b)[0] for b in list(state.left.work_load.values())])
-            print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.data) ({state.left.data})", '\n', '='*35)
+            left_node_id = ''.join([ str(b)[0] for b in list(state.left.workload.values())])
+            node_depth = str(len(state.left.path))
+            left_node_id = node_depth + left_node_id
             
-            DAG.node(left_node_id, label= 'Path: '+path+str(state.left.data)+'\n'+str(state.left.work_load))
-            DAG.edge(node_id, left_node_id, label= state.left.data+'\n'+'['+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst)+']')
+            # print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.data) ({state.left.data})", '\n', '='*35)
+            
+            DAG.node(node_id, 
+                     label= node_label+left_node_id)
+            
+            
+            DAG.edge(node_id, left_node_id, 
+                     label= state.left.data+
+                     '\n'+'['+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst)+']')
 
             # DAG.view()
             self._visualize_DAG_helper(DAG, state.left, path+str(state.left.data))
         
+        
         if state.right:
-            right_node_id = ''.join([ str(b)[0] for b in list(state.right.work_load.values())])
-            print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.data) ({state.right.data})", '\n','='*35)
+            right_node_id = ''.join([ str(b)[0] for b in list(state.right.workload.values())])
+            node_depth = str(len(state.right.path))
+            right_node_id = node_depth + right_node_id
             
-            DAG.node(right_node_id, label= 'Path: '+path+str(state.right.data)+'\n'+str(state.right.work_load))
-            DAG.edge(node_id, right_node_id, label= state.right.data+'\n'+'['+str(state.right.prob)+'--'+str(state.left.inst)+']')
+            # print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.data) ({state.right.data})", '\n','='*35)
+            
+            DAG.node(node_id, 
+                     label= node_label)
+            
+            
+            DAG.edge(node_id, right_node_id,
+                     label= state.right.data+
+                     '\n'+'['+str(state.right.prob)+'--'+str(state.left.inst)+']')
 
             # DAG.view()
             self._visualize_DAG_helper(DAG, state.right, path+str(state.right.data))
         
 
         # DAG.view()
+        
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 # ================================================================
 
 
@@ -316,7 +358,7 @@ def run_instruction(instruction_file_path):
             flow_name = parsed_instruction[1]
             address = parsed_instruction[2]
             
-            # work_load[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
+            # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
             
             tree.release_flow(flow_name)
             
@@ -348,13 +390,13 @@ def run_instruction(instruction_file_path):
             tree.add_conditional_state(condition, condition_is_true, condition_is_false, prob=0.8)
 
     tree.print_tree()
-        
+    
         
     # tree.all_paths()
 
     tree.visualize_tree()
 
-    # tree.visualize_DAG()
+    tree.visualize_DAG()
 
 # A dummy function for running a set of instructions
 def test_instructions():
