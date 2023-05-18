@@ -1,7 +1,10 @@
-release (F0,BC)
-release (F1,AC)
-
-
+release (F0,BA)
+--
 pull (F0, #0)
-if !has(F0) then pull(F0,#1) else pull (F1,#1)
+--
+sleep()
+--
+release (F0,AC)
+if !has(F0,BA) then pull(F0,#1,AC) else pull (F0,#1,BA)
+
 pull (F1, #2)
