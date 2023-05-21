@@ -1,0 +1,8 @@
+release (F0,AB)
+pull (F0,AB,#0)
+----
+release (F0,AC)
+if !has(F0,AB) then pull (F0,AB,#1) else push (F0,BC,#1)
+------
+push (F0,BC)
+
