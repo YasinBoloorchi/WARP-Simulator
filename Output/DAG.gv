@@ -1,0 +1,133 @@
+graph "./Output/DAG" {
+	"0F" [label="Path: 
+Workload: {'F0BA': False}
+ID: 0F"]
+	"0F" [label="Path: 
+Workload: {'F0BA': False}
+ID: 0F1FF"]
+	"0F" -- "1FF" [label="F
+[0.2--pull (F0,BA,#0)]"]
+	"1FF" [label="Path: F
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 1FF"]
+	"1FF" [label="Path: F
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 1FF"]
+	"1FF" -- "2FF" [label="H
+[1--sleep]"]
+	"2FF" [label="Path: FH
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 2FF"]
+	"2FF" [label="Path: FH
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 2FF3FF"]
+	"2FF" -- "3FF" [label="F
+[0.2--('pull', 'F0', 'BA', '#1')]"]
+	"3FF" [label="Path: FHF
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 3FF"]
+	"3FF" [label="Path: FHF
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 3FF4FF"]
+	"3FF" -- "4FF" [label="F
+[0.2--pull (F0,AC)]"]
+	"4FF" [label="Path: FHFF
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 4FF"]
+	"3FF" [label="Path: FHF
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 3FF"]
+	"3FF" -- "4FT" [label="S
+[0.8--pull (F0,AC)]"]
+	"4FT" [label="Path: FHFS
+Workload: {'F0BA': False, 'F0AC': True}
+ID: 4FT"]
+	"2FF" [label="Path: FH
+Workload: {'F0BA': False, 'F0AC': False}
+ID: 2FF"]
+	"2FF" -- "3TF" [label="S
+[0.8--('pull', 'F0', 'BA', '#1')]"]
+	"3TF" [label="Path: FHS
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 3TF"]
+	"3TF" [label="Path: FHS
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 3TF4TF"]
+	"3TF" -- "4TF" [label="F
+[0.2--pull (F0,AC)]"]
+	"4TF" [label="Path: FHSF
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 4TF"]
+	"3TF" [label="Path: FHS
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 3TF"]
+	"3TF" -- "4TT" [label="S
+[0.8--pull (F0,AC)]"]
+	"4TT" [label="Path: FHSS
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 4TT"]
+	"0F" [label="Path: 
+Workload: {'F0BA': False}
+ID: 0F"]
+	"0F" -- "1TF" [label="S
+[0.8--pull (F0,BA,#0)]"]
+	"1TF" [label="Path: S
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 1TF"]
+	"1TF" [label="Path: S
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 1TF"]
+	"1TF" -- "2TF" [label="H
+[1--sleep]"]
+	"2TF" [label="Path: SH
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 2TF"]
+	"2TF" [label="Path: SH
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 2TF3TF"]
+	"2TF" -- "3TF" [label="F
+[0.2--('pull', 'F0', 'AC', '#1')]"]
+	"3TF" [label="Path: SHF
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 3TF"]
+	"3TF" [label="Path: SHF
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 3TF4TF"]
+	"3TF" -- "4TF" [label="F
+[0.2--pull (F0,AC)]"]
+	"4TF" [label="Path: SHFF
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 4TF"]
+	"3TF" [label="Path: SHF
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 3TF"]
+	"3TF" -- "4TT" [label="S
+[0.8--pull (F0,AC)]"]
+	"4TT" [label="Path: SHFS
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 4TT"]
+	"2TF" [label="Path: SH
+Workload: {'F0BA': True, 'F0AC': False}
+ID: 2TF"]
+	"2TF" -- "3TT" [label="S
+[0.8--('pull', 'F0', 'AC', '#1')]"]
+	"3TT" [label="Path: SHS
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 3TT"]
+	"3TT" [label="Path: SHS
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 3TT4TT"]
+	"3TT" -- "4TT" [label="F
+[0.2--pull (F0,AC)]"]
+	"4TT" [label="Path: SHSF
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 4TT"]
+	"3TT" [label="Path: SHS
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 3TT"]
+	"3TT" -- "4TT" [label="S
+[0.8--pull (F0,AC)]"]
+	"4TT" [label="Path: SHSS
+Workload: {'F0BA': True, 'F0AC': True}
+ID: 4TT"]
+}
