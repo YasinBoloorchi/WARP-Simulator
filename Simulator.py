@@ -1,6 +1,8 @@
 from Graphgen import Node, State, StatesTree
 from Parser import parse_instructions, inst_parser
 from time import sleep
+import subprocess
+
 
 # Running the instructions that been parsed from the file
 def run_loop(instruction_file_path):
@@ -21,7 +23,7 @@ def run_loop(instruction_file_path):
             
             inst_type = inst[0]
             instruction = inst[1]
-            print(inst, '| inst type: ', inst_type, '| instruction: ', instruction)
+            print('\n\n[! Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
             
             if inst_type == 'release':
                 parsed_instruction = inst_parser(instruction)[0]
@@ -82,6 +84,7 @@ def run_loop(instruction_file_path):
         # sleep(0.5)
     tree.visualize_tree()
 
+    print('Hash table:', tree.hash_table)
     # tree.print_tree()
     
     # tree.all_paths()
@@ -91,6 +94,8 @@ def run_loop(instruction_file_path):
 
 def main():
     run_loop('./WARP-codes/pulls.wrp')
+    # run_loop('./WARP-codes/Instructions.wrp')
+    # subprocess.run(["pkill", "viewnior"])
     # parse_instructions('./NEW_Instructions.wrp')
 
 

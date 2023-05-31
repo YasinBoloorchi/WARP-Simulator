@@ -27,6 +27,14 @@ class State:
 class StatesTree:
     def __init__(self, root=None):
         self.root = root
+        self.hash_table = {}
+        
+        # Hash table: {'{F0BA:True, F0AC:False}': <Graphgen.State object at 0x7fa7dbcde530>, 
+        #              '{F0AC:False, F0BA:True}': <Graphgen.State object at 0x7fa7dbcddd20>,
+        #              '2F': <Graphgen.State object at 0x7fa7dbcddd80>,
+        #              '2T': <Graphgen.State object at 0x7fa7dbcdddb0>,
+        #              '3F': <Graphgen.State object at 0x7fa7dbcddde0>,
+        #              '3T': <Graphgen.State object at 0x7fa7dbcdde10>,}
     
     # Adding two states to all leaf after a pull 
     def add_pull_state(self, prob=1, flow_name='', inst='', path='', path_prob=1):
@@ -37,12 +45,19 @@ class StatesTree:
         self._add_pull_state_helper(self.root, prob, flow_name, inst, path, path_prob)
       
     def _add_pull_state_helper(self, state, prob, flow_name, inst, path, path_prob):
-        print('Adding states')
+        print('='*35)
+        print('- Call _add_pull_state_helper')
+        print('state.path: ', state.path)
+        print('Flow name: ', flow_name)
+        print(state.workload)
+        # self.visualize_tree()
+        # sleep(0.5)
+        print(self.hash_table)
         rdigits = 3
         
         # Skiping sleep states for being added right and left nodes
         if state.middle:
-                print('If state.middle ')
+                print('-- If state.middle ')
                 self._add_pull_state_helper(state.middle, 
                 prob, 
                 flow_name, 
@@ -52,70 +67,99 @@ class StatesTree:
         
         # If it's not a sleep state
         else:
-            
+            print('-- else (if NOT state.middle)')
             # If it doesn't have a left node
             if not state.left:
-                print('if not state.left')
-                right_work_load = state.workload.copy()
-                right_work_load[flow_name] = False
-                left_state = State(status='F', 
-                                prob=round(1-prob, rdigits), 
-                                workload=state.workload.copy(), 
-                                inst=inst, 
-                                path=path+'F', 
-                                path_prob=round(path_prob*round(1-prob, rdigits), rdigits))  #main line for pull - for left node (failed attempt)
+                # if it's not successful yet       
+                if not state.workload[flow_name]:
+                    print('--- if not state.left')
+                    left_work_load = state.workload.copy()
+                    left_work_load[flow_name] = False
+                    left_state = State(status='F', 
+                                    prob=round(1-prob, rdigits), 
+                                    workload=left_work_load, 
+                                    inst=inst, 
+                                    path=path+'F', 
+                                    path_prob=round(state.path_prob*round(1-prob, rdigits), rdigits))  #main line for pull - for left node (failed attempt)
+                    
+                    print("--- left_state.id: ", left_state.id)
                 
-                # similar_state = self.search_state(self.root, left_state.workload, len(left_state.path))
-                similar_state = self.search_state(self.root, left_state.id)
-                similar_state = None
-                if similar_state:
-                    similar_state.path_prob += left_state.path_prob
-                    state.left = similar_state
-                
-                else:
-                    state.left = left_state
+                    if  left_state.id in self.hash_table:
+                        print('---- left_state.id in self.hash_table')
+                        self.hash_table[left_state.id].path_prob += left_state.path_prob
+                        state.left = self.hash_table[left_state.id]
+                        return
+                    
+                    else:
+                        print('---- else (left_state.id NOT in self.hash_table)')
+                        state.left = left_state
+                        self.hash_table[state.left.id] = state.left
+                    
                         #-------------------------------------------------
+                
 
             # If it does have a left node
             else:
+                print('--- else (if state.left)')
                 self._add_pull_state_helper(state.left, 
                                     prob, 
                                     flow_name, 
                                     inst=inst, 
                                     path=path+'F',
-                                    path_prob= round(path_prob * round(1-prob, rdigits), rdigits))
+                                    path_prob= round(state.path_prob * round(1-prob, rdigits), rdigits))
+
+
             
             # If it doesn't have a right node
             if not state.right:
-                print('if not state.right')
+                print('--- if not state.right')
+                
                 right_work_load = state.workload.copy()
                 right_work_load[flow_name] = True
-                right_state = State(status='S',
-                                    prob=prob,
-                                    workload=right_work_load,
-                                    inst=inst ,path=path+'S',
-                                    path_prob=round(path_prob*prob, rdigits)) # main line for pull - for right node (successful attempt)
+                # if it's flow name is true in workload then path_prob * 1
+                if state.workload[flow_name]:
+                    print('---- state workload was True')
+                    right_state = State(status='S',
+                                        prob=prob,
+                                        workload=right_work_load,
+                                        inst=inst ,
+                                        path=path+'S',
+                                        path_prob=state.path_prob) # main line for pull - for right node (successful attempt)
+                else:
+                    print('--- if not state.right')
+                    right_state = State(status='S',
+                                        prob=prob,
+                                        workload=right_work_load,
+                                        inst=inst ,
+                                        path=path+'S',
+                                        path_prob=round(state.path_prob*prob, rdigits)) # main line for pull - for right node (successful attempt)
+                    
                 
-                # similar_state = self.search_state(self.root, right_state.workload, len(right_state.path))
-                similar_state = self.search_state(self.root, right_state.id)
-                similar_state = None
-                if similar_state:
-                    similar_state.path_prob += right_state.path_prob
-                    state.right = similar_state
+                print("--- right_state.id: ", right_state.id)
+                if right_state.id in self.hash_table:
+                    print('---- right_state.id in self.hash_table')
+                    self.hash_table[right_state.id].path_prob += right_state.path_prob
+                    state.right = self.hash_table[right_state.id]
+                    
                 
-                else:    
+                else:
+                    print('---- else (right_state.id NOT in self.hash_table)')
                     state.right = right_state
+                    self.hash_table[state.right.id] = state.right
+                    
                         #-------------------------------------------------
             
             # If it does have a right node
             else:
-                self._add_pull_state_helper(state.right, 
-                                    prob, 
-                                    flow_name, 
-                                    inst=inst, 
-                                    path=path+'S', 
-                                    path_prob= round(path_prob * prob, rdigits))
-                    
+                print('--- else (if state.right)')
+                if state:
+                    self._add_pull_state_helper(state.right, 
+                                        prob, 
+                                        flow_name, 
+                                        inst=inst, 
+                                        path=path+'S', 
+                                        path_prob= round(path_prob * prob, rdigits))
+                        
 
     # Adding state after a conditional pull (Assuming the previous pull was not successful)
     def add_conditional_state(self, condition, condition_is_true, condition_is_false, prob=1, inst='', path='', path_prob=1):
@@ -207,6 +251,7 @@ class StatesTree:
         self._add_sleep_state_helper(self.root, prob, flow_name, inst, path, path_prob)
       
     def _add_sleep_state_helper(self, state, prob, flow_name, inst, path, path_prob):
+        
         if not state.right and not state.left and not state.middle:
             middle_work_load = state.workload.copy()
             state.middle = State(status='H',
