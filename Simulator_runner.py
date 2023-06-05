@@ -10,7 +10,7 @@ def run_slot(tree, slot):
     for inst in slot:
         inst_type = inst[0]
         instruction = inst[1]
-        print('\n\n[! Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
+        print('\n\n[Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
         
         if inst_type == 'release':
             parsed_instruction = inst_parser(instruction)[0]
@@ -85,12 +85,12 @@ def run_loop(instruction_file_path):
 
         run_slot(tree, slot)    
         
-        sleep(0.5)
-        tree.visualize()
+        # sleep(0.5)
+        # tree.visualize()
 
         print('Hash table:')
         for state in tree.hash_table:
-            print(state, tree.hash_table.get(state).prob, tree.hash_table.get(state))
+            print('\t',state, '|',tree.hash_table.get(state).prob, '|',tree.hash_table.get(state))
         
         
         print('Test of Correctness result: ', test_of_correctness(tree))

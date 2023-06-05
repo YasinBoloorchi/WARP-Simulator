@@ -121,7 +121,6 @@ class StatesCollection:
             
             # Checking the main condition
             if not state.workload.get(condition): # !has F0AB == Ture
-                print('Condition is True')
                 flow_name = condition_is_true
                 # ------------------------------------
                 # Create a new state for success -----
@@ -162,7 +161,6 @@ class StatesCollection:
                 
                     
             else: # !has F0AB == False
-                print('Condition is False')
                 flow_name = condition_is_false
                 # ------------------------------------
                 # Create a new state for success -----
