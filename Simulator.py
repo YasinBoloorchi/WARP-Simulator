@@ -1,104 +1,139 @@
-from Graphgen import Node, State, StatesTree
-from Parser import parse_instructions, inst_parser
+from graphviz import Graph
 from time import sleep
-import subprocess
+import copy
 
+class State:
+    def __init__(self, prob=1, workload={},):
+        self.prob = prob
+        self.workload = workload
+        self.id = ''
 
-# Running the instructions that been parsed from the file
-def run_loop(instruction_file_path):
-    # initial variables
-    instructions = parse_instructions(instruction_file_path)
-    
-    # Generate States tree and initial state
-    tree = StatesTree()
-    tree.add_pull_state()
-
-    
-    # [['release', 'release (F0,BC)'], ['release', 'release (F1,AC)'], ['pull', 'pull (F0, #0)'], ['if', 'if !has(F0) then pull(F0,#1) else pull (F1,#1)'], ['pull', 'pull (F1, #2)']]
-    # warp code execution losiop
-    for slot in instructions:
-        pull_count = 0
+class StatesCollection:
+    def __init__(self):
+        self.hash_table = {}
         
-        for inst in slot:
-            
-            inst_type = inst[0]
-            instruction = inst[1]
-            print('\n\n[! Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
-            
-            if inst_type == 'release':
-                parsed_instruction = inst_parser(instruction)[0]
-                # inst_parser => [('release', 'F0', 'BA', '')]
-            
-                flow_name = parsed_instruction[1]+parsed_instruction[2]
-                
-                # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
-                
-                tree.release_flow(flow_name)
-                
-            
-            elif inst_type == 'drop':
-                parsed_instruction = inst_parser(instruction)[0]
-                # inst_parser => [('drop', 'F0', 'BA', '')] 
-                
-                flow_name = parsed_instruction[1]+parsed_instruction[2]
-                
-                tree.drop_flow(flow_name)
-
-
-            elif inst_type == 'pull' or inst_type == 'push':
-                pull_count += 1
-                parsed_instruction = inst_parser(instruction)
-                # inst_parser => [('pull', 'F0', 'BA', '#0')] 
-                
-                instruc, flow_name, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
-                flow_name+=nodes
-                tree.add_pull_state(prob=0.8, flow_name=flow_name, inst=instruction)
-                
-                
-            elif inst_type == 'if':
-                pull_count += 1
-                parsed_instruction = inst_parser(instruction)
-                # inst_parser => [('has', 'F0', 'BA', ''), ('pull', 'F0', 'BA', '#1'), ('pull', 'F0', 'AC', '#1')] 
-                
-                condition, condition_is_true, condition_is_false = inst_parser(instruction)         
-
-                #          F0         pull(F0,#1)         pull (F1,#1)
-                #         vvvv         vvvvvvvv              vvvv
-                # print(condition, condition_is_true, condition_is_false)
-                
-                flow_name = condition[1]
-                nodes = condition[2]
-                flow_name += nodes
-                condition = flow_name
-                
-                tree.add_conditional_state(condition, condition_is_true, condition_is_false, prob=0.8)
-
+        # Hash table: {
+                        # F0AC:True,F0BA:True 0.922 <Simulator.State object at 0x7f95e511a410>
+                        # F0AC:False,F0BA:True 0.038 <Simulator.State object at 0x7f95e511a470>
+                        # F0AC:True,F0BA:False 0.038 <Simulator.State object at 0x7f95e511a4d0>
+                        # F0AC:False,F0BA:False 0.002 <Simulator.State object at 0x7f95e511a530>
+                    #  } 
     
-            elif inst_type == 'sleep':
-                print(instruction)
-                tree.add_sleep_state(inst='sleep')
-
-        if pull_count > 1:
-            raise Exception('Unexceptable number of pull/push requests in a single slot.')
+    def generate_unique_string(self, dictionary):
+        dictionary_keys = list(dictionary.keys())
+        dictionary_keys.sort()
+        sorted_dictionary = {key: dictionary[key] for key in dictionary_keys}
+        key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
+        unique_string = ','.join(key_value_strings)
+        return unique_string
         
-        # sleep(0.5)
-    tree.visualize_tree()
 
-    print('Hash table:', tree.hash_table)
-    # tree.print_tree()
+    def release(self, flow_name):
+        # flow_name = 'F0BA'    
+        
+        """Add the given flow_name with False status
+        to all the states' workloads in the hash table
+        """
+        
+        if not self.hash_table:
+            initial_state = State(prob=1, workload={flow_name:False})
+            initial_state.id = self.generate_unique_string(initial_state.workload)
+            self.hash_table[initial_state.id] = initial_state
+            return
+
+
+        new_hash_table = {}
+        
+        for key in list(self.hash_table.keys()):
+            
+            state = self.hash_table.pop(key)
+            state.workload[flow_name] = False
+            state.id = self.generate_unique_string(state.workload)
+
+            new_hash_table[state.id] = state
+            
+        self.hash_table = new_hash_table.copy()
+
     
-    # tree.all_paths()
+    def pull(self, flow_name, prob):
+        # flow_name = 'F0BA',
+        # prob = 0.8
+        
+        """ * pop every state
+            * multiply one by S and another by F
+            * put the two new states in the new hash table
+            * merge similar states
+        """       
+        
+        new_hash_table = {}
+        decimal_precision = 3
+        
+        for key in list(self.hash_table.keys()):
+            state = self.hash_table.pop(key)
+            
+            # ------------------------------------
+            # Create a new state for success -----
+            success_state = copy.deepcopy(state)
+            
+            # Update workloads and probablity
+            if state.workload[flow_name] != True:
+                success_state.workload[flow_name] = True
+                success_state.prob = round(success_state.prob * prob, decimal_precision)               # Multiply S probability
+            else:
+                success_state.prob *= 1
+            
+            # Generate unique id
+            success_state.id = self.generate_unique_string(success_state.workload)
+            
+            # Update new hashtable with success state (Merge section)
+            if success_state.id in new_hash_table:
+                current_state_prob =  new_hash_table[success_state.id].prob
+                new_hash_table[success_state.id].prob = round(current_state_prob + success_state.prob, decimal_precision)  # Sum similar state probablity
 
-    # tree.visualize_DAG()
+            else:
+                new_hash_table[success_state.id] = success_state
+            
+            # ------------------------------------
+            # Create a new state for failure -----
+            if state.workload[flow_name] == True:
+                continue
+            
+            fail_state = copy.deepcopy(state)
+            
+            # Updat probability
+            fail_state.prob = round(fail_state.prob * (1-prob), decimal_precision)
+            
+            # Update unique id
+            fail_state.id = self.generate_unique_string(fail_state.workload)
+            
+            # Update new hashtable with failure state
+            new_hash_table[fail_state.id] = fail_state
+        
+        # Replacing the new hash table with the old one
+        self.hash_table = new_hash_table.copy()
+    
+    
+    def conditional_pull(self, condition, condition_is_true, condition_is_false):
+        
+        new_hash_table = {}
+        for key in list(self.hash_table.keys()):
+            pass
+            
+        
+        pass
+        
+    
+    def visualize(self):
+        if not self.hash_table:
+            print('Hash table is empty')
+            return        
 
+        graph = Graph('./Output/Simulators_output', format='png')
+        
+        for key in self.hash_table:
+            state = self.hash_table.get(key)
+            graph.node(state.id, label=state.id+'\n'+str(state.prob))
+            
+        graph.view()
+    
 
-def main():
-    run_loop('./WARP-codes/pulls.wrp')
-    # run_loop('./WARP-codes/Instructions.wrp')
-    # subprocess.run(["pkill", "viewnior"])
-    # parse_instructions('./NEW_Instructions.wrp')
-
-
-if __name__ == "__main__":
-    # parse_instructions('./Instructions.wrp')
-    main()

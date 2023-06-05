@@ -36,6 +36,29 @@ class StatesTree:
         #              '3F': <Graphgen.State object at 0x7fa7dbcddde0>,
         #              '3T': <Graphgen.State object at 0x7fa7dbcdde10>,}
     
+    
+    def generate_unique_string(dictionary):
+        sorted_items = sorted(dictionary.items())  # Sort dictionary by keys
+        key_value_strings = [f"{key}:{value}" for key, value in sorted_items]
+        unique_string = ",".join(key_value_strings)
+        return unique_string
+
+        # table = {'F0BA': True, 'F0AC': False}
+        # unique_string = generate_unique_string(table)
+        # print(unique_string)
+
+    
+    def pull(self, flow_name, prob):
+        
+        
+        
+        pass
+    
+    
+      
+    
+    # ================== old code ============================
+    
     # Adding two states to all leaf after a pull 
     def add_pull_state(self, prob=1, flow_name='', inst='', path='', path_prob=1):
         if not self.root:
@@ -208,7 +231,7 @@ class StatesTree:
     # Releasing and dropping flows in the tree
     def release_flow(self, flow_name):
         if not self.root:
-            return
+            self.root = State()
         
         self._release_flow_helper(self.root, flow_name)
     
@@ -388,99 +411,7 @@ class StatesTree:
                 # graph.edge(state.path, state.right.path, label= state.right.status+'\n'+str(state.right.prob)+'--'+str(state.right.inst))
                 
                 self._visualize_tree_helper(graph, state.right)
-        
-        
-    def visualize_DAG(self):
-        if not self.root:
-            print("Empty tree!")
-            return
-        
-        DAG = Graph('./Output/DAG', format='png')
-        self._visualize_DAG_helper(DAG, self.root, path='')
-        DAG.view()
-    
-    def _visualize_DAG_helper(self, DAG, state, path):
-        if not state:
-            return
-        
-        node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
-        node_depth = str(len(state.path))
-        node_id = node_depth + node_id
-        
-        node_label = str('Path: '+state.path+'\n'+
-                         'Workload: '+str(state.workload)+'\n'+
-                         'ID: '+ node_id)
-        
-        
-        print('='*35, '\n', f'node_id: ({node_id}), path ({path}) += str(state.status ({state.status}))', '\n','='*35)
-        
-        DAG.node(node_id, label= node_label)
-        
-        # DAG.view()
-        # path += str(state.status)
-        
-        
-        if state.middle:
-            middle_node_id = ''.join([ str(b)[0] for b in list(state.middle.workload.values())])
-            node_depth = str(len(state.middle.path))
-            middle_node_id = node_depth + middle_node_id
-            
-            # print('='*35,'\n',f"middle_node_id: ({middle_node_id}), path ({path}) + str(state.middle.status) ({state.middle.status})", '\n', '='*35)
-            
-            DAG.node(node_id, 
-                    label= node_label)
-            
-            
-            DAG.edge(node_id, middle_node_id, 
-                    label= state.middle.status+
-                    '\n'+'['+str(state.middle.prob)+'--'+str(state.middle.inst)+']')
 
-            # DAG.view()
-            self._visualize_DAG_helper(DAG, state.middle, path+str(state.middle.status))
-        
-        
-        else:
-        
-            if state.left:
-                left_node_id = ''.join([ str(b)[0] for b in list(state.left.workload.values())])
-                node_depth = str(len(state.left.path))
-                left_node_id = node_depth + left_node_id
-                
-                # print('='*35,'\n',f"left_node_id: ({left_node_id}), path ({path}) + str(state.left.status) ({state.left.status})", '\n', '='*35)
-                
-                DAG.node(node_id, 
-                        label= node_label+left_node_id)
-                
-                
-                DAG.edge(node_id, left_node_id, 
-                        label= state.left.status+
-                        '\n'+'['+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst)+']')
-
-                # DAG.view()
-                self._visualize_DAG_helper(DAG, state.left, path+str(state.left.status))
-            
-            
-            if state.right:
-                right_node_id = ''.join([ str(b)[0] for b in list(state.right.workload.values())])
-                node_depth = str(len(state.right.path))
-                right_node_id = node_depth + right_node_id
-                
-                # print('='*35,'\n',f"right_node_id: ({right_node_id}), path ({path}) + str(state.right.status) ({state.right.status})", '\n','='*35)
-                
-                DAG.node(node_id, 
-                        label= node_label)
-                
-                
-                DAG.edge(node_id, right_node_id,
-                        label= state.right.status+
-                        '\n'+'['+str(state.right.prob)+'--'+str(state.left.inst)+']')
-
-                # DAG.view()
-                self._visualize_DAG_helper(DAG, state.right, path+str(state.right.status))
-            
-
-        # DAG.view()
-    
 
     def search_state(self, state, target_id, age=0):
         

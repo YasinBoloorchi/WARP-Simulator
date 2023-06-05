@@ -1,6 +1,10 @@
 release (F0,BA)
+release (F0,AC)
+----
 pull (F0,BA,#1)
 -----
 pull (F0,BA,#2)
 ----
-pull (F0,BA,#3)
+push (F0,AC,#3)
+---
+push (F0,AC,#4)
