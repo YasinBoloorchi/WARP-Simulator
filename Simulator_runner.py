@@ -29,7 +29,7 @@ def run_slot(tree, slot):
             
             flow_name = parsed_instruction[1]+parsed_instruction[2]
             
-            # tree.drop_flow(flow_name)
+            tree.drop_flow(flow_name)
 
 
         elif inst_type == 'pull' or inst_type == 'push':
@@ -53,9 +53,11 @@ def run_slot(tree, slot):
             #         vvvv         vvvvvvvv              vvvv
             # print(condition, condition_is_true, condition_is_false)
             
-            flow_name = condition[1]+condition[2]
+            condition_flow_name = condition[1]+condition[2]
+            condition_is_true_flow_name = condition_is_true[1]+condition_is_true[2]
+            condition_is_false_flow_name = condition_is_false[1]+condition_is_false[2]
             
-            # tree.add_conditional_state(condition, condition_is_true, condition_is_false, prob=0.8)
+            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, prob=0.8)
 
 
         elif inst_type == 'sleep':
@@ -83,8 +85,8 @@ def run_loop(instruction_file_path):
 
         run_slot(tree, slot)    
         
-        # sleep(0.5)
-        # tree.visualize()
+        sleep(0.5)
+        tree.visualize()
 
         print('Hash table:')
         for state in tree.hash_table:
@@ -109,7 +111,8 @@ def test_of_correctness(tree):
 
 def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
-    run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
+    # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
+    run_loop('./WARP-codes/one_condition.wrp') # Passed ✓ 
     # subprocess.run(["pkill", "viewnior"])
 
 

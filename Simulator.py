@@ -87,8 +87,7 @@ class StatesCollection:
             
             # Update new hashtable with success state (Merge section)
             if success_state.id in new_hash_table:
-                current_state_prob =  new_hash_table[success_state.id].prob
-                new_hash_table[success_state.id].prob = round(current_state_prob + success_state.prob, decimal_precision)  # Sum similar state probablity
+                new_hash_table[success_state.id].prob = round(new_hash_table[success_state.id].prob + success_state.prob, decimal_precision)  # Sum similar state probablity
 
             else:
                 new_hash_table[success_state.id] = success_state
@@ -113,15 +112,121 @@ class StatesCollection:
         self.hash_table = new_hash_table.copy()
     
     
-    def conditional_pull(self, condition, condition_is_true, condition_is_false):
-        
+    def conditional_pull(self, condition, condition_is_true, condition_is_false, prob):
+        decimal_precision = 3
         new_hash_table = {}
+        
         for key in list(self.hash_table.keys()):
-            pass
+            state = self.hash_table.pop(key)
+            
+            # Checking the main condition
+            if not state.workload.get(condition): # !has F0AB == Ture
+                print('Condition is True')
+                flow_name = condition_is_true
+                # ------------------------------------
+                # Create a new state for success -----
+                success_state = copy.deepcopy(state)
+                
+                # Update workloads and probablity
+                if state.workload[flow_name] != True:
+                    success_state.workload[flow_name] = True
+                    success_state.prob = round(success_state.prob * prob, decimal_precision)               # Multiply S probability
+                else:
+                    success_state.prob *= 1
+                
+                # Generate unique id
+                success_state.id = self.generate_unique_string(success_state.workload)
+                
+                # Update new hashtable with success state (Merge section)
+                if success_state.id in new_hash_table:
+                    new_hash_table[success_state.id].prob = round(new_hash_table[success_state.id].prob + success_state.prob, decimal_precision)  # Sum similar state probablity
+
+                else:
+                    new_hash_table[success_state.id] = success_state
+                
+                # ------------------------------------
+                # Create a new state for failure -----
+                if state.workload[flow_name] == True:
+                    continue
+                
+                fail_state = copy.deepcopy(state)
+                
+                # Updat probability
+                fail_state.prob = round(fail_state.prob * (1-prob), decimal_precision)
+                
+                # Update unique id
+                fail_state.id = self.generate_unique_string(fail_state.workload)
+                
+                # Update new hashtable with failure state
+                new_hash_table[fail_state.id] = fail_state
+                
+                    
+            else: # !has F0AB == False
+                print('Condition is False')
+                flow_name = condition_is_false
+                # ------------------------------------
+                # Create a new state for success -----
+                success_state = copy.deepcopy(state)
+                
+                # Update workloads and probablity
+                if state.workload[flow_name] != True:
+                    success_state.workload[flow_name] = True
+                    success_state.prob = round(success_state.prob * prob, decimal_precision)               # Multiply S probability
+                else:
+                    success_state.prob *= 1
+                
+                # Generate unique id
+                success_state.id = self.generate_unique_string(success_state.workload)
+                
+                # Update new hashtable with success state (Merge section)
+                if success_state.id in new_hash_table:
+                    new_hash_table[success_state.id].prob = round(new_hash_table[success_state.id].prob + success_state.prob, decimal_precision)  # Sum similar state probablity
+
+                else:
+                    new_hash_table[success_state.id] = success_state
+                
+                # ------------------------------------
+                # Create a new state for failure -----
+                if state.workload[flow_name] == True:
+                    continue
+                
+                fail_state = copy.deepcopy(state)
+                
+                # Updat probability
+                fail_state.prob = round(fail_state.prob * (1-prob), decimal_precision)
+                
+                # Update unique id
+                fail_state.id = self.generate_unique_string(fail_state.workload)
+                
+                # Update new hashtable with failure state
+                new_hash_table[fail_state.id] = fail_state
+                
+
+        # Replacing the new hash table with the old one
+        self.hash_table = new_hash_table.copy()
+        
+    
+    def drop_flow(self, flow_name):
+        decimal_precision = 3
+        new_hash_table = {}
+        
+        for key in list(self.hash_table.keys()):
+            state = self.hash_table.pop(key)
+            
+            # Drop the flow name from the workload
+            state.workload.pop(flow_name)
+            state.id = self.generate_unique_string(state.workload)
+            
+            # Update new hashtable with success state (Merge section)
+            if state.id in new_hash_table:
+                new_hash_table[state.id].prob = round(new_hash_table[state.id].prob + state.prob, decimal_precision)  # Sum similar state probablity
+
+            else:
+                new_hash_table[state.id] = state
             
         
-        pass
-        
+        self.hash_table = new_hash_table
+            
     
     def visualize(self):
         if not self.hash_table:

@@ -1,6 +1,4 @@
 graph "./Output/Simulators_output" {
-	"F0BA:True" [label="F0BA:True
-0.992"]
-	"F0BA:False" [label="F0BA:False
-0.008"]
+	"" [label="
+1.0"]
 }
