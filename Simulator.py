@@ -116,6 +116,10 @@ class StatesCollection:
         decimal_precision = 3
         new_hash_table = {}
         
+        print('Hash table before conditional pull:')
+        for state in self.hash_table:
+            print('\t',state, '|',self.hash_table.get(state).prob, '|',self.hash_table.get(state))
+        
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
             
@@ -162,6 +166,11 @@ class StatesCollection:
                     
             else: # !has F0AB == False
                 flow_name = condition_is_false
+                
+                if condition_is_false == '':
+                    new_hash_table[state.id] = state
+                    continue
+                
                 # ------------------------------------
                 # Create a new state for success -----
                 success_state = copy.deepcopy(state)

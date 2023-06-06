@@ -103,16 +103,18 @@ def test_of_correctness(tree):
         sum_of_probabilities += tree.hash_table.get(state).prob
     
     if sum_of_probabilities == 1:
-        return True
+        return '\033[92m'+'Correct'+'\033[0m'
     else:
-        return False
+        return '\033[91m'+'Failed'+'\033[0m'
         
-    
 
 def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    run_loop('./WARP-codes/one_condition.wrp') # Passed ✓ 
+    # run_loop('./WARP-codes/one_condition.wrp') # Passed ✓ 
+    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    
+    
     # subprocess.run(["pkill", "viewnior"])
 
 

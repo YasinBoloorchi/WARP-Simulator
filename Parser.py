@@ -28,11 +28,15 @@ def parse_instructions(instruction_file_path):
 def inst_parser(instruction):
     parsed_inst = re.findall('(\w*)\s*\(\s*(\w\d+)\s*,*\s*(\w+)*\s*,*(\#\d+)*\s*\)', instruction)
     
-    # print('\n\n','Parsed ====>',parsed_inst,'\n\n')
+    
+    if len(parsed_inst) == 2:
+        parsed_inst.append(('', '', '', ''))
+    
+    print('\n\n','Parsed ====>',parsed_inst,'\n\n', 'Len: ', len(parsed_inst))
+    
     return parsed_inst
 
 
 def if_inst_parser(instruction):
-    parsd_if_inst = re.findall('^\w*\s*\W\w*\((\w\d),\w{2}\)\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+,\w{2}\))\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+,\w{2}\))*$', instruction)[0]
-    
-    return parsd_if_inst
+    parsed_if_inst = re.findall('^\w*\s*\W\w*\((\w\d),\w{2}\)\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+,\w{2}\))\s*\w*\s*(\w*\s*\(\s*\w+\d+\s*,\s*\W\d+,\w{2}\))*$', instruction)[0]
+    return parsed_if_inst
