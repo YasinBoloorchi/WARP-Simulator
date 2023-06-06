@@ -1,6 +1,7 @@
 from Simulator import State, StatesCollection
 from Parser import parse_instructions, inst_parser
 from time import sleep
+from sympy import symbols, factor
 import subprocess
 
 
@@ -39,7 +40,7 @@ def run_slot(tree, slot):
             
             instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
             flow_name =flow_number + nodes
-            tree.pull(flow_name=flow_name, prob=0.8)
+            tree.pull(flow_name=flow_name)#, prob=0.8)
             
         
         elif inst_type == 'if':
@@ -57,7 +58,7 @@ def run_slot(tree, slot):
             condition_is_true_flow_name = condition_is_true[1]+condition_is_true[2]
             condition_is_false_flow_name = condition_is_false[1]+condition_is_false[2]
             
-            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, prob=0.8)
+            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name)#, prob=0.8)
 
 
         elif inst_type == 'sleep':
@@ -89,8 +90,12 @@ def run_loop(instruction_file_path):
         # tree.visualize()
 
         print('Hash table:')
+        success_prob = symbols('S')
         for state in tree.hash_table:
-            print('\t',state, '|',tree.hash_table.get(state).prob, '|',tree.hash_table.get(state))
+            print('\t',state, '|',
+                  factor(tree.hash_table.get(state).prob), '|',
+                  round(factor(tree.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
+                  tree.hash_table.get(state))
         
         
         print('Test of Correctness result: ', test_of_correctness(tree))
@@ -102,7 +107,7 @@ def test_of_correctness(tree):
     for state in tree.hash_table:
         sum_of_probabilities += tree.hash_table.get(state).prob
     
-    if sum_of_probabilities == 1:
+    if factor(sum_of_probabilities) == 1:
         return '\033[92m'+'Correct'+'\033[0m'
     else:
         return '\033[91m'+'Failed'+'\033[0m'
