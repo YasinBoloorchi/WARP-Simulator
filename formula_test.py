@@ -5,4 +5,4 @@ fail_prob = 1 - success_prob
 
 expresion = success_prob * success_prob + success_prob
 
-print(expresion)
+print(expresion.subs(success_prob, 0.8))

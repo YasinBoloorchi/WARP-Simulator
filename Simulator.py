@@ -1,8 +1,9 @@
 from graphviz import Graph
 from time import sleep
-from sympy import symbols, factor
 import copy
-
+# C:\Program Files\Graphviz
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
 
 class State:
     def __init__(self, prob=1, workload={},):
@@ -13,6 +14,7 @@ class State:
 class StatesCollection:
     def __init__(self):
         self.hash_table = {}
+        
         # Hash table: {
                         # F0AC:True,F0BA:True 0.922 <Simulator.State object at 0x7f95e511a410>
                         # F0AC:False,F0BA:True 0.038 <Simulator.State object at 0x7f95e511a470>
@@ -56,7 +58,7 @@ class StatesCollection:
         self.hash_table = new_hash_table.copy()
 
     
-    def pull(self, flow_name, prob=symbols('S')):
+    def pull(self, flow_name, prob):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -79,8 +81,7 @@ class StatesCollection:
             # Update workloads and probablity
             if state.workload[flow_name] != True:
                 success_state.workload[flow_name] = True
-
-                success_state.prob = success_state.prob * prob               # Multiply S probability
+                success_state.prob = round(success_state.prob * prob, decimal_precision)               # Multiply S probability
             else:
                 success_state.prob *= 1
             
@@ -89,8 +90,7 @@ class StatesCollection:
             
             # Update new hashtable with success state (Merge section)
             if success_state.id in new_hash_table:
-
-                new_hash_table[success_state.id].prob = new_hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+                new_hash_table[success_state.id].prob = round(new_hash_table[success_state.id].prob + success_state.prob, decimal_precision)  # Sum similar state probablity
 
             else:
                 new_hash_table[success_state.id] = success_state
@@ -103,8 +103,7 @@ class StatesCollection:
             fail_state = copy.deepcopy(state)
             
             # Updat probability
-
-            fail_state.prob = fail_state.prob * (1-prob)
+            fail_state.prob = round(fail_state.prob * (1-prob), decimal_precision)
             
             # Update unique id
             fail_state.id = self.generate_unique_string(fail_state.workload)
@@ -116,13 +115,9 @@ class StatesCollection:
         self.hash_table = new_hash_table.copy()
     
     
-    def conditional_pull(self, condition, condition_is_true, condition_is_false, prob=symbols('S')):
+    def conditional_pull(self, condition, condition_is_true, condition_is_false, prob):
         decimal_precision = 3
         new_hash_table = {}
-        
-        print('Hash table before conditional pull:')
-        for state in self.hash_table:
-            print('\t',state, '|',self.hash_table.get(state).prob, '|',self.hash_table.get(state))
         
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
@@ -137,8 +132,7 @@ class StatesCollection:
                 # Update workloads and probablity
                 if state.workload[flow_name] != True:
                     success_state.workload[flow_name] = True
-
-                    success_state.prob = success_state.prob * prob               # Multiply S probability
+                    success_state.prob = round(success_state.prob * prob, decimal_precision)               # Multiply S probability
                 else:
                     success_state.prob *= 1
                 
@@ -147,8 +141,7 @@ class StatesCollection:
                 
                 # Update new hashtable with success state (Merge section)
                 if success_state.id in new_hash_table:
-
-                    new_hash_table[success_state.id].prob = new_hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+                    new_hash_table[success_state.id].prob = round(new_hash_table[success_state.id].prob + success_state.prob, decimal_precision)  # Sum similar state probablity
 
                 else:
                     new_hash_table[success_state.id] = success_state
@@ -161,8 +154,7 @@ class StatesCollection:
                 fail_state = copy.deepcopy(state)
                 
                 # Updat probability
-
-                fail_state.prob = fail_state.prob * (1-prob)
+                fail_state.prob = round(fail_state.prob * (1-prob), decimal_precision)
                 
                 # Update unique id
                 fail_state.id = self.generate_unique_string(fail_state.workload)
@@ -173,11 +165,6 @@ class StatesCollection:
                     
             else: # !has F0AB == False
                 flow_name = condition_is_false
-                
-                if condition_is_false == '':
-                    new_hash_table[state.id] = state
-                    continue
-                
                 # ------------------------------------
                 # Create a new state for success -----
                 success_state = copy.deepcopy(state)
@@ -185,8 +172,7 @@ class StatesCollection:
                 # Update workloads and probablity
                 if state.workload[flow_name] != True:
                     success_state.workload[flow_name] = True
-
-                    success_state.prob = success_state.prob * prob               # Multiply S probability
+                    success_state.prob = round(success_state.prob * prob, decimal_precision)               # Multiply S probability
                 else:
                     success_state.prob *= 1
                 
@@ -195,8 +181,7 @@ class StatesCollection:
                 
                 # Update new hashtable with success state (Merge section)
                 if success_state.id in new_hash_table:
-
-                    new_hash_table[success_state.id].prob = new_hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+                    new_hash_table[success_state.id].prob = round(new_hash_table[success_state.id].prob + success_state.prob, decimal_precision)  # Sum similar state probablity
 
                 else:
                     new_hash_table[success_state.id] = success_state
@@ -209,8 +194,7 @@ class StatesCollection:
                 fail_state = copy.deepcopy(state)
                 
                 # Updat probability
-
-                fail_state.prob = fail_state.prob * (1-prob)
+                fail_state.prob = round(fail_state.prob * (1-prob), decimal_precision)
                 
                 # Update unique id
                 fail_state.id = self.generate_unique_string(fail_state.workload)
@@ -236,8 +220,7 @@ class StatesCollection:
             
             # Update new hashtable with success state (Merge section)
             if state.id in new_hash_table:
-
-                new_hash_table[state.id].prob = new_hash_table[state.id].prob + state.prob     # Sum similar state probablity
+                new_hash_table[state.id].prob = round(new_hash_table[state.id].prob + state.prob, decimal_precision)  # Sum similar state probablity
 
             else:
                 new_hash_table[state.id] = state
@@ -246,12 +229,12 @@ class StatesCollection:
         self.hash_table = new_hash_table
             
     
-    def visualize(self):
+    def visualize(self, i):
         if not self.hash_table:
             print('Hash table is empty')
             return        
 
-        graph = Graph('./Output/Simulators_output', format='png')
+        graph = Graph(f'./Output/Simulators_output #{i}', format='png')
         
         for key in self.hash_table:
             state = self.hash_table.get(key)

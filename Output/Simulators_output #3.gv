@@ -1,0 +1,8 @@
+graph "./Output/Simulators_output #3" {
+	"F0AC:True,F0BA:True" [label="F0AC:True,F0BA:True
+0.64"]
+	"F0AC:False,F0BA:True" [label="F0AC:False,F0BA:True
+0.32"]
+	"F0AC:False,F0BA:False" [label="F0AC:False,F0BA:False
+0.04"]
+}

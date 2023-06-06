@@ -1,0 +1,6 @@
+graph "./Output/Simulators_output #5" {
+	"F0AC:True" [label="F0AC:True
+0.928"]
+	"F0AC:False" [label="F0AC:False
+0.072"]
+}

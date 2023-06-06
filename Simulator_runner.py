@@ -1,7 +1,6 @@
 from Simulator import State, StatesCollection
 from Parser import parse_instructions, inst_parser
 from time import sleep
-from sympy import symbols, factor
 import subprocess
 
 
@@ -40,7 +39,7 @@ def run_slot(tree, slot):
             
             instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
             flow_name =flow_number + nodes
-            tree.pull(flow_name=flow_name)#, prob=0.8)
+            tree.pull(flow_name=flow_name, prob=0.8)
             
         
         elif inst_type == 'if':
@@ -58,7 +57,7 @@ def run_slot(tree, slot):
             condition_is_true_flow_name = condition_is_true[1]+condition_is_true[2]
             condition_is_false_flow_name = condition_is_false[1]+condition_is_false[2]
             
-            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name)#, prob=0.8)
+            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, prob=0.8)
 
 
         elif inst_type == 'sleep':
@@ -81,20 +80,22 @@ def run_loop(instruction_file_path):
     # Generate States tree and initial state    
     tree = StatesCollection()
     
+    counter = 0
     # warp code execution losiop
     for slot in instructions:
 
         run_slot(tree, slot)    
         
         # sleep(0.5)
-        # tree.visualize()
+        # tree.visualize(counter)
+        # counter += 1
 
         print('Hash table:')
         for state in tree.hash_table:
-            print('\t',state, '|', factor(tree.hash_table.get(state).prob), '|',tree.hash_table.get(state))
+            print('\t',state, '|',tree.hash_table.get(state).prob, '|',tree.hash_table.get(state))
         
         
-        # print('Test of Correctness result: ', test_of_correctness(tree))
+        print('Test of Correctness result: ', test_of_correctness(tree))
         print('='*50)
 
 
@@ -104,18 +105,16 @@ def test_of_correctness(tree):
         sum_of_probabilities += tree.hash_table.get(state).prob
     
     if sum_of_probabilities == 1:
-        return '\033[92m'+'Correct'+'\033[0m'
+        return True
     else:
-        return '\033[91m'+'Failed'+'\033[0m'
+        return False
         
+    
 
 def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    # run_loop('./WARP-codes/one_condition.wrp') # Passed ✓ 
-    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
-    
-    
+    run_loop('./WARP-codes/one_condition.wrp') # Passed ✓ 
     # subprocess.run(["pkill", "viewnior"])
 
 
