@@ -1,7 +1,7 @@
 from Simulator import State, StatesCollection
 from Parser import parse_instructions, inst_parser
 from time import sleep
-from sympy import symbols, factor
+from sympy import symbols, factor, expand
 import subprocess
 
 
@@ -106,21 +106,20 @@ def run_loop(instruction_file_path):
         print('Test of Correctness result: ', test_of_correctness(tree))
         print('='*50)
         
-
+        # sleep(0.5)
+    tree.visualize_dag(prob=0.8)
         
-    # print('Archive root is:', tree.root.id, tree.root)
-    # print('Length of Archive is:', len(tree.archive))
-    # for state in tree.archive:
-    #     print('ID: ',state.id, state.clock, state)
+    print('Archive root is:', tree.root.id, tree.root)
+    print('Length of Archive is:', len(tree.archive))
+    for state in tree.archive:
+        print('ID: ',state.id, state.clock, state)
         
-    #     if state.left:
-    #         print('\tLeft ID: ',state.left.id, state.clock, state.left)
+        if state.left:
+            print('\tLeft ID: ',state.left.id, state.clock, state.left)
         
-    #     if state.right:
-    #         print('\tRight ID: ', state.right.id, state.clock, state.right)
-    #     print('-'*50)
-    
-    tree.visualize_dag(0.8)
+        if state.right:
+            print('\tRight ID: ', state.right.id, state.clock, state.right)
+        print('-'*50)
 
 
 def test_of_correctness(tree):
@@ -137,8 +136,8 @@ def test_of_correctness(tree):
 def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    # run_loop('./WARP-codes/one_condition.wrp') # Testing ~  
-    run_loop('./WARP-codes/half_condition.wrp') # Testing ✓
+    # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    run_loop('./WARP-codes/full_condition.wrp') # Passed ✓  
     # subprocess.run(["pkill", "viewnior"])
 
 

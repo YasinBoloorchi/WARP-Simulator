@@ -20,7 +20,7 @@ class State:
 class StatesCollection:
     def __init__(self):
         self.hash_table = {}
-        # self.archive = []
+        self.archive = []
         self.root = None
         # Hash table: {
                         # F0AC:True,F0BA:True 0.922 <Simulator.State object at 0x7f95e511a410>
@@ -48,7 +48,7 @@ class StatesCollection:
             initial_state = State(workload={flow_name:False})
             initial_state.id = self.generate_unique_string(initial_state.workload)
             self.hash_table[initial_state.id] = initial_state
-            # self.archive.append(initial_state) # it'll cause the side offect of lean(archive) +1
+            self.archive.append(initial_state) # it'll cause the side offect of lean(archive) +1
             self.root = initial_state
             return True
 
@@ -85,7 +85,7 @@ class StatesCollection:
         
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
-            # self.archive.append(state)
+            self.archive.append(state)
             
             # -------- Copy fail_state --------
             fail_state = copy.deepcopy(state)
@@ -150,14 +150,16 @@ class StatesCollection:
         
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
-            # self.archive.append(state)
+            self.archive.append(state)
+            
+
             
             # Checking the main condition
-            if not state.workload.get(condition): # !has F0AB == Ture
+            # vvvvvvvvvvvvvvvvvvvvvvvvvvv
+            # !has F0AB == Ture
+            if not state.workload.get(condition): 
                 flow_name = condition_is_true
                 
-                
-                                
                 # -------- Copy fail_state --------
                 fail_state = copy.deepcopy(state)
                 # ---------------------------------
@@ -168,13 +170,11 @@ class StatesCollection:
                 
                 # ------------------------------------
                 # Create a new state for success -----
-                if tick_clock_flag:
-                    success_state.tick_clock()
+
                     
                 # Update workloads and probablity
                 if state.workload[flow_name] != True:
                     success_state.workload[flow_name] = True
-
                     success_state.prob = success_state.prob * prob               # Multiply S probability
                 else:
                     success_state.prob *= 1
@@ -188,6 +188,8 @@ class StatesCollection:
 
                 else:
                     new_hash_table[success_state.id] = success_state
+                    if tick_clock_flag:
+                        success_state.tick_clock()
                 
                 state.right = new_hash_table[success_state.id]
                 
@@ -208,10 +210,14 @@ class StatesCollection:
                 
                 # Update new hashtable with failure state
                 new_hash_table[fail_state.id] = fail_state
-                state.right = new_hash_table[fail_state.id]
+                state.left = new_hash_table[fail_state.id]
                 
-                    
-            else: # !has F0AB == False
+
+            
+            # Checking the main condition
+            # vvvvvvvvvvvvvvvvvvvvvvvvvvv
+            # !has F0AB == False
+            else: 
                 flow_name = condition_is_false
                 
                 if condition_is_false == '':
@@ -250,7 +256,8 @@ class StatesCollection:
                 else:
                     new_hash_table[success_state.id] = success_state
                 
-                new_hash_table[success_state.id]
+                # new_hash_table[success_state.id]
+                state.right = new_hash_table[success_state.id]
                 
                 # ------------------------------------
                 # Create a new state for failure -----
@@ -270,9 +277,11 @@ class StatesCollection:
                 # Update new hashtable with failure state
                 new_hash_table[fail_state.id] = fail_state
                 new_hash_table[fail_state.id]
-
+                state.left = new_hash_table[fail_state.id]
+                
         # Replacing the new hash table with the old one
         self.hash_table = new_hash_table.copy()
+        
         
     
     def drop_flow(self, flow_name, tick_clock_flag):
@@ -280,7 +289,7 @@ class StatesCollection:
         
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
-            # self.archive.append(state)
+            self.archive.append(state)
             
             # ------------------------------------
             # Create a new reduced state ---------
@@ -310,7 +319,7 @@ class StatesCollection:
         
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
-            # self.archive.append(state)
+            self.archive.append(state)
             
             # ------------------------------------
             # Create a new reduced state ---------
@@ -352,7 +361,7 @@ class StatesCollection:
             if node not in visited:
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
-                           +'Prob:'+str(node.prob)+'\n'
+                           +'Prob:'+str(factor(node.prob))+'\n'
                            +str(round(node.prob.subs(success_prob, prob), 3))+'\n'
                            +repr(node))
                 

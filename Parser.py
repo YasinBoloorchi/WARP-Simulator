@@ -32,7 +32,7 @@ def inst_parser(instruction):
     if len(parsed_inst) == 2:
         parsed_inst.append(('', '', '', ''))
     
-    print('\n\n','Parsed ====>',parsed_inst,'\n\n', 'Len: ', len(parsed_inst))
+    # print('\n\n','Parsed ====>',parsed_inst,'\n\n', 'Len: ', len(parsed_inst))
     
     return parsed_inst
 
