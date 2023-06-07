@@ -1,0 +1,71 @@
+digraph "./Output/Digraph" {
+	<Simulator.State object at 0x7fbd35784c70> [label="ID: F0BA:False
+Prob:1
+1
+<Simulator.State object at 0x7fbd35784c70>"]
+	<Simulator.State object at 0x7fbd35784c70> -> <Simulator.State object at 0x7fbd357c1510> [label=L]
+	<Simulator.State object at 0x7fbd35784c70> -> <Simulator.State object at 0x7fbd357c1570> [label=R]
+	<Simulator.State object at 0x7fbd357c1510> [label="ID: F0AC:False,F0BA:False
+Prob:1 - S
+0.200
+<Simulator.State object at 0x7fbd357c1510>"]
+	<Simulator.State object at 0x7fbd357c1510> -> <Simulator.State object at 0x7fbd35530b80> [label=R]
+	<Simulator.State object at 0x7fbd357c1570> [label="ID: F0AC:False,F0BA:True
+Prob:S*(1 - S) + S
+0.960
+<Simulator.State object at 0x7fbd357c1570>"]
+	<Simulator.State object at 0x7fbd357c1570> -> <Simulator.State object at 0x7fbd356d7e20> [label=L]
+	<Simulator.State object at 0x7fbd357c1570> -> <Simulator.State object at 0x7fbd35531e70> [label=R]
+	<Simulator.State object at 0x7fbd35530b80> [label="ID: F0AC:False,F0BA:False
+Prob:(1 - S)**2
+0.040
+<Simulator.State object at 0x7fbd35530b80>"]
+	<Simulator.State object at 0x7fbd35530b80> -> <Simulator.State object at 0x7fbd35531ab0> [label=L]
+	<Simulator.State object at 0x7fbd35530b80> -> <Simulator.State object at 0x7fbd355323b0> [label=R]
+	<Simulator.State object at 0x7fbd356d7e20> [label="ID: F0AC:False,F0BA:True
+Prob:(1 - S)*(S*(1 - S) + S)
+0.192
+<Simulator.State object at 0x7fbd356d7e20>"]
+	<Simulator.State object at 0x7fbd356d7e20> -> <Simulator.State object at 0x7fbd355334c0> [label=R]
+	<Simulator.State object at 0x7fbd35531e70> [label="ID: F0AC:True,F0BA:True
+Prob:S*(S*(1 - S) + S)
+0.768
+<Simulator.State object at 0x7fbd35531e70>"]
+	<Simulator.State object at 0x7fbd35531e70> -> <Simulator.State object at 0x7fbd35533430> [label=R]
+	<Simulator.State object at 0x7fbd35531ab0> [label="ID: F0AC:False,F0BA:False
+Prob:(1 - S)**3
+0.008
+<Simulator.State object at 0x7fbd35531ab0>"]
+	<Simulator.State object at 0x7fbd35531ab0> -> <Simulator.State object at 0x7fbd355333a0> [label=R]
+	<Simulator.State object at 0x7fbd355323b0> [label="ID: F0AC:True,F0BA:False
+Prob:S*(1 - S)**2
+0.032
+<Simulator.State object at 0x7fbd355323b0>"]
+	<Simulator.State object at 0x7fbd355323b0> -> <Simulator.State object at 0x7fbd355338b0> [label=R]
+	<Simulator.State object at 0x7fbd355334c0> [label="ID: F0AC:False
+Prob:(1 - S)**3 + (1 - S)*(S*(1 - S) + S)
+0.200
+<Simulator.State object at 0x7fbd355334c0>"]
+	<Simulator.State object at 0x7fbd355334c0> -> <Simulator.State object at 0x7fbd35532b90> [label=R]
+	<Simulator.State object at 0x7fbd35533430> [label="ID: F0AC:True
+Prob:S*(1 - S)**2 + S*(S*(1 - S) + S)
+0.800
+<Simulator.State object at 0x7fbd35533430>"]
+	<Simulator.State object at 0x7fbd35533430> -> <Simulator.State object at 0x7fbd355303d0> [label=R]
+	<Simulator.State object at 0x7fbd355333a0> [label="ID: F0AC:False
+Prob:(1 - S)**3
+0.008
+<Simulator.State object at 0x7fbd355333a0>"]
+	<Simulator.State object at 0x7fbd355338b0> [label="ID: F0AC:True
+Prob:S*(1 - S)**2
+0.032
+<Simulator.State object at 0x7fbd355338b0>"]
+	<Simulator.State object at 0x7fbd35532b90> [label="ID: 
+Prob:(1 - S)**3 + (1 - S)*(S*(1 - S) + S)
+0.200
+<Simulator.State object at 0x7fbd35532b90>"]
+	<Simulator.State object at 0x7fbd355303d0> [label="ID: 
+Prob:S*(1 - S)**2 + S*(S*(1 - S) + S) + (1 - S)**3 + (1 - S)*(S*(1 - S) + S)
+1.00000000000000
+<Simulator.State object at 0x7fbd355303d0>"]
+}

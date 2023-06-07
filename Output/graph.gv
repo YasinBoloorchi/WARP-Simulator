@@ -1,126 +1,49 @@
 graph "./Output/graph" {
-	"" [label="Path: 
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 1
-ID: 0FF"]
-	"" [label="Path: 
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 1
-ID: 0FF"]
-	"" -- F [label="F
-0.2--pull (F0,BA,#1)"]
-	F [label="Path: F
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.2
-ID: 1FF"]
-	F [label="Path: F
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.2
-ID: 1FF"]
-	F -- FF [label="F
-0.2--pull (F0,BA,#2)"]
-	FF [label="Path: FF
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.04
-ID: 2FF"]
-	FF [label="Path: FF
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.04
-ID: 2FF"]
-	FF -- FFF [label="F
-0.2--pull (F0,BA,#3)"]
-	FFF [label="Path: FFF
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.008
-ID: 3FF"]
-	FF [label="Path: FF
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.04
-ID: 2FF"]
-	FF -- FFS [label="S
-0.8--pull (F0,BA,#3)"]
-	FFS [label="Path: FFS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 3FT"]
-	FFS [label="Path: FFS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 3FT"]
-	FFS -- SSSS [label="S
-0.8--pull (F0,BA,#3)"]
-	SSSS [label="Path: SSSS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 4FT"]
-	F [label="Path: F
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 0.2
-ID: 1FF"]
-	F -- FS [label="S
-0.8--pull (F0,BA,#2)"]
-	FS [label="Path: FS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9600000000000001
-ID: 2FT"]
-	FS [label="Path: FS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9600000000000001
-ID: 2FT"]
-	FS -- FFS [label="S
-0.8--pull (F0,BA,#3)"]
-	FFS [label="Path: FFS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 3FT"]
-	FFS [label="Path: FFS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 3FT"]
-	FFS -- SSSS [label="S
-0.8--pull (F0,BA,#3)"]
-	SSSS [label="Path: SSSS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 4FT"]
-	"" [label="Path: 
-Workload: {'F0CA': False, 'F0BA': False}
-Path Prob: 1
-ID: 0FF"]
-	"" -- S [label="S
-0.8--pull (F0,BA,#1)"]
-	S [label="Path: S
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.8
-ID: 1FT"]
-	S [label="Path: S
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.8
-ID: 1FT"]
-	S -- FS [label="S
-0.8--pull (F0,BA,#2)"]
-	FS [label="Path: FS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9600000000000001
-ID: 2FT"]
-	FS [label="Path: FS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9600000000000001
-ID: 2FT"]
-	FS -- FFS [label="S
-0.8--pull (F0,BA,#3)"]
-	FFS [label="Path: FFS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 3FT"]
-	FFS [label="Path: FFS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 3FT"]
-	FFS -- SSSS [label="S
-0.8--pull (F0,BA,#3)"]
-	SSSS [label="Path: SSSS
-Workload: {'F0CA': False, 'F0BA': True}
-Path Prob: 0.9920000000000001
-ID: 4FT"]
+	<Simulator.State object at 0x7f09cc33d660> [label="F0BA:False
+1
+<Simulator.State object at 0x7f09cc33d660>"]
+	<Simulator.State object at 0x7f09cc33d660> -- <Simulator.State object at 0x7f09cc379b10> [label=L]
+	<Simulator.State object at 0x7f09cc33d660> -- <Simulator.State object at 0x7f09cc379b40> [label=R]
+	<Simulator.State object at 0x7f09cc379b10> [label="F0BA:False
+1 - S
+<Simulator.State object at 0x7f09cc379b10>"]
+	<Simulator.State object at 0x7f09cc379b10> -- <Simulator.State object at 0x7f09cc2d0ca0> [label=L]
+	<Simulator.State object at 0x7f09cc379b10> -- <Simulator.State object at 0x7f09cc2d09a0> [label=R]
+	<Simulator.State object at 0x7f09cc379b40> [label="F0BA:True
+S
+<Simulator.State object at 0x7f09cc379b40>"]
+	<Simulator.State object at 0x7f09cc379b40> -- <Simulator.State object at 0x7f09cc2d09a0> [label=R]
+	<Simulator.State object at 0x7f09cc2d0ca0> [label="F0BA:False
+(1 - S)**2
+<Simulator.State object at 0x7f09cc2d0ca0>"]
+	<Simulator.State object at 0x7f09cc2d0ca0> -- <Simulator.State object at 0x7f09cc2d2260> [label=L]
+	<Simulator.State object at 0x7f09cc2d0ca0> -- <Simulator.State object at 0x7f09cc2d2590> [label=R]
+	<Simulator.State object at 0x7f09cc2d09a0> [label="F0BA:True
+S*(1 - S) + S
+<Simulator.State object at 0x7f09cc2d09a0>"]
+	<Simulator.State object at 0x7f09cc2d09a0> -- <Simulator.State object at 0x7f09cc2d2590> [label=R]
+	<Simulator.State object at 0x7f09cc2d2260> [label="F0BA:False
+(1 - S)**3
+<Simulator.State object at 0x7f09cc2d2260>"]
+	<Simulator.State object at 0x7f09cc2d2260> -- <Simulator.State object at 0x7f09cc2d3dc0> [label=L]
+	<Simulator.State object at 0x7f09cc2d2260> -- <Simulator.State object at 0x7f09cc2d3fa0> [label=R]
+	<Simulator.State object at 0x7f09cc2d2590> [label="F0BA:True
+S*(1 - S)**2 + S*(1 - S) + S
+<Simulator.State object at 0x7f09cc2d2590>"]
+	<Simulator.State object at 0x7f09cc2d2590> -- <Simulator.State object at 0x7f09cc2d3fa0> [label=R]
+	<Simulator.State object at 0x7f09cc2d3dc0> [label="F0BA:False
+(1 - S)**4
+<Simulator.State object at 0x7f09cc2d3dc0>"]
+	<Simulator.State object at 0x7f09cc2d3dc0> -- <Simulator.State object at 0x7f09cc120a30> [label=L]
+	<Simulator.State object at 0x7f09cc2d3dc0> -- <Simulator.State object at 0x7f09cc120d90> [label=R]
+	<Simulator.State object at 0x7f09cc2d3fa0> [label="F0BA:True
+S*(1 - S)**3 + S*(1 - S)**2 + S*(1 - S) + S
+<Simulator.State object at 0x7f09cc2d3fa0>"]
+	<Simulator.State object at 0x7f09cc2d3fa0> -- <Simulator.State object at 0x7f09cc120d90> [label=R]
+	<Simulator.State object at 0x7f09cc120a30> [label="F0BA:False
+(1 - S)**5
+<Simulator.State object at 0x7f09cc120a30>"]
+	<Simulator.State object at 0x7f09cc120d90> [label="F0BA:True
+S*(1 - S)**4 + S*(1 - S)**3 + S*(1 - S)**2 + S*(1 - S) + S
+<Simulator.State object at 0x7f09cc120d90>"]
 }

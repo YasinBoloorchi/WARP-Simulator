@@ -7,7 +7,8 @@ import subprocess
 
 def run_slot(tree, slot):
     pull_count = 0
-    
+    tick_clock_flag = True
+    keep_clock_flag = False
     for inst in slot:
         inst_type = inst[0]
         instruction = inst[1]
@@ -21,7 +22,7 @@ def run_slot(tree, slot):
             
             # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
             
-            tree.release(flow_name)
+            keep_clock_flag = tree.release(flow_name, tick_clock_flag)
             
         
         elif inst_type == 'drop':
@@ -30,7 +31,7 @@ def run_slot(tree, slot):
             
             flow_name = parsed_instruction[1]+parsed_instruction[2]
             
-            tree.drop_flow(flow_name)
+            tree.drop_flow(flow_name, tick_clock_flag)
 
 
         elif inst_type == 'pull' or inst_type == 'push':
@@ -40,7 +41,7 @@ def run_slot(tree, slot):
             
             instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
             flow_name =flow_number + nodes
-            tree.pull(flow_name=flow_name)#, prob=0.8)
+            tree.pull(flow_name, tick_clock_flag)#, prob=0.8)
             
         
         elif inst_type == 'if':
@@ -58,18 +59,22 @@ def run_slot(tree, slot):
             condition_is_true_flow_name = condition_is_true[1]+condition_is_true[2]
             condition_is_false_flow_name = condition_is_false[1]+condition_is_false[2]
             
-            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name)#, prob=0.8)
+            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, tick_clock_flag)#, prob=0.8)
 
 
         elif inst_type == 'sleep':
             # print(instruction)
             # tree.add_sleep_state(inst='sleep')
+            tree.add_sleep(tick_clock_flag)
             pass
         
         
         if pull_count > 1:
             raise Exception('Unexceptable number of pull/push requests in a single slot.')
-    
+        
+        if not keep_clock_flag:
+            tick_clock_flag = False
+            keep_clock_flag = False
     
 # Running the instructions that been parsed from the file
 def run_loop(instruction_file_path):
@@ -100,6 +105,22 @@ def run_loop(instruction_file_path):
         
         print('Test of Correctness result: ', test_of_correctness(tree))
         print('='*50)
+        
+
+        
+    # print('Archive root is:', tree.root.id, tree.root)
+    # print('Length of Archive is:', len(tree.archive))
+    # for state in tree.archive:
+    #     print('ID: ',state.id, state.clock, state)
+        
+    #     if state.left:
+    #         print('\tLeft ID: ',state.left.id, state.clock, state.left)
+        
+    #     if state.right:
+    #         print('\tRight ID: ', state.right.id, state.clock, state.right)
+    #     print('-'*50)
+    
+    tree.visualize_dag(0.8)
 
 
 def test_of_correctness(tree):
@@ -116,10 +137,8 @@ def test_of_correctness(tree):
 def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    # run_loop('./WARP-codes/one_condition.wrp') # Passed ✓ 
-    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
-    
-    
+    # run_loop('./WARP-codes/one_condition.wrp') # Testing ~  
+    run_loop('./WARP-codes/half_condition.wrp') # Testing ✓
     # subprocess.run(["pkill", "viewnior"])
 
 

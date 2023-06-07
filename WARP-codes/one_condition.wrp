@@ -1,13 +1,8 @@
 release (F0,BA)
+release (F0,AC)
 ------
 pull (F0,BA,#0)
 -----
-release (F0,AC)
-----
 if !has(F0,BA) then pull (F0,BA,#1) else pull (F0,AC,#1)
 ------
 pull (F0,AC,#2)
-------
-drop (F0,BA)
-------
-drop (F0,AC)

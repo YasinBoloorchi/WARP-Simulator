@@ -1,5 +1,6 @@
 from graphviz import Graph
 from time import sleep
+from collections import deque
 
 class Node:
     def __init__(self, node_id, label=None):
@@ -352,66 +353,105 @@ class StatesTree:
                 queue.append([state.right, path + [state.status], round(prob * state.prob, 3)])
 
 
-    # Visualizing the graph with the help of graphviz (Whole tree version)
+    # # Visualizing the graph with the help of graphviz (Whole tree version)
+    # def visualize_tree(self):
+    #     if not self.root:
+    #         print("Empty tree!")
+    #         return
+        
+    #     graph = Graph('./Output/graph', format='png')
+    #     self._visualize_tree_helper(graph, self.root)
+    #     graph.view()
+    
+    # def _visualize_tree_helper(self, graph, state):
+    #     if not state:
+    #         return
+        
+    #     node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
+        
+    #     node_label = str('Path: '+state.path+'\n'+
+    #                      'Workload: '+str(state.workload)+'\n'+
+    #                      'Path Prob: '+str(state.path_prob)+'\n'+
+    #                      'ID: '+ str(len(state.path)) + node_id)
+        
+
+    #     graph.node(state.path, label= node_label)
+        
+    #     # print(f'path ({path}) / state.path ({state.path}) += str(state.status ({state.status}))')
+        
+    #     # path += str(state.status)
+        
+    #     if state.middle:
+    #         # print(f"path ({path}) / state.path ({state.path})+ str(state.right.status) ({state.right.status})")
+    #         print('middle state path prob:', state.path_prob)
+    #         graph.node(state.path, label= node_label)
+            
+    #         graph.edge(state.path, state.middle.path, label= state.middle.status+'\n'+str(state.middle.prob)+'--'+str(state.middle.inst))
+            
+    #         self._visualize_tree_helper(graph, state.middle)
+        
+    #     else:
+    #         if state.left:
+    #             # print(f"path ({path}) / state.path ({state.path}) + str(state.left.status) ({state.left.status})")
+                
+    #             graph.node(state.path, label= node_label)
+                
+    #             graph.edge(state.path, state.left.path, label="F"+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+    #             # graph.edge(state.path, state.left.path, label=state.left.status+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
+                
+    #             self._visualize_tree_helper(graph, state.left)
+            
+            
+            
+    #         if state.right:
+    #             # print(f"path ({path}) / state.path ({state.path})+ str(state.right.status) ({state.right.status})")
+                
+    #             graph.node(state.path, label= node_label)
+                
+    #             graph.edge(state.path, state.right.path, label= "S"+'\n'+str(state.right.prob)+'--'+str(state.right.inst))
+    #             # graph.edge(state.path, state.right.path, label= state.right.status+'\n'+str(state.right.prob)+'--'+str(state.right.inst))
+                
+    #             self._visualize_tree_helper(graph, state.right)
+
+
     def visualize_tree(self):
         if not self.root:
             print("Empty tree!")
             return
         
         graph = Graph('./Output/graph', format='png')
-        self._visualize_tree_helper(graph, self.root)
+        self._visualize_tree_helper(graph)
         graph.view()
-    
-    def _visualize_tree_helper(self, graph, state):
-        if not state:
-            return
-        
-        node_id = ''.join([ str(b)[0] for b in list(state.workload.values())])
-        
-        node_label = str('Path: '+state.path+'\n'+
-                         'Workload: '+str(state.workload)+'\n'+
-                         'Path Prob: '+str(state.path_prob)+'\n'+
-                         'ID: '+ str(len(state.path)) + node_id)
-        
 
-        graph.node(state.path, label= node_label)
-        
-        # print(f'path ({path}) / state.path ({state.path}) += str(state.status ({state.status}))')
-        
-        # path += str(state.status)
-        
-        if state.middle:
-            # print(f"path ({path}) / state.path ({state.path})+ str(state.right.status) ({state.right.status})")
-            print('middle state path prob:', state.path_prob)
-            graph.node(state.path, label= node_label)
-            
-            graph.edge(state.path, state.middle.path, label= state.middle.status+'\n'+str(state.middle.prob)+'--'+str(state.middle.inst))
-            
-            self._visualize_tree_helper(graph, state.middle)
-        
-        else:
-            if state.left:
-                # print(f"path ({path}) / state.path ({state.path}) + str(state.left.status) ({state.left.status})")
-                
-                graph.node(state.path, label= node_label)
-                
-                graph.edge(state.path, state.left.path, label="F"+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-                # graph.edge(state.path, state.left.path, label=state.left.status+'\n'+str(round(1-state.right.prob, 2))+'--'+str(state.left.inst))
-                
-                self._visualize_tree_helper(graph, state.left)
-            
-            
-            
-            if state.right:
-                # print(f"path ({path}) / state.path ({state.path})+ str(state.right.status) ({state.right.status})")
-                
-                graph.node(state.path, label= node_label)
-                
-                graph.edge(state.path, state.right.path, label= "S"+'\n'+str(state.right.prob)+'--'+str(state.right.inst))
-                # graph.edge(state.path, state.right.path, label= state.right.status+'\n'+str(state.right.prob)+'--'+str(state.right.inst))
-                
-                self._visualize_tree_helper(graph, state.right)
+    def _visualize_tree_helper(self, graph):
+        queue = deque([(self.root, "")])
 
+        while queue:
+            state, parent_path = queue.popleft()
+            node_id = ''.join([str(b)[0] for b in list(state.workload.values())])
+            node_path = parent_path + state.path
+
+            node_label = (
+                'Path: ' + node_path + '\n' +
+                'Workload: ' + str(state.workload) + '\n' +
+                'Path Prob: ' + str(state.path_prob) + '\n' +
+                'ID: ' + str(len(node_path)) + node_id
+            )
+
+            graph.node(node_path, label=node_label)
+
+            if state.middle:
+                graph.edge(node_path, node_path + state.middle.path, label=state.middle.status + '\n' + str(state.middle.prob) + '--' + str(state.middle.inst))
+                queue.append((state.middle, node_path))
+            
+            else:
+                if state.left:
+                    graph.edge(node_path, node_path + state.left.path, label="F" + '\n' + str(round(1 - state.right.prob, 2)) + '--' + str(state.left.inst))
+                    queue.append((state.left, node_path))
+
+                if state.right:
+                    graph.edge(node_path, node_path + state.right.path, label="S" + '\n' + str(state.right.prob) + '--' + str(state.right.inst))
+                    queue.append((state.right, node_path))
 
     def search_state(self, state, target_id, age=0):
         
