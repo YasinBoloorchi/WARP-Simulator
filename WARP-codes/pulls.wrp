@@ -6,3 +6,4 @@ pull (F0,BA,#1)
 -----
 pull (F0,BA,#2)
 -----
+drop (F0,BA)

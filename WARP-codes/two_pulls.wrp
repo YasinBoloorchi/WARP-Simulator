@@ -10,3 +10,6 @@ push (F0,AC,#3)
 release (F1,AC)
 ---
 push (F0,AC,#4)
+---
+drop (F0,BA)
+drop (F0,AC)

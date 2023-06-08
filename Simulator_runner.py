@@ -138,8 +138,8 @@ def test_of_correctness(tree):
 def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
-    run_loop('./WARP-codes/full_condition.wrp') # Passed ✓  
+    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓  
     # subprocess.run(["pkill", "viewnior"])
 
 

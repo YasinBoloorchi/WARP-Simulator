@@ -202,9 +202,14 @@ class StatesCollection:
 
                 else:
                     new_hash_table[success_state.id] = success_state
+                    if condition_is_false != '':
+                        if tick_clock_flag:
+                            new_hash_table[success_state.id].tick_clock()
+                            # tick_clock_flag = False
+                        
+                if condition_is_false == '':
                     if tick_clock_flag:
-                        success_state.tick_clock()
-                        # tick_clock_flag = False
+                        new_hash_table[success_state.id].tick_clock()
                 
                 state.right = new_hash_table[success_state.id]
                 
@@ -223,7 +228,7 @@ class StatesCollection:
                 # Update new hashtable with failure state
                 new_hash_table[fail_state.id] = fail_state
                 if tick_clock_flag:
-                    fail_state.tick_clock()
+                    new_hash_table[fail_state.id].tick_clock()
                     # tick_clock_flag = False
                 
                 state.left = new_hash_table[fail_state.id]
@@ -271,7 +276,7 @@ class StatesCollection:
                     new_hash_table[success_state.id] = success_state
                     if tick_clock_flag:
                         success_state.tick_clock()
-                        # tick_clock_flag = False
+                    # tick_clock_flag = False
                 
                 # new_hash_table[success_state.id]
                 state.right = new_hash_table[success_state.id]
