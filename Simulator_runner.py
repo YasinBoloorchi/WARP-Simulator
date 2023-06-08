@@ -75,6 +75,7 @@ def run_slot(tree, slot):
         # if not keep_clock_flag:
         tick_clock_flag = False
             # keep_clock_flag = False
+        
     
 # Running the instructions that been parsed from the file
 def run_loop(instruction_file_path):
@@ -98,6 +99,7 @@ def run_loop(instruction_file_path):
         success_prob = symbols('S')
         for state in tree.hash_table:
             print('\t',state, '|',
+                  '|', tree.hash_table.get(state).workload,
                   factor(tree.hash_table.get(state).prob), '|',
                   round(factor(tree.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
                   tree.hash_table.get(state))

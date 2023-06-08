@@ -22,6 +22,7 @@ class StatesCollection:
         self.hash_table = {}
         self.archive = []
         self.root = State()
+        self.root.id = 'root'
         # Hash table: {
                         # F0AC:True,F0BA:True 0.922 <Simulator.State object at 0x7f95e511a410>
                         # F0AC:False,F0BA:True 0.038 <Simulator.State object at 0x7f95e511a470>
@@ -44,17 +45,21 @@ class StatesCollection:
         to all the states' workloads in the hash table
         """
         
-        if not self.hash_table:
-            initial_state = State(workload={flow_name:False})
-            initial_state.id = self.generate_unique_string(initial_state.workload)
-            self.hash_table[initial_state.id] = initial_state
-            if tick_clock_flag:
-                initial_state.tick_clock()
-                # tick_clock_flag = False
+        # if not self.hash_table:
+        #     initial_state = State(workload={flow_name:False})
+        #     initial_state.id = self.generate_unique_string(initial_state.workload)
+        #     self.hash_table[initial_state.id] = initial_state
+        #     if tick_clock_flag:
+        #         initial_state.tick_clock()
+        #         # tick_clock_flag = False
             
-            self.archive.append(initial_state) # it'll cause the side offect of lean(archive) +1
-            self.root.right = initial_state
-            return
+        #     self.archive.append(initial_state) # it'll cause the side offect of lean(archive) +1
+        #     self.root.right = initial_state
+        #     return
+        
+        if not self.hash_table:
+            self.hash_table[self.root.id] = self.root
+            
 
 
         new_hash_table = {}
@@ -64,7 +69,7 @@ class StatesCollection:
             state = self.hash_table.pop(key)
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
-            new_state.id = self.generate_unique_string(state.workload)      
+            new_state.id = self.generate_unique_string(new_state.workload)      
             new_hash_table[new_state.id] = new_state
             
             if tick_clock_flag:
@@ -296,7 +301,6 @@ class StatesCollection:
         self.hash_table = new_hash_table.copy()
         
         
-    
     def drop_flow(self, flow_name, tick_clock_flag):
         new_hash_table = {}
         
