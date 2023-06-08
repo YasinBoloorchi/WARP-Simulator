@@ -326,7 +326,7 @@ class StatesCollection:
                     reduced_state.tick_clock()
                     # tick_clock_flag = False
             
-            state.right = reduced_state
+            state.right = new_hash_table[reduced_state.id]
         
         self.hash_table = new_hash_table
             
@@ -371,6 +371,7 @@ class StatesCollection:
         
         return
 
+
     def add_nodes_and_edges(self, graph, prob):
         success_prob = symbols('S')
         visited = set()
@@ -383,8 +384,8 @@ class StatesCollection:
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Prob:'+str(factor(node.prob))+'\n'
+                           +f'prob (S={prob}): '+str(round(node.prob.subs(success_prob, prob), 3))+'\n'
                            +'Clock: '+str(node.clock)+'\n'
-                           +str(round(node.prob.subs(success_prob, prob), 3))+'\n'
                            +repr(node))
                 
                 visited.add(node)
