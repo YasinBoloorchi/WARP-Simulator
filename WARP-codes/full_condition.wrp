@@ -5,4 +5,10 @@ pull (F0,AB,#0)
 -----
 if !has(F0,AB) then pull (F0,AB,#1) else push (F0,BC,#1)
 ---
+if !has(F0,AB) then pull (F0,AB,#1) else push (F0,BC,#1)
+---
+release (F1, AH)
+---
+if !has(F0,AB) then pull (F0,AB,#1) else push (F0,BC,#1)
+---
 push (F0, BC)

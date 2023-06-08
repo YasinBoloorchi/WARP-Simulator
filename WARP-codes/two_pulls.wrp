@@ -6,5 +6,7 @@ pull (F0,BA,#1)
 pull (F0,BA,#2)
 ----
 push (F0,AC,#3)
+----
+release (F1,AC)
 ---
 push (F0,AC,#4)

@@ -72,9 +72,9 @@ def run_slot(tree, slot):
         if pull_count > 1:
             raise Exception('Unexceptable number of pull/push requests in a single slot.')
         
-        if not keep_clock_flag:
-            tick_clock_flag = False
-            keep_clock_flag = False
+        # if not keep_clock_flag:
+        tick_clock_flag = False
+            # keep_clock_flag = False
     
 # Running the instructions that been parsed from the file
 def run_loop(instruction_file_path):

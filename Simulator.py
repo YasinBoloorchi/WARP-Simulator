@@ -21,7 +21,7 @@ class StatesCollection:
     def __init__(self):
         self.hash_table = {}
         self.archive = []
-        self.root = None
+        self.root = State()
         # Hash table: {
                         # F0AC:True,F0BA:True 0.922 <Simulator.State object at 0x7f95e511a410>
                         # F0AC:False,F0BA:True 0.038 <Simulator.State object at 0x7f95e511a470>
@@ -48,9 +48,13 @@ class StatesCollection:
             initial_state = State(workload={flow_name:False})
             initial_state.id = self.generate_unique_string(initial_state.workload)
             self.hash_table[initial_state.id] = initial_state
+            if tick_clock_flag:
+                initial_state.tick_clock()
+                # tick_clock_flag = False
+            
             self.archive.append(initial_state) # it'll cause the side offect of lean(archive) +1
-            self.root = initial_state
-            return True
+            self.root.right = initial_state
+            return
 
 
         new_hash_table = {}
@@ -58,16 +62,19 @@ class StatesCollection:
         for key in list(self.hash_table.keys()):
             
             state = self.hash_table.pop(key)
-            state.workload[flow_name] = False
-            state.id = self.generate_unique_string(state.workload)
+            new_state = copy.deepcopy(state)
+            new_state.workload[flow_name] = False
+            new_state.id = self.generate_unique_string(state.workload)      
+            new_hash_table[new_state.id] = new_state
             
             if tick_clock_flag:
-                state.tick_clock()
+                new_state.tick_clock()
+                # tick_clock_flag = False
             
-            new_hash_table[state.id] = state
+            state.right = new_hash_table[new_state.id]
             
         self.hash_table = new_hash_table.copy()
-        return False
+        return
 
     
     def pull(self, flow_name, tick_clock_flag, prob=symbols('S')):
@@ -97,9 +104,7 @@ class StatesCollection:
             
             # ------------------------------------
             # Create a new state for success -----
-            if tick_clock_flag:
-                success_state.tick_clock()
-                
+
             # Update workloads and probablity
             if state.workload[flow_name] != True:
                 success_state.workload[flow_name] = True
@@ -116,6 +121,10 @@ class StatesCollection:
                 
             else:
                 new_hash_table[success_state.id] = success_state
+                if tick_clock_flag:
+                    success_state.tick_clock()
+                    # tick_clock_flag = False
+                
             
             state.right = new_hash_table[success_state.id]
             # ------------------------------------
@@ -123,18 +132,18 @@ class StatesCollection:
             if state.workload[flow_name] == True:
                 continue
             
-            if tick_clock_flag:
-                fail_state.tick_clock()
-                
             # Updat probability
 
             fail_state.prob = fail_state.prob * (1-prob)
-            fail_state.clock += 1
             # Update unique id
             fail_state.id = self.generate_unique_string(fail_state.workload)
             
             # Update new hashtable with failure state
             new_hash_table[fail_state.id] = fail_state
+            if tick_clock_flag:
+                fail_state.tick_clock()
+                # tick_clock_flag = False
+                
             state.left = new_hash_table[fail_state.id]
         # Replacing the new hash table with the old one
         self.hash_table = new_hash_table.copy()
@@ -190,6 +199,7 @@ class StatesCollection:
                     new_hash_table[success_state.id] = success_state
                     if tick_clock_flag:
                         success_state.tick_clock()
+                        # tick_clock_flag = False
                 
                 state.right = new_hash_table[success_state.id]
                 
@@ -198,9 +208,6 @@ class StatesCollection:
                 if state.workload[flow_name] == True:
                     continue
 
-                if tick_clock_flag:
-                    fail_state.tick_clock()
-                    
                 # Updat probability
 
                 fail_state.prob = fail_state.prob * (1-prob)
@@ -210,6 +217,10 @@ class StatesCollection:
                 
                 # Update new hashtable with failure state
                 new_hash_table[fail_state.id] = fail_state
+                if tick_clock_flag:
+                    fail_state.tick_clock()
+                    # tick_clock_flag = False
+                
                 state.left = new_hash_table[fail_state.id]
                 
 
@@ -234,8 +245,7 @@ class StatesCollection:
                 
                 # ------------------------------------
                 # Create a new state for success -----
-                if tick_clock_flag:
-                    success_state.tick_clock()
+
                     
                 # Update workloads and probablity
                 if state.workload[flow_name] != True:
@@ -250,11 +260,13 @@ class StatesCollection:
                 
                 # Update new hashtable with success state (Merge section)
                 if success_state.id in new_hash_table:
-
                     new_hash_table[success_state.id].prob = new_hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
 
                 else:
                     new_hash_table[success_state.id] = success_state
+                    if tick_clock_flag:
+                        success_state.tick_clock()
+                        # tick_clock_flag = False
                 
                 # new_hash_table[success_state.id]
                 state.right = new_hash_table[success_state.id]
@@ -264,9 +276,7 @@ class StatesCollection:
                 if state.workload[flow_name] == True:
                     continue
                 
-                if tick_clock_flag:
-                    fail_state.tick_clock()
-                    
+
                 # Updat probability
 
                 fail_state.prob = fail_state.prob * (1-prob)
@@ -276,7 +286,10 @@ class StatesCollection:
                 
                 # Update new hashtable with failure state
                 new_hash_table[fail_state.id] = fail_state
-                new_hash_table[fail_state.id]
+                if tick_clock_flag:
+                    fail_state.tick_clock()
+                    # tick_clock_flag = False
+                    
                 state.left = new_hash_table[fail_state.id]
                 
         # Replacing the new hash table with the old one
@@ -294,10 +307,7 @@ class StatesCollection:
             # ------------------------------------
             # Create a new reduced state ---------
             reduced_state = copy.deepcopy(state)
-            
-            if tick_clock_flag:
-                reduced_state.tick_clock()
-            
+
             # Drop the flow name from the workload
             reduced_state.workload.pop(flow_name)
             reduced_state.id = self.generate_unique_string(reduced_state.workload)
@@ -308,6 +318,9 @@ class StatesCollection:
 
             else:
                 new_hash_table[reduced_state.id] = reduced_state
+                if tick_clock_flag:
+                    reduced_state.tick_clock()
+                    # tick_clock_flag = False
             
             state.right = reduced_state
         
@@ -325,12 +338,16 @@ class StatesCollection:
             # Create a new reduced state ---------
             slept_state = copy.deepcopy(state)
             
-            if tick_clock_flag:
-                slept_state.tick_clock()
+
             
             slept_state.id = self.generate_unique_string(slept_state.workload)
             # Update new hashtable with success state (Merge section)
             new_hash_table[slept_state.id] = slept_state
+            
+            if tick_clock_flag:
+                slept_state.tick_clock()
+                # tick_clock_flag = False
+                
             
             state.right = slept_state
         
@@ -362,6 +379,7 @@ class StatesCollection:
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Prob:'+str(factor(node.prob))+'\n'
+                           +'Clock: '+str(node.clock)+'\n'
                            +str(round(node.prob.subs(success_prob, prob), 3))+'\n'
                            +repr(node))
                 
