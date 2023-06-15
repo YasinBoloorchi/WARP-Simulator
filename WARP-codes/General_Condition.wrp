@@ -3,9 +3,7 @@ release (F0,BC)
 ------
 pull (F0,AB,#0)
 -----
-if !has(F0,AB) then pull (F0,AB,#1) else push (F0,BC,#1)
------
-push (F0, BC)
+if !has(F0,AB) then pull (F0,AB,#1) else drop (F0,AB)
 -----
 drop (F0,BC)
 drop (F0,AB)

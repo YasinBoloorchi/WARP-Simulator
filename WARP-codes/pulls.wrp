@@ -4,6 +4,8 @@ pull (F0,BA,#1)
 -----
 pull (F0,BA,#1)
 -----
-pull (F0,BA,#2)
+pull (F0,BA,#1)
+-----
+pull (F0,BA,#1)
 -----
 drop (F0,BA)

@@ -1,7 +1,7 @@
 release (F0,BA)
 ------
 pull (F0,BA,#0)
------
-release (F0,AC)
 ----
 if !has(F0,BA) then pull (F0,BA,#1)
+----
+drop (F0,BA)

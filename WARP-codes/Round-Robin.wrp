@@ -1,0 +1,5 @@
+release (F0,CA)
+---------
+if !has(F0,CA) then sleep else pull(F1,RA)
+---------
+push (F0,AB)

@@ -154,20 +154,14 @@ class StatesCollection:
         self.hash_table = new_hash_table.copy()
     
     
-    def conditional_pull(self, condition, condition_is_true, condition_is_false, tick_clock_flag, prob=symbols('S')):
+    def condition(self, condition, condition_is_true, condition_is_false, tick_clock_flag, prob=symbols('S')):
         decimal_precision = 3
         new_hash_table = {}
-        
-        print('Hash table before conditional pull:')
-        for state in self.hash_table:
-            print('\t',state, '|',self.hash_table.get(state).prob, '|',self.hash_table.get(state))
         
         for key in list(self.hash_table.keys()):
             state = self.hash_table.pop(key)
             self.archive.append(state)
-            
-
-            
+                
             # Checking the main condition
             # vvvvvvvvvvvvvvvvvvvvvvvvvvv
             # !has F0AB == Ture
@@ -396,10 +390,10 @@ class StatesCollection:
                 visited.add(node)
 
                 if node.left:
-                    graph.edge(repr(node), repr(node.left), label='L')
+                    graph.edge(repr(node), repr(node.left), label='F')
                     queue.append(node.left)
 
                 if node.right:
-                    graph.edge(repr(node), repr(node.right), label='R')
+                    graph.edge(repr(node), repr(node.right), label='S')
                     queue.append(node.right)
 

@@ -59,7 +59,7 @@ def run_slot(tree, slot):
             condition_is_true_flow_name = condition_is_true[1]+condition_is_true[2]
             condition_is_false_flow_name = condition_is_false[1]+condition_is_false[2]
             
-            tree.conditional_pull(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, tick_clock_flag)#, prob=0.8)
+            tree.condition(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, tick_clock_flag)#, prob=0.8)
 
 
         elif inst_type == 'sleep':
@@ -99,7 +99,7 @@ def run_loop(instruction_file_path):
         success_prob = symbols('S')
         for state in tree.hash_table:
             print('\t',state, '|',
-                  '|', tree.hash_table.get(state).workload,
+                  tree.hash_table.get(state).workload,'|',
                   factor(tree.hash_table.get(state).prob), '|',
                   round(factor(tree.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
                   tree.hash_table.get(state))
@@ -136,10 +136,13 @@ def test_of_correctness(tree):
         
 
 def main():
-    # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
+    # Testing Codes
+    run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓  
+    # run_loop('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
+    
     # subprocess.run(["pkill", "viewnior"])
 
 
