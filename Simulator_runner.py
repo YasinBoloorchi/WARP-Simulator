@@ -56,10 +56,9 @@ def run_slot(tree, slot):
             # print(condition, condition_is_true, condition_is_false)
             
             condition_flow_name = condition[1]+condition[2]
-            condition_is_true_flow_name = condition_is_true[1]+condition_is_true[2]
-            condition_is_false_flow_name = condition_is_false[1]+condition_is_false[2]
             
-            tree.condition(condition_flow_name, condition_is_true_flow_name, condition_is_false_flow_name, tick_clock_flag)#, prob=0.8)
+            
+            tree.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag)#, prob=0.8)
 
 
         elif inst_type == 'sleep':
@@ -80,6 +79,7 @@ def run_slot(tree, slot):
 # Running the instructions that been parsed from the file
 def run_loop(instruction_file_path):
     # initial variables
+    file_name = instruction_file_path.split('/')[-1]
     instructions = parse_instructions(instruction_file_path)
     
     # instructions.insert(0, [('release', 'release (F0,CA)')])
@@ -108,8 +108,9 @@ def run_loop(instruction_file_path):
         print('Test of Correctness result: ', test_of_correctness(tree))
         print('='*50)
         
-        # sleep(0.5)
-    tree.visualize_dag(prob=0.8)
+    
+    # sleep(0.5)
+    tree.visualize_dag(file_name, prob=0.8)
         
     print('Archive root is:', tree.root.id, tree.root)
     print('Length of Archive is:', len(tree.archive))
@@ -137,9 +138,9 @@ def test_of_correctness(tree):
 
 def main():
     # Testing Codes
-    run_loop('./WARP-codes/pulls.wrp') # Passed ✓
+    # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓  
     # run_loop('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
     
