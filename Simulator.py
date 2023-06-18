@@ -1,4 +1,5 @@
 from graphviz import Digraph, Graph
+from Parser import parse_instructions, inst_parser
 from time import sleep
 from sympy import symbols, factor, Integer
 import copy
@@ -41,7 +42,78 @@ class StatesCollection:
                     #  } 
 
 
-    def release(self, flow_name, tick_clock_flag=False):
+    def run_slot(self, slot, new_hash_table={}):
+        pull_count = 0
+        tick_clock_flag = True
+        keep_clock_flag = False
+        for inst in slot:
+            inst_type = inst[0]
+            instruction = inst[1]
+            print('\n\n[Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
+            
+            if inst_type == 'release':
+                parsed_instruction = inst_parser(instruction)[0]
+                # inst_parser => [('release', 'F0', 'BA', '')]
+            
+                flow_name = parsed_instruction[1]+parsed_instruction[2]
+                
+                # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
+                
+                new_hash_table = self.release(flow_name, new_hash_table, tick_clock_flag)
+                
+            
+            elif inst_type == 'drop':
+                parsed_instruction = inst_parser(instruction)[0]
+                # inst_parser => [('drop', 'F0', 'BA', '')] 
+                
+                flow_name = parsed_instruction[1]+parsed_instruction[2]
+                
+                self.drop_flow(flow_name, tick_clock_flag)
+
+
+            elif inst_type == 'pull' or inst_type == 'push':
+                pull_count += 1
+                parsed_instruction = inst_parser(instruction)
+                # inst_parser => [('pull', 'F0', 'BA', '#0')] 
+                
+                instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
+                flow_name =flow_number + nodes
+                self.pull(flow_name, tick_clock_flag)#, prob=0.8)
+                
+            
+            elif inst_type == 'if':
+                pull_count += 1
+                parsed_instruction = inst_parser(instruction)
+                # inst_parser => [('has', 'F0', 'BA', ''), ('pull', 'F0', 'BA', '#1'), ('pull', 'F0', 'AC', '#1')] 
+                
+                condition, condition_is_true, condition_is_false = inst_parser(instruction)         
+
+                #          F0         pull(F0,#1)         pull (F1,#1)
+                #         vvvv         vvvvvvvv              vvvv
+                # print(condition, condition_is_true, condition_is_false)
+                
+                condition_flow_name = condition[1]+condition[2]
+                
+                
+                self.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag)#, prob=0.8)
+
+
+            elif inst_type == 'sleep':
+                # print(instruction)
+                # self.add_sleep_state(inst='sleep')
+                self.add_sleep(tick_clock_flag)
+                pass
+            
+            
+            if pull_count > 1:
+                raise Exception('Unexceptable number of pull/push requests in a single slot.')
+            
+            # if not keep_clock_flag:
+            tick_clock_flag = False
+                # keep_clock_flag = False
+
+
+    def release(self, flow_name, new_hash_table, tick_clock_flag=False):
         # flow_name = 'F0BA'    
         """Add the given flow_name with False status
         to all the states' workloads in the hash table
@@ -50,7 +122,6 @@ class StatesCollection:
         if not self.hash_table:
             self.hash_table[self.root.id] = self.root
 
-        new_hash_table = {}
         
         for key in list(self.hash_table.keys()):
             
@@ -65,8 +136,7 @@ class StatesCollection:
             
             state.right = new_hash_table[new_state.id]
             
-        self.hash_table = new_hash_table.copy()
-        return
+        return new_hash_table
 
     
     def apply_pull(self, flow_name, tick_clock_flag, state, new_hash_table, prob=symbols('S')):
@@ -131,6 +201,7 @@ class StatesCollection:
         state.left = new_hash_table[fail_state.id]
 
         return new_hash_table
+ 
     
     def pull(self, flow_name, tick_clock_flag, prob=symbols('S')):
         # flow_name = 'F0BA',

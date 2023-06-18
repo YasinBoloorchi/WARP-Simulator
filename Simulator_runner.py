@@ -5,75 +5,6 @@ from sympy import symbols, factor, expand
 import subprocess
 
 
-def run_slot(tree, slot):
-    pull_count = 0
-    tick_clock_flag = True
-    keep_clock_flag = False
-    for inst in slot:
-        inst_type = inst[0]
-        instruction = inst[1]
-        print('\n\n[Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
-        
-        if inst_type == 'release':
-            parsed_instruction = inst_parser(instruction)[0]
-            # inst_parser => [('release', 'F0', 'BA', '')]
-        
-            flow_name = parsed_instruction[1]+parsed_instruction[2]
-            
-            # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
-            
-            keep_clock_flag = tree.release(flow_name, tick_clock_flag)
-            
-        
-        elif inst_type == 'drop':
-            parsed_instruction = inst_parser(instruction)[0]
-            # inst_parser => [('drop', 'F0', 'BA', '')] 
-            
-            flow_name = parsed_instruction[1]+parsed_instruction[2]
-            
-            tree.drop_flow(flow_name, tick_clock_flag)
-
-
-        elif inst_type == 'pull' or inst_type == 'push':
-            pull_count += 1
-            parsed_instruction = inst_parser(instruction)
-            # inst_parser => [('pull', 'F0', 'BA', '#0')] 
-            
-            instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
-            flow_name =flow_number + nodes
-            tree.pull(flow_name, tick_clock_flag)#, prob=0.8)
-            
-        
-        elif inst_type == 'if':
-            pull_count += 1
-            parsed_instruction = inst_parser(instruction)
-            # inst_parser => [('has', 'F0', 'BA', ''), ('pull', 'F0', 'BA', '#1'), ('pull', 'F0', 'AC', '#1')] 
-            
-            condition, condition_is_true, condition_is_false = inst_parser(instruction)         
-
-            #          F0         pull(F0,#1)         pull (F1,#1)
-            #         vvvv         vvvvvvvv              vvvv
-            # print(condition, condition_is_true, condition_is_false)
-            
-            condition_flow_name = condition[1]+condition[2]
-            
-            
-            tree.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag)#, prob=0.8)
-
-
-        elif inst_type == 'sleep':
-            # print(instruction)
-            # tree.add_sleep_state(inst='sleep')
-            tree.add_sleep(tick_clock_flag)
-            pass
-        
-        
-        if pull_count > 1:
-            raise Exception('Unexceptable number of pull/push requests in a single slot.')
-        
-        # if not keep_clock_flag:
-        tick_clock_flag = False
-            # keep_clock_flag = False
         
     
 # Running the instructions that been parsed from the file
@@ -84,37 +15,37 @@ def run_loop(instruction_file_path):
     
     # instructions.insert(0, [('release', 'release (F0,CA)')])
 
-    # Generate States tree and initial state    
-    tree = StatesCollection()
+    # Generate States simu and initial state    
+    simu = StatesCollection()
     
     # warp code execution losiop
     for slot in instructions:
 
-        run_slot(tree, slot)    
+        simu.run_slot(slot)    
         
         # sleep(0.5)
-        # tree.visualize()
+        # simu.visualize()
 
         print('Hash table:')
         success_prob = symbols('S')
-        for state in tree.hash_table:
+        for state in simu.hash_table:
             print('\t',state, '|',
-                  tree.hash_table.get(state).workload,'|',
-                  factor(tree.hash_table.get(state).prob), '|',
-                  round(factor(tree.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
-                  tree.hash_table.get(state))
+                  simu.hash_table.get(state).workload,'|',
+                  factor(simu.hash_table.get(state).prob), '|',
+                  round(factor(simu.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
+                  simu.hash_table.get(state))
         
         
-        print('Test of Correctness result: ', test_of_correctness(tree))
+        print('Test of Correctness result: ', test_of_correctness(simu))
         print('='*50)
         
     
     # sleep(0.5)
-    tree.visualize_dag(file_name, prob=0.8)
+    simu.visualize_dag(file_name, prob=0.8)
         
-    print('Archive root is:', tree.root.id, tree.root)
-    print('Length of Archive is:', len(tree.archive))
-    for state in tree.archive:
+    print('Archive root is:', simu.root.id, simu.root)
+    print('Length of Archive is:', len(simu.archive))
+    for state in simu.archive:
         print('ID: ',state.id, state.clock, state)
         
         if state.left:
@@ -125,10 +56,10 @@ def run_loop(instruction_file_path):
         print('-'*50)
 
 
-def test_of_correctness(tree):
+def test_of_correctness(simu):
     sum_of_probabilities = 0
-    for state in tree.hash_table:
-        sum_of_probabilities += tree.hash_table.get(state).prob
+    for state in simu.hash_table:
+        sum_of_probabilities += simu.hash_table.get(state).prob
     
     if factor(sum_of_probabilities) == 1:
         return '\033[92m'+'Correct'+'\033[0m'
