@@ -1,39 +1,39 @@
 digraph "./Output/half_condition.wrp" {
-	<Simulator.State object at 0x7fb9e5aebf10> [label="ID: root
+	<Simulator.State object at 0x7f938a533fd0> [label="ID: root
 Prob:1
 prob (S=0.8): 1
 Clock: 0
-<Simulator.State object at 0x7fb9e5aebf10>"]
-	<Simulator.State object at 0x7fb9e5aebf10> -> <Simulator.State object at 0x7fb9e4318670> [label=S]
-	<Simulator.State object at 0x7fb9e4318670> [label="ID: F0BA:False
+<Simulator.State object at 0x7f938a533fd0>"]
+	<Simulator.State object at 0x7f938a533fd0> -> <Simulator.State object at 0x7f9388d70640> [label=S]
+	<Simulator.State object at 0x7f9388d70640> [label="ID: F0BA:False
 Prob:1
 prob (S=0.8): 1
 Clock: 1
-<Simulator.State object at 0x7fb9e4318670>"]
-	<Simulator.State object at 0x7fb9e4318670> -> <Simulator.State object at 0x7fb9e4360df0> [label=F]
-	<Simulator.State object at 0x7fb9e4318670> -> <Simulator.State object at 0x7fb9e4360ee0> [label=S]
-	<Simulator.State object at 0x7fb9e4360df0> [label="ID: F0BA:False
+<Simulator.State object at 0x7f9388d70640>"]
+	<Simulator.State object at 0x7f9388d70640> -> <Simulator.State object at 0x7f9388db8d90> [label=F]
+	<Simulator.State object at 0x7f9388d70640> -> <Simulator.State object at 0x7f9388db8df0> [label=S]
+	<Simulator.State object at 0x7f9388db8d90> [label="ID: F0BA:False
 Prob:1 - S
 prob (S=0.8): 0.200
 Clock: 2
-<Simulator.State object at 0x7fb9e4360df0>"]
-	<Simulator.State object at 0x7fb9e4360df0> -> <Simulator.State object at 0x7fb9e426f3d0> [label=F]
-	<Simulator.State object at 0x7fb9e4360df0> -> <Simulator.State object at 0x7fb9e4360ee0> [label=S]
-	<Simulator.State object at 0x7fb9e4360ee0> [label="ID: F0BA:True
+<Simulator.State object at 0x7f9388db8d90>"]
+	<Simulator.State object at 0x7f9388db8d90> -> <Simulator.State object at 0x7f9388cc3eb0> [label=F]
+	<Simulator.State object at 0x7f9388db8d90> -> <Simulator.State object at 0x7f9388db8df0> [label=S]
+	<Simulator.State object at 0x7f9388db8df0> [label="ID: F0BA:True
 Prob:-S*(S - 2)
 prob (S=0.8): 0.960
 Clock: 3
-<Simulator.State object at 0x7fb9e4360ee0>"]
-	<Simulator.State object at 0x7fb9e4360ee0> -> <Simulator.State object at 0x7fb9e40cd450> [label=S]
-	<Simulator.State object at 0x7fb9e426f3d0> [label="ID: F0BA:False
+<Simulator.State object at 0x7f9388db8df0>"]
+	<Simulator.State object at 0x7f9388db8df0> -> <Simulator.State object at 0x7f9388cc3dc0> [label=S]
+	<Simulator.State object at 0x7f9388cc3eb0> [label="ID: F0BA:False
 Prob:(S - 1)**2
 prob (S=0.8): 0.040
 Clock: 3
-<Simulator.State object at 0x7fb9e426f3d0>"]
-	<Simulator.State object at 0x7fb9e426f3d0> -> <Simulator.State object at 0x7fb9e40cd450> [label=S]
-	<Simulator.State object at 0x7fb9e40cd450> [label="ID: 
+<Simulator.State object at 0x7f9388cc3eb0>"]
+	<Simulator.State object at 0x7f9388cc3eb0> -> <Simulator.State object at 0x7f9388cc3dc0> [label=S]
+	<Simulator.State object at 0x7f9388cc3dc0> [label="ID: 
 Prob:1
 prob (S=0.8): 1.00000000000000
 Clock: 4
-<Simulator.State object at 0x7fb9e40cd450>"]
+<Simulator.State object at 0x7f9388cc3dc0>"]
 }

@@ -1,0 +1,5 @@
+release (F0, AB)
+------
+while(True):
+    push(F0, AB)
+----

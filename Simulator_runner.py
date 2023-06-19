@@ -68,11 +68,12 @@ def test_of_correctness(simu):
         
 
 def main():
-    # Testing Codes
+    # Testing Cases
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
-    run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
-    # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓  
+    # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
+    # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
     # run_loop('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
     
     # subprocess.run(["pkill", "viewnior"])

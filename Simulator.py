@@ -68,7 +68,7 @@ class StatesCollection:
                 
                 flow_name = parsed_instruction[1]+parsed_instruction[2]
                 
-                self.drop_flow(flow_name, tick_clock_flag)
+                new_hash_table = self.drop_flow(flow_name, tick_clock_flag, new_hash_table)
 
 
             elif inst_type == 'pull' or inst_type == 'push':
@@ -78,7 +78,7 @@ class StatesCollection:
                 
                 instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
                 flow_name =flow_number + nodes
-                self.pull(flow_name, tick_clock_flag)#, prob=0.8)
+                new_hash_table = self.pull(flow_name, tick_clock_flag, new_hash_table)#, prob=0.8)
                 
             
             elif inst_type == 'if':
@@ -95,14 +95,14 @@ class StatesCollection:
                 condition_flow_name = condition[1]+condition[2]
                 
                 
-                self.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag)#, prob=0.8)
+                new_hash_table = self.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag, new_hash_table)#, prob=0.8)
 
 
             elif inst_type == 'sleep':
                 # print(instruction)
                 # self.add_sleep_state(inst='sleep')
-                self.add_sleep(tick_clock_flag)
-                pass
+                new_hash_table = self.add_sleep(tick_clock_flag)
+                
             
             
             if pull_count > 1:
@@ -112,6 +112,8 @@ class StatesCollection:
             tick_clock_flag = False
                 # keep_clock_flag = False
 
+            self.hash_table = new_hash_table.copy()
+            
 
     def release(self, flow_name, new_hash_table, tick_clock_flag=False):
         # flow_name = 'F0BA'    
@@ -119,13 +121,13 @@ class StatesCollection:
         to all the states' workloads in the hash table
         """
         
-        if not self.hash_table:
-            self.hash_table[self.root.id] = self.root
+        if not new_hash_table:
+            new_hash_table[self.root.id] = self.root
 
         
-        for key in list(self.hash_table.keys()):
+        for key in list(new_hash_table.keys()):
             
-            state = self.hash_table.pop(key)
+            state = new_hash_table.pop(key)
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
             new_state.update_id()
@@ -203,7 +205,7 @@ class StatesCollection:
         return new_hash_table
  
     
-    def pull(self, flow_name, tick_clock_flag, prob=symbols('S')):
+    def pull(self, flow_name, tick_clock_flag, new_hash_table, prob=symbols('S')):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -212,24 +214,22 @@ class StatesCollection:
             * put the two new states in the new hash table
             * merge similar states
         """       
-        new_hash_table = {}
         # new_hash_table = {}
         
-        for key in list(self.hash_table.keys()):
-            state = self.hash_table.pop(key)
+        for key in list(new_hash_table.keys()):
+            state = new_hash_table.pop(key)
             self.archive.append(state)
         
-            new_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
+            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
             
         # Replacing the new hash table with the old one
-        self.hash_table = new_hash_table.copy()
+        return temp_hash_table
     
     
-    def condition(self, condition, condition_is_true, condition_is_false, tick_clock_flag, prob=symbols('S')):
-        new_hash_table = {}
+    def condition(self, condition, condition_is_true, condition_is_false, tick_clock_flag, new_hash_table, prob=symbols('S')):
         
-        for key in list(self.hash_table.keys()):
-            state = self.hash_table.pop(key)
+        for key in list(new_hash_table.keys()):
+            state = new_hash_table.pop(key)
             self.archive.append(state)
             
             # Checking the main condition
@@ -242,7 +242,7 @@ class StatesCollection:
                 
                 # If it's pull command:
                 flow_name = condition_is_true[1]+condition_is_true[2]
-                new_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
+                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
             
             # Checking the main condition
             # vvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -254,17 +254,16 @@ class StatesCollection:
                 
                 # If it's pull command
                 flow_name = condition_is_false[1]+condition_is_false[2]
-                new_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
+                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
                 
         # Replacing the new hash table with the old one
-        self.hash_table = new_hash_table.copy()
+        return temp_hash_table.copy()
         
         
-    def drop_flow(self, flow_name, tick_clock_flag):
-        new_hash_table = {}
+    def drop_flow(self, flow_name, tick_clock_flag, new_hash_table):
         
-        for key in list(self.hash_table.keys()):
-            state = self.hash_table.pop(key)
+        for key in list(new_hash_table.keys()):
+            state = new_hash_table.pop(key)
             self.archive.append(state)
             
             # ------------------------------------
@@ -287,14 +286,13 @@ class StatesCollection:
             
             state.right = new_hash_table[reduced_state.id]
         
-        self.hash_table = new_hash_table
+        return new_hash_table
             
 
-    def add_sleep(self, tick_clock_flag):
-        new_hash_table = {}
+    def add_sleep(self, tick_clock_flag, new_hash_table):
         
-        for key in list(self.hash_table.keys()):
-            state = self.hash_table.pop(key)
+        for key in list(new_hash_table.keys()):
+            state = new_hash_table.pop(key)
             self.archive.append(state)
             
             # ------------------------------------
@@ -314,7 +312,7 @@ class StatesCollection:
             
             state.right = slept_state
         
-        self.hash_table = new_hash_table
+        return new_hash_table
     
 
     def visualize_dag(self, file_name='Digraph' ,prob=0.8):
