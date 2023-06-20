@@ -28,7 +28,7 @@ class State:
         return unique_string
 
 
-class StatesCollection:
+class Simulator:
     def __init__(self):
         self.hash_table = {}
         self.archive = []
@@ -42,7 +42,7 @@ class StatesCollection:
                     #  } 
 
 
-    def run_slot(self, slot, new_hash_table={}):
+    def run_slot(self, slot, hash_table={}):
         pull_count = 0
         tick_clock_flag = True
         keep_clock_flag = False
@@ -59,7 +59,7 @@ class StatesCollection:
                 
                 # workload[flow_name] = {'source': address[0], 'dest':address[1], 'has':False}
                 
-                new_hash_table = self.release(flow_name, new_hash_table, tick_clock_flag)
+                hash_table = self.release(flow_name, hash_table, tick_clock_flag)
                 
             
             elif inst_type == 'drop':
@@ -68,7 +68,7 @@ class StatesCollection:
                 
                 flow_name = parsed_instruction[1]+parsed_instruction[2]
                 
-                new_hash_table = self.drop_flow(flow_name, tick_clock_flag, new_hash_table)
+                hash_table = self.drop_flow(flow_name, tick_clock_flag, hash_table)
 
 
             elif inst_type == 'pull' or inst_type == 'push':
@@ -78,7 +78,7 @@ class StatesCollection:
                 
                 instruc, flow_number, nodes, channel_number = parsed_instruction = inst_parser(instruction)[0]
                 flow_name =flow_number + nodes
-                new_hash_table = self.pull(flow_name, tick_clock_flag, new_hash_table)#, prob=0.8)
+                hash_table = self.pull(flow_name, tick_clock_flag, hash_table)#, prob=0.8)
                 
             
             elif inst_type == 'if':
@@ -95,13 +95,13 @@ class StatesCollection:
                 condition_flow_name = condition[1]+condition[2]
                 
                 
-                new_hash_table = self.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag, new_hash_table)#, prob=0.8)
+                hash_table = self.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag, hash_table)#, prob=0.8)
 
 
             elif inst_type == 'sleep':
                 # print(instruction)
                 # self.add_sleep_state(inst='sleep')
-                new_hash_table = self.add_sleep(tick_clock_flag)
+                hash_table = self.add_sleep(tick_clock_flag)
                 
             
             
@@ -112,40 +112,40 @@ class StatesCollection:
             tick_clock_flag = False
                 # keep_clock_flag = False
 
-            self.hash_table = new_hash_table.copy()
+            self.hash_table = hash_table.copy()
             
 
-    def release(self, flow_name, new_hash_table, tick_clock_flag=False):
+    def release(self, flow_name, hash_table, tick_clock_flag=False):
         # flow_name = 'F0BA'    
         """Add the given flow_name with False status
         to all the states' workloads in the hash table
         """
         
-        if not new_hash_table:
-            new_hash_table[self.root.id] = self.root
+        if not hash_table:
+            hash_table[self.root.id] = self.root
 
         
-        for key in list(new_hash_table.keys()):
+        for key in list(hash_table.keys()):
             
-            state = new_hash_table.pop(key)
+            state = hash_table.pop(key)
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
             new_state.update_id()
-            new_hash_table[new_state.id] = new_state
+            hash_table[new_state.id] = new_state
             
             if tick_clock_flag:
                 new_state.tick_clock()
             
-            state.right = new_hash_table[new_state.id]
+            state.right = hash_table[new_state.id]
             
-        return new_hash_table
+        return hash_table
 
     
-    def apply_pull(self, flow_name, tick_clock_flag, state, new_hash_table, prob=symbols('S')):
+    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S')):
         if flow_name == '':
             state.tick_clock()
-            new_hash_table[state.id] = state
-            return new_hash_table
+            hash_table[state.id] = state
+            return hash_table
         
         # -------- Copy fail_state --------
         fail_state = copy.deepcopy(state)
@@ -169,23 +169,23 @@ class StatesCollection:
         success_state.update_id()
         
         # Update new hashtable with success state (Merge section)
-        if success_state.id in new_hash_table:
-            new_hash_table[success_state.id].prob = new_hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+        if success_state.id in hash_table:
+            hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
 
         else:
-            new_hash_table[success_state.id] = success_state
+            hash_table[success_state.id] = success_state
             if flow_name != '':
                 if tick_clock_flag:
-                    new_hash_table[success_state.id].tick_clock()
+                    hash_table[success_state.id].tick_clock()
                     # tick_clock_flag = False
                 
         
-        state.right = new_hash_table[success_state.id]
+        state.right = hash_table[success_state.id]
         
         # ------------------------------------
         # Create a new state for failure -----
         if state.workload[flow_name] == True:
-            return new_hash_table
+            return hash_table
 
         # Updat probability
 
@@ -195,17 +195,17 @@ class StatesCollection:
         fail_state.update_id()
         
         # Update new hashtable with failure state
-        new_hash_table[fail_state.id] = fail_state
+        hash_table[fail_state.id] = fail_state
         if tick_clock_flag:
-            new_hash_table[fail_state.id].tick_clock()
+            hash_table[fail_state.id].tick_clock()
             # tick_clock_flag = False
         
-        state.left = new_hash_table[fail_state.id]
+        state.left = hash_table[fail_state.id]
 
-        return new_hash_table
+        return hash_table
  
     
-    def pull(self, flow_name, tick_clock_flag, new_hash_table, prob=symbols('S')):
+    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S')):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -214,22 +214,22 @@ class StatesCollection:
             * put the two new states in the new hash table
             * merge similar states
         """       
-        # new_hash_table = {}
+        # hash_table = {}
         
-        for key in list(new_hash_table.keys()):
-            state = new_hash_table.pop(key)
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
             self.archive.append(state)
         
-            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
+            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob)
             
         # Replacing the new hash table with the old one
         return temp_hash_table
     
     
-    def condition(self, condition, condition_is_true, condition_is_false, tick_clock_flag, new_hash_table, prob=symbols('S')):
+    def condition(self, condition, condition_is_true, condition_is_false, tick_clock_flag, hash_table, prob=symbols('S')):
         
-        for key in list(new_hash_table.keys()):
-            state = new_hash_table.pop(key)
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
             self.archive.append(state)
             
             # Checking the main condition
@@ -242,8 +242,8 @@ class StatesCollection:
                 
                 # If it's pull command:
                 flow_name = condition_is_true[1]+condition_is_true[2]
-                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
-            
+                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob)
+
             # Checking the main condition
             # vvvvvvvvvvvvvvvvvvvvvvvvvvv
             # !has F0AB == False
@@ -254,16 +254,16 @@ class StatesCollection:
                 
                 # If it's pull command
                 flow_name = condition_is_false[1]+condition_is_false[2]
-                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, new_hash_table, prob)
+                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob)
                 
         # Replacing the new hash table with the old one
         return temp_hash_table.copy()
         
         
-    def drop_flow(self, flow_name, tick_clock_flag, new_hash_table):
+    def drop_flow(self, flow_name, tick_clock_flag, hash_table):
         
-        for key in list(new_hash_table.keys()):
-            state = new_hash_table.pop(key)
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
             self.archive.append(state)
             
             # ------------------------------------
@@ -275,24 +275,24 @@ class StatesCollection:
             reduced_state.update_id()
             
             # Update new hashtable with success state (Merge section)
-            if reduced_state.id in new_hash_table:
-                new_hash_table[reduced_state.id].prob = new_hash_table[reduced_state.id].prob + reduced_state.prob     # Sum similar state probablity
+            if reduced_state.id in hash_table:
+                hash_table[reduced_state.id].prob = hash_table[reduced_state.id].prob + reduced_state.prob     # Sum similar state probablity
 
             else:
-                new_hash_table[reduced_state.id] = reduced_state
+                hash_table[reduced_state.id] = reduced_state
                 if tick_clock_flag:
                     reduced_state.tick_clock()
                     # tick_clock_flag = False
             
-            state.right = new_hash_table[reduced_state.id]
+            state.right = hash_table[reduced_state.id]
         
-        return new_hash_table
+        return hash_table
             
 
-    def add_sleep(self, tick_clock_flag, new_hash_table):
+    def add_sleep(self, tick_clock_flag, hash_table):
         
-        for key in list(new_hash_table.keys()):
-            state = new_hash_table.pop(key)
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
             self.archive.append(state)
             
             # ------------------------------------
@@ -303,7 +303,7 @@ class StatesCollection:
             
             slept_state.update_id()
             # Update new hashtable with success state (Merge section)
-            new_hash_table[slept_state.id] = slept_state
+            hash_table[slept_state.id] = slept_state
             
             if tick_clock_flag:
                 slept_state.tick_clock()
@@ -312,7 +312,7 @@ class StatesCollection:
             
             state.right = slept_state
         
-        return new_hash_table
+        return hash_table
     
 
     def visualize_dag(self, file_name='Digraph' ,prob=0.8):
@@ -347,11 +347,59 @@ class StatesCollection:
                 
                 visited.add(node)
 
-                if node.left:
+                if node.left: # and node.left.prob.subs(success_prob, prob) != 0:
                     graph.edge(repr(node), repr(node.left), label='F')
                     queue.append(node.left)
 
-                if node.right:
+                if node.right: # and node.right.prob.subs(success_prob, prob) != 0:
                     graph.edge(repr(node), repr(node.right), label='S')
                     queue.append(node.right)
 
+
+    def imprint_hash_table(self):
+        """
+        Printout the hash table of the simulation
+        """
+        print('Hash table:')
+        success_prob = symbols('S')
+        for state in self.hash_table:
+            print('\t',state, '|',
+                  self.hash_table.get(state).workload,'|',
+                  factor(self.hash_table.get(state).prob), '|',
+                  round(factor(self.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
+                  self.hash_table.get(state))
+    
+    
+    def archive_print(self):
+        """
+        A function to print the archive of all the states
+        that has been created in the simulation
+        """
+        
+        print('Archive root is:', self.root.id, self.root)
+        print('Length of Archive is:', len(self.archive))
+        for state in self.archive:
+            print('ID: ',state.id, state.clock, state)
+            
+            if state.left:
+                print('\tLeft ID: ',state.left.id, state.clock, state.left)
+            
+            if state.right:
+                print('\tRight ID: ', state.right.id, state.clock, state.right)
+            print('-'*50)
+            
+            
+    def test_of_correctness(self):
+        """
+            A funciton to test the result of the simulation
+            by summing up the probabilities.
+        """
+        
+        sum_of_probabilities = 0
+        for state in self.hash_table:
+            sum_of_probabilities += self.hash_table.get(state).prob
+        
+        if factor(sum_of_probabilities) == 1:
+            return '\033[92m'+'Correct'+'\033[0m'
+        else:
+            return '\033[91m'+'Failed'+'\033[0m'

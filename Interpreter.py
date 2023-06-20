@@ -42,3 +42,19 @@ def if_inst_parser(instruction):
     return parsed_if_inst
 
 
+def main():
+    # Testing Cases
+    # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
+    # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
+    # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
+    # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
+    # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
+    
+    inst_parser('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
+    
+    # subprocess.run(["pkill", "viewnior"])
+
+
+if __name__ == "__main__":
+    # parse_instructions('./Instructions.wrp')
+    main()
