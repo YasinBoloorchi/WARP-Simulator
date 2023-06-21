@@ -1,5 +1,6 @@
 from Simulator import State, Simulator
-from Parser import new_parse_instructions, inst_parser
+# from Old_Parser import parse_instructions, inst_parser, recreate_file
+from Parser import file_parser, recreate_file
 from time import sleep
 from sympy import symbols, factor, expand
 import subprocess
@@ -21,7 +22,6 @@ def simulate(file_name, instructions):
     simu.archive_print()
 
 
-
 def run_loop(instruction_file_path):
     """
         Running the instructions that been parsed from the file
@@ -30,11 +30,12 @@ def run_loop(instruction_file_path):
     # initial variables
     
     file_name = instruction_file_path.split('/')[-1]
-    instructions = new_parse_instructions(instruction_file_path)
+    instructions_slots = file_parser(instruction_file_path)
 
-    for s in instructions:
-        print(s)
-    
+    print(instructions_slots)
+    for slot in instructions_slots:
+        recreate_file(slot)
+        print('----')
 
     # simulate(file_name, instructions)
 

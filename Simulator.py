@@ -1,5 +1,5 @@
 from graphviz import Digraph, Graph
-from Parser import parse_instructions, inst_parser
+from Parser import inst_parser
 from time import sleep
 from sympy import symbols, factor, Integer
 import copy

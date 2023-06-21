@@ -1,107 +1,75 @@
 import re
 
+"""
+release (F0, AB)
+----
+while (True):
+    push (F0, AB)
+----
 
+v v v v v v v v v v v v v v v v v v v
 
-# Parsing the Warp instruction from a file
-def parse_instructions(instruction_file_path):
-    with open(instruction_file_path, 'r') as instructions_file:
-        instructions = [inst.strip() for inst in instructions_file.readlines()]
-        
-        slot_num = 0
-        slots = [[]]
-        
-        for inst in instructions:
-            if '---' in inst:
-                slot_num += 1
-                slots.append([])
-            else:
-                instruction = (inst.split(' ', maxsplit=1)[0], inst.strip())
-                slots[slot_num].append(instruction)
-                
-        instructions = slots.copy()
-        instructions_file.close()
-        
-    return instructions
+[[['release (F0, AB)']], [['while (True):', ['push (F0, AB)']]]]
 
+# [['1', ['2', ['3', ['4']], ['5']], ['6']], ['7'], ['8'], ['9', ['10']]]
+"""
 
-def count_indent(inst):
-    """Counts number of spaces befor each instruction"""
+def count_indent(line):
     count = 0
-    for char in inst:
+    for char in line:
         if char == ' ':
             count += 1
         else:
             break
-    print(count)
     return count
 
-def push_instruction(inst, indent):
-    if indent < 0:
-        return instruction
+
+def gen_list(inst_list, line, indent):
+    if indent == 0:
+        inst_list.append([line])
+        return inst_list
+
+    gen_list(inst_list[-1], line, indent-1)    
+    return inst_list
     
-    inst_type = inst.split(' ', maxsplit=1)[0]
-    
-    instruction =  {inst_type: [inst.strip()]}
-    
+
+def recreate_file(slot, indent=0):
+        for line in slot:
+            print('    '*indent,line[0])
+            if len(line) > 1:
+                recreate_file(line[1:], indent+1)
 
 
-# each slot = []
-# each slot = [ {} ]
-# each slot = [ {inst_type: [] } ]
-# each slot = [ {inst_type: [instruction] } ]
-
-# each slot = [ {'release': "release (F0, AB)" } ]
-
-# each slot = [ {'push': ["push (F0, AB)"] } ]
-
-# each slot = [   {  'while':  ['while (50)', {'push': ["push (F0, AB)"]} ]    } ]
-
-# slots = [ {'release': "release (F0, AB)" } , 
-#           {'push': ["push (F0, AB)"] } , 
-#           {  'while':  ['while (50)', {'push': ["push (F0, AB)"]} ]    
-#           } 
-#         ] 
-
-# each slot = [   {  'while(50)':  [ {'if1': ['push1']} ]    } ]
-# each slot = [   { 'while(50)': [{'if1': ['push1']}, {'if2': ['push2']}] }   ]
-def new_parse_instructions(instruction_file_path):
-    with open(instruction_file_path, 'r') as instructions_file:
-        instructions = [inst.replace('\n', '') for inst in instructions_file.readlines()]
-
-        slot_num = 0
-        above_line = 0
-        slots = [[]]
+def file_parser(instruction_file_path):
+    with open('./WARP-codes/Simple_loop.wrp', 'r+') as test_file:
+        test_file_lines = test_file.readlines()
+        inst_list = []  
         
-        for inst in instructions:
-            if len(inst.strip()) == 0:
-                # It's an empty line
+        slots = []
+        # slot_num = 0
+        
+        for line in test_file_lines:
+            if len(line.strip()) == 0:
                 continue
             
-            elif '---' in inst:
-                # It's a new slot
-                slot_num += 1
-                above_line = 0
-                slots.append([])
+            elif '---' in line:
+                # slot_num += 1
+                slots.append(inst_list.copy())
+                inst_list = [] 
+                # slots.append([])
                 
+            
             else:
-                # It's a line of instruction
-                # push_instruction(inst, count_indent(inst))
-                
-                instruction = [inst.split(' ', maxsplit=1)[0], inst.strip()]
-                
-                
-                
-                
-                slots[slot_num].append(instruction)
-                above_line += 1
-                
-        instructions = slots.copy()
-        instructions_file.close()
+                indent_count = count_indent(line)//4
+                inst_list = gen_list(inst_list, line.strip(), indent_count)
         
-        for i in instructions:
-            print(i)
-    exit()
-    # return instructions
+        slots.append(inst_list.copy())
+        # print(inst_list)    
+        # print('='*50)
+        # recreate_file(inst_list, 0)
+        
+    return slots
+
 
 # Parser function for different types of instructions
 def inst_parser(instruction):
