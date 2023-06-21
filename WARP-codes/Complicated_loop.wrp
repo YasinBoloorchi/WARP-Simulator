@@ -1,0 +1,11 @@
+release (F0, AB)
+------
+while(True):
+    if clock % R == 0:
+        q.push(new packet)
+    
+    if clock % S == 0:
+       if !q.empty():
+            p = q.pop()
+            push(p)
+----

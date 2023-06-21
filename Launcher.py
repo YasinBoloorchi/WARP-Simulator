@@ -1,5 +1,5 @@
 from Simulator import State, Simulator
-from Parser import parse_instructions, inst_parser
+from Parser import new_parse_instructions, inst_parser
 from time import sleep
 from sympy import symbols, factor, expand
 import subprocess
@@ -30,9 +30,13 @@ def run_loop(instruction_file_path):
     # initial variables
     
     file_name = instruction_file_path.split('/')[-1]
-    instructions = parse_instructions(instruction_file_path)
+    instructions = new_parse_instructions(instruction_file_path)
 
-    simulate(file_name, instructions)
+    for s in instructions:
+        print(s)
+    
+
+    # simulate(file_name, instructions)
 
 
 
@@ -41,9 +45,9 @@ def main():
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
-    run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
+    # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
-    # run_loop('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
+    run_loop('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
     
     # subprocess.run(["pkill", "viewnior"])
 
