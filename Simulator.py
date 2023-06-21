@@ -45,11 +45,13 @@ class Simulator:
     def run_slot(self, slot, hash_table={}):
         pull_count = 0
         tick_clock_flag = True
-        keep_clock_flag = False
+        # keep_clock_flag = False
         for inst in slot:
-            inst_type = inst[0]
-            instruction = inst[1]
+            inst_type = inst[0].split(' ', maxsplit=1)[0]
+            instruction = inst[0]
             print('\n\n[Inst] ',inst, '| inst type: ', inst_type, '| instruction: ', instruction)
+            
+            # continuerun_slot(self, slot, hash_table={})
             
             if inst_type == 'release':
                 parsed_instruction = inst_parser(instruction)[0]
@@ -102,8 +104,37 @@ class Simulator:
                 # print(instruction)
                 # self.add_sleep_state(inst='sleep')
                 hash_table = self.add_sleep(tick_clock_flag)
+              
                 
+            elif inst_type == 'while':
+                # [Inst]  ['while (10):', ['push (F0, AB)']] | inst type:  while | instruction:  while (10):
+                # [['while (10):', ['push (F0, AB)'], ['pull (F1, CA)']]]
+                
+                def check_condition(condition, counter):
+                    if condition == 'True':
+                        condition = 100
+
+                    
+                    if int(condition) - counter > 0:
+                        return True
+                    else:
+                        return False
             
+                
+                parsed_instruction = inst_parser(instruction)[0]
+                
+                # print('Inst_parser result: ', parsed_instruction)
+                # exit()
+                print('condition:', parsed_instruction[1])
+                condition = parsed_instruction[1]
+                counter = 0
+                
+                while check_condition(condition, counter):
+                    hash_table = self.run_slot(inst[1:], hash_table)
+                    counter += 1
+                
+                
+                            
             
             if pull_count > 1:
                 raise Exception('Unexceptable number of pull/push requests in a single slot.')
@@ -113,7 +144,8 @@ class Simulator:
                 # keep_clock_flag = False
 
             self.hash_table = hash_table.copy()
-            
+        
+        return hash_table
 
     def release(self, flow_name, hash_table, tick_clock_flag=False):
         # flow_name = 'F0BA'    

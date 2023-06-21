@@ -1,4 +1,7 @@
 release (F0, AB)
+release (F1, CA)
 -----
-while (True):
+while (10):
     push (F0, AB)
+
+drop (F0, AB)

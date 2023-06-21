@@ -41,7 +41,19 @@ def recreate_file(slot, indent=0):
 
 
 def file_parser(instruction_file_path):
-    with open('./WARP-codes/Simple_loop.wrp', 'r+') as test_file:
+    
+    def is_comment(line):
+        if line.strip()[0] == '#':
+            return True
+        else: False
+        
+    def is_empty(line):
+        if len(line.strip()) == 0:
+            return True
+        else: False
+    
+    
+    with open(instruction_file_path, 'r+') as test_file:
         test_file_lines = test_file.readlines()
         inst_list = []  
         
@@ -49,7 +61,7 @@ def file_parser(instruction_file_path):
         # slot_num = 0
         
         for line in test_file_lines:
-            if len(line.strip()) == 0:
+            if is_empty(line) or is_comment(line):
                 continue
             
             elif '---' in line:
@@ -73,7 +85,7 @@ def file_parser(instruction_file_path):
 
 # Parser function for different types of instructions
 def inst_parser(instruction):
-    parsed_inst = re.findall('(\w*)\s*\(\s*(\w\d+)\s*,*\s*(\w+)*\s*,*(\#\d+)*\s*\)', instruction)
+    parsed_inst = re.findall('(\w*)\s*\(\s*(\w*)\s*,*\s*(\w+)*\s*,*(\#\d+)*\s*\)', instruction)
     
     
     if len(parsed_inst) == 2:

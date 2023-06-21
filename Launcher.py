@@ -7,20 +7,21 @@ import subprocess
 
 
 
-def simulate(file_name, instructions):
+def simulate(file_name, instructions_slots):
     # Generate States simu and initial state    
     simu = Simulator()
     
     # warp code execution losiop
-    for slot in instructions:
+    for slot in instructions_slots:
         simu.run_slot(slot)
         simu.imprint_hash_table()
-        print('Test of Correctness result: ', simu.test_of_correctness(), end='\n'+"="*50+'\n')
+        print('Test of Correctness: ', simu.test_of_correctness(), end='\n'+"="*50+'\n')
     
     # sleep(0.5)
-    simu.visualize_dag(file_name, prob=1)
-    simu.archive_print()
-
+    simu.visualize_dag(file_name, prob=0.8)
+    # simu.archive_print()
+    del(simu)
+    return
 
 def run_loop(instruction_file_path):
     """
@@ -33,12 +34,17 @@ def run_loop(instruction_file_path):
     instructions_slots = file_parser(instruction_file_path)
 
     print(instructions_slots)
+    print('='*50)
     for slot in instructions_slots:
-        recreate_file(slot)
+        # recreate_file(slot)
+        print(slot)
         print('----')
 
-    # simulate(file_name, instructions)
+    print('='*50)
+    
+    simulate(file_name, instructions_slots)
 
+    return
 
 
 def main():
@@ -47,8 +53,8 @@ def main():
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
+    run_loop('./WARP-codes/Simple_loop.wrp') # Passed ‍‍‍~ 
     # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
-    run_loop('./WARP-codes/Simple_loop.wrp') # Testing ‍‍‍~ 
     
     # subprocess.run(["pkill", "viewnior"])
 
