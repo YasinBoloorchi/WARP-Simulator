@@ -43,6 +43,8 @@ class Simulator:
 
 
     def run_slot(self, slot, hash_table={}):
+        if hash_table == {}:
+            hash_table = self.hash_table
         
         pull_count = 0
         tick_clock_flag = True
