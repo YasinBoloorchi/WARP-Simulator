@@ -43,8 +43,10 @@ class Simulator:
 
 
     def run_slot(self, slot, hash_table={}):
+        
         pull_count = 0
         tick_clock_flag = True
+
         # keep_clock_flag = False
         for inst in slot:
             inst_type = inst[0].split(' ', maxsplit=1)[0]
@@ -84,20 +86,30 @@ class Simulator:
                 
             
             elif inst_type == 'if':
-                pull_count += 1
+                # pull_count += 1
                 parsed_instruction = inst_parser(instruction)
-                # inst_parser => [('has', 'F0', 'BA', ''), ('pull', 'F0', 'BA', '#1'), ('pull', 'F0', 'AC', '#1')] 
+                # [Inst]  ['if !has(F0,AB):', ['pull (F0,AB,#1)'], 'else:', ['pull (F0,BC,#1)']]
+                print('inst: ', inst)
+                print('instruction: ', instruction)
+                print('Parsed Instruction in if: ', parsed_instruction)
+                condition_type, condition_flow, condition_nodes, _ = inst_parser(instruction)[0]
                 
-                condition, condition_is_true, condition_is_false = inst_parser(instruction)         
-
-                #          F0         pull(F0,#1)         pull (F1,#1)
-                #         vvvv         vvvvvvvv              vvvv
-                # print(condition, condition_is_true, condition_is_false)
+                condition = condition_flow + condition_nodes
                 
-                condition_flow_name = condition[1]+condition[2]
+                print("condition_type, condition: :", condition, condition_type)
                 
                 
-                hash_table = self.condition(condition_flow_name, condition_is_true, condition_is_false, tick_clock_flag, hash_table)#, prob=0.8)
+                if 'else:' in inst:
+                    condition_is_true_inst = inst[1: inst.index('else:')]
+                    condition_is_false_inst = inst[inst.index('else:')+1:]
+                else:
+                    condition_is_true_inst = inst[1:]
+                    condition_is_false_inst = []
+                    
+                print("condition_is_true_inst, condition_is_false_inst: ", condition_is_true_inst, condition_is_false_inst)
+                
+                
+                hash_table = self.condition(condition_type, condition, condition_is_true_inst, condition_is_false_inst, tick_clock_flag, hash_table)#, prob=0.8)
 
 
             elif inst_type == 'sleep':
@@ -110,7 +122,7 @@ class Simulator:
                 # [Inst]  ['while (10):', ['push (F0, AB)']] | inst type:  while | instruction:  while (10):
                 # [['while (10):', ['push (F0, AB)'], ['pull (F1, CA)']]]
                 
-                def check_condition(condition, counter):
+                def check_loop_condition(condition, counter):
                     if condition == 'True':
                         condition = 100
 
@@ -129,13 +141,11 @@ class Simulator:
                 condition = parsed_instruction[1]
                 counter = 0
                 
-                while check_condition(condition, counter):
+                while check_loop_condition(condition, counter):
                     hash_table = self.run_slot(inst[1:], hash_table)
                     counter += 1
                 
-                
-                            
-            
+           
             if pull_count > 1:
                 raise Exception('Unexceptable number of pull/push requests in a single slot.')
             
@@ -146,6 +156,7 @@ class Simulator:
             self.hash_table = hash_table.copy()
         
         return hash_table
+
 
     def release(self, flow_name, hash_table, tick_clock_flag=False):
         # flow_name = 'F0BA'    
@@ -258,7 +269,63 @@ class Simulator:
         return temp_hash_table
     
     
-    def condition(self, condition, condition_is_true, condition_is_false, tick_clock_flag, hash_table, prob=symbols('S')):
+    def condition(self, condition_type, condition, condition_is_true_inst, condition_is_false_inst, tick_clock_flag, hash_table, prob=symbols('S')):
+        
+        def check_if_condition(state, condition_type, condition):
+            
+            if condition_type == '!has':
+                if not state.workload.get(condition):
+                    return True
+                else:
+                    return False
+                
+            # elif condition_type == 'has':
+            #     if state.workload.get(condition):
+            #         return True
+            #     else:
+            #         return False
+            
+        
+        condition_is_true_hash_table = {}
+        condition_is_false_hash_table = {}
+        
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
+            self.archive.append(state)
+
+            if check_if_condition(state, condition_type, condition):
+                
+                condition_is_true_hash_table[key] = state
+                
+            else:
+                
+                condition_is_false_hash_table[key] = state
+        
+        
+        condition_is_true_hash_table = self.run_slot(condition_is_true_inst, condition_is_true_hash_table)
+        
+        if condition_is_false_inst:
+            condition_is_false_hash_table = self.run_slot(condition_is_false_inst, condition_is_false_hash_table)
+
+
+        hash_table = condition_is_true_hash_table
+        
+        for key in list(condition_is_false_hash_table.keys()):
+            if key in hash_table:
+                # hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+                
+                hash_table[key].prob += condition_is_false_hash_table.get(key).prob
+                
+                condition_is_false_hash_table.get(key).right = hash_table[key]  # Sum similar state probablity
+                
+            else:
+                hash_table[key] = condition_is_false_hash_table.pop(key)
+            
+        # print(hash_table)
+        
+        
+        return hash_table
+    
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
@@ -401,7 +468,7 @@ class Simulator:
                   round(factor(self.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
                   self.hash_table.get(state))
     
-    
+   
     def archive_print(self):
         """
         A function to print the archive of all the states

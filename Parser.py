@@ -25,7 +25,11 @@ def count_indent(line):
 
 
 def gen_list(inst_list, line, indent):
-    if indent == 0:
+    if indent < 0 and line=='else:': # added this condition to consider "else"
+        inst_list.append(line)
+        return inst_list
+    
+    elif indent == 0 and line != 'else:':
         inst_list.append([line])
         return inst_list
 
@@ -85,7 +89,7 @@ def file_parser(instruction_file_path):
 
 # Parser function for different types of instructions
 def inst_parser(instruction):
-    parsed_inst = re.findall('(\w*)\s*\(\s*(\w*)\s*,*\s*(\w+)*\s*,*(\#\d+)*\s*\)', instruction)
+    parsed_inst = re.findall('(\!*\w*)\s*\(\s*(\w*)\s*,*\s*(\w+)*\s*,*(\#\d+)*\s*\)', instruction)
     
     
     if len(parsed_inst) == 2:

@@ -1,0 +1,10 @@
+release (F0,AB)
+release (F0,BC)
+------
+pull (F0,AB,#0)
+-----
+if !has(F0,AB):
+    pull (F0,AB,#1)
+-----
+drop (F0,AB)
+drop (F0,BC)

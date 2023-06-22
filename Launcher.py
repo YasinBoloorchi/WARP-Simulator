@@ -23,6 +23,7 @@ def simulate(file_name, instructions_slots):
     del(simu)
     return
 
+
 def run_loop(instruction_file_path):
     """
         Running the instructions that been parsed from the file
@@ -53,7 +54,8 @@ def main():
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
-    run_loop('./WARP-codes/Simple_loop.wrp') # Passed ‍‍‍~ 
+    # run_loop('./WARP-codes/Simple_loop.wrp') # Passed ‍‍‍✓
+    run_loop('./WARP-codes/new_half_condition.wrp') # Testing ‍‍‍~ 
     # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
     
     # subprocess.run(["pkill", "viewnior"])
