@@ -11,14 +11,15 @@ def simulate(file_name, instructions_slots):
     # Generate States simu and initial state    
     simu = Simulator()
     
+    hash_table = {}
     # warp code execution losiop
     for slot in instructions_slots:
-        simu.run_slot(slot)
-        simu.imprint_hash_table()
-        print('Test of Correctness: ', simu.test_of_correctness(), end='\n'+"="*50+'\n')
+        hash_table = simu.run_slot(slot, hash_table)
+        simu.imprint_hash_table(hash_table)
+        print('Test of Correctness: ', simu.test_of_correctness(hash_table), end='\n'+"="*50+'\n')
     
     # sleep(0.5)
-    simu.visualize_dag(file_name, prob=0.8)
+    simu.visualize_dag(file_name, prob=1)
     # simu.archive_print()
     del(simu)
     return
@@ -54,9 +55,15 @@ def main():
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
-    # run_loop('./WARP-codes/Simple_loop.wrp') # Passed ‍‍‍✓
-    run_loop('./WARP-codes/new_half_condition.wrp') # Testing ‍‍‍~ 
     # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
+    
+    
+    # run_loop('./WARP-codes/Simple_loop.wrp') # Passed ‍‍‍✓
+    # run_loop('./WARP-codes/new_half_condition.wrp') # Testing ‍‍‍~ 
+    run_loop('./WARP-codes/new_full_condition.wrp') # Testing ‍‍‍~ 
+    
+    
+    # run_loop('./WARP-codes/four_different_state.wrp')
     
     # subprocess.run(["pkill", "viewnior"])
 

@@ -1,0 +1,10 @@
+release (F0,BA)
+release (F1,CA)
+-----
+pull (F0,BA,#1)
+-----
+pull (F1,CA,#2)
+-----
+if !has(F0,BA)
+    pull (F0,BA,#3)
+    sleep 

@@ -1,7 +1,7 @@
 release (F0, AB)
 -----
-release (F1, CA)
 while (5):
-    push (F0, AB)
+    while (5)
+        push (F0, AB)
 -----
 drop (F0, AB)

@@ -30,7 +30,6 @@ class State:
 
 class Simulator:
     def __init__(self):
-        self.hash_table = {}
         self.archive = []
         self.root = State()
         self.root.id = 'root'
@@ -43,8 +42,6 @@ class Simulator:
 
 
     def run_slot(self, slot, hash_table={}):
-        if hash_table == {}:
-            hash_table = self.hash_table
         
         pull_count = 0
         tick_clock_flag = True
@@ -117,7 +114,7 @@ class Simulator:
             elif inst_type == 'sleep':
                 # print(instruction)
                 # self.add_sleep_state(inst='sleep')
-                hash_table = self.add_sleep(tick_clock_flag)
+                hash_table = self.add_sleep(tick_clock_flag, hash_table)
               
                 
             elif inst_type == 'while':
@@ -155,7 +152,7 @@ class Simulator:
             tick_clock_flag = False
                 # keep_clock_flag = False
 
-            self.hash_table = hash_table.copy()
+            # self.hash_table = hash_table.copy()
         
         return hash_table
 
@@ -260,12 +257,12 @@ class Simulator:
             * merge similar states
         """       
         # hash_table = {}
-        
+        temp_hash_table= {}
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
             self.archive.append(state)
         
-            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob)
+            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob)
             
         # Replacing the new hash table with the old one
         return temp_hash_table
@@ -281,12 +278,37 @@ class Simulator:
                 else:
                     return False
                 
-            # elif condition_type == 'has':
-            #     if state.workload.get(condition):
-            #         return True
-            #     else:
-            #         return False
+            elif condition_type == 'has':
+                if state.workload.get(condition):
+                    return True
+                else:
+                    return False
             
+        
+        # condition_is_true_hash_table = {}
+        # condition_is_false_hash_table = {}
+        # temp_hash_table = {}
+         
+        # for key in list(hash_table.keys()):
+        #     state = hash_table.pop(key)
+        #     self.archive.append(state)
+        #     temp_hash_table.append(state)
+
+        #     if check_if_condition(state, condition_type, condition):
+
+        #         condition_is_true_hash_table = self.run_slot(condition_is_true_inst, {key: state})
+                
+                
+        #     elif condition_is_false_inst:
+        #         condition_is_false_hash_table = self.run_slot(condition_is_false_inst, {key: state})
+            
+        #     else:
+        #         temp_hash_table[key] = state
+        
+        
+
+        
+        # =======================Previouse (works)============================
         
         condition_is_true_hash_table = {}
         condition_is_false_hash_table = {}
@@ -319,15 +341,15 @@ class Simulator:
                 hash_table[key].prob += condition_is_false_hash_table.get(key).prob
                 
                 condition_is_false_hash_table.get(key).right = hash_table[key]  # Sum similar state probablity
-                
             else:
                 hash_table[key] = condition_is_false_hash_table.pop(key)
             
-        # print(hash_table)
-        
+        print(hash_table)
         
         return hash_table
     
+    
+    # ==================== Old one =======================
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
@@ -457,18 +479,18 @@ class Simulator:
                     queue.append(node.right)
 
 
-    def imprint_hash_table(self):
+    def imprint_hash_table(self, hash_table):
         """
         Printout the hash table of the simulation
         """
         print('Hash table:')
         success_prob = symbols('S')
-        for state in self.hash_table:
+        for state in hash_table:
             print('\t',state, '|',
-                  self.hash_table.get(state).workload,'|',
-                  factor(self.hash_table.get(state).prob), '|',
-                  round(factor(self.hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
-                  self.hash_table.get(state))
+                  hash_table.get(state).workload,'|',
+                  factor(hash_table.get(state).prob), '|',
+                  round(factor(hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
+                  hash_table.get(state))
     
    
     def archive_print(self):
@@ -490,15 +512,15 @@ class Simulator:
             print('-'*50)
             
             
-    def test_of_correctness(self):
+    def test_of_correctness(self, hash_table):
         """
             A funciton to test the result of the simulation
             by summing up the probabilities.
         """
         
         sum_of_probabilities = 0
-        for state in self.hash_table:
-            sum_of_probabilities += self.hash_table.get(state).prob
+        for state in hash_table:
+            sum_of_probabilities += hash_table.get(state).prob
         
         if factor(sum_of_probabilities) == 1:
             return '\033[92m'+'Correct'+'\033[0m'
