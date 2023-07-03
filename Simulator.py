@@ -14,8 +14,8 @@ class State:
         self.left = None
         self.clock= 0
         
-    def tick_clock(self):
-        self.clock += 1
+    def tick_clock(self, tick_num):
+        self.clock += tick_num
 
     def update_id(self):
         dictionary_keys = list(self.workload.keys())
@@ -157,7 +157,7 @@ class Simulator:
         return hash_table
 
 
-    def release(self, flow_name, hash_table, tick_clock_flag=False):
+    def release(self, flow_name, hash_table, tick_clock_flag=False, tick_num=1):
         # flow_name = 'F0BA'    
         """Add the given flow_name with False status
         to all the states' workloads in the hash table
@@ -176,16 +176,16 @@ class Simulator:
             hash_table[new_state.id] = new_state
             
             if tick_clock_flag:
-                new_state.tick_clock()
+                new_state.tick_clock(tick_num)
             
             state.right = hash_table[new_state.id]
             
         return hash_table
 
     
-    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S')):
+    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1):
         if flow_name == '':
-            state.tick_clock()
+            state.tick_clock(tick_num)
             hash_table[state.id] = state
             return hash_table
         
@@ -218,7 +218,7 @@ class Simulator:
             hash_table[success_state.id] = success_state
             if flow_name != '':
                 if tick_clock_flag:
-                    hash_table[success_state.id].tick_clock()
+                    hash_table[success_state.id].tick_clock(tick_num)
                     # tick_clock_flag = False
                 
         
@@ -239,7 +239,7 @@ class Simulator:
         # Update new hashtable with failure state
         hash_table[fail_state.id] = fail_state
         if tick_clock_flag:
-            hash_table[fail_state.id].tick_clock()
+            hash_table[fail_state.id].tick_clock(tick_num)
             # tick_clock_flag = False
         
         state.left = hash_table[fail_state.id]
@@ -247,7 +247,7 @@ class Simulator:
         return hash_table
  
     
-    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S')):
+    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -262,7 +262,7 @@ class Simulator:
             state = hash_table.pop(key)
             self.archive.append(state)
         
-            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob)
+            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
             
         # Replacing the new hash table with the old one
         return temp_hash_table
@@ -383,7 +383,7 @@ class Simulator:
         return temp_hash_table.copy()
         
         
-    def drop_flow(self, flow_name, tick_clock_flag, hash_table):
+    def drop_flow(self, flow_name, tick_clock_flag, hash_table, tick_num=1):
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
@@ -404,7 +404,7 @@ class Simulator:
             else:
                 hash_table[reduced_state.id] = reduced_state
                 if tick_clock_flag:
-                    reduced_state.tick_clock()
+                    reduced_state.tick_clock(tick_num)
                     # tick_clock_flag = False
             
             state.right = hash_table[reduced_state.id]
@@ -412,7 +412,7 @@ class Simulator:
         return hash_table
             
 
-    def add_sleep(self, tick_clock_flag, hash_table):
+    def add_sleep(self, tick_clock_flag, hash_table, tick_num=1):
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
@@ -429,7 +429,7 @@ class Simulator:
             hash_table[slept_state.id] = slept_state
             
             if tick_clock_flag:
-                slept_state.tick_clock()
+                slept_state.tick_clock(tick_num)
                 # tick_clock_flag = False
                 
             
@@ -479,19 +479,21 @@ class Simulator:
                     queue.append(node.right)
 
 
-    def imprint_hash_table(self, hash_table):
+    def imprint_hash_table(self, hash_table, prob=0.8):
         """
         Printout the hash table of the simulation
         """
+        print('='*50)
         print('Hash table:')
         success_prob = symbols('S')
         for state in hash_table:
-            print('\t',state, '|',
+            print('\t','[ ]',state, '|',
                   hash_table.get(state).workload,'|',
                   factor(hash_table.get(state).prob), '|',
-                  round(factor(hash_table.get(state).prob).subs(success_prob, 0.8), 3), '|',
-                  hash_table.get(state))
-    
+                  round(factor(hash_table.get(state).prob).subs(success_prob, prob), 3), '|',
+            )#hash_table.get(state))
+
+        print('='*50)
    
     def archive_print(self):
         """
