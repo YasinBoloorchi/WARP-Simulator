@@ -21,8 +21,7 @@ def simple_while_loop():
         simu.imprint_hash_table(hash_table)
         simu.visualize_dag('./Whileloop',prob=1)
         
-    
-        
+
 # ======== Step two ==========
 def while_with_condition():
     simu = Simulator()
@@ -49,7 +48,7 @@ def while_with_condition():
         clock += 1
 
 
-# ===== Step two =====
+# ===== Step three =====
 def while_with_controled_frequency(S=100, R=100):
     print(f'Running simulation for S={S} and R={R}')
     clock = 0
@@ -83,6 +82,46 @@ def while_with_controled_frequency(S=100, R=100):
             return hash_table
         
         clock += 1
+
+
+# ===== Step four =====
+def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
+    print(f'Running simulation for S={S} and R={R}')
+    clock = t
+    q = list()
+    hash_table = dict()
+    simu = Simulator()
+    
+    
+    hash_table = simu.release('F0AB', hash_table, tick_clock_flag=True, tick_num=t)
+    
+    while(True):
+        
+        if clock % R == 0:
+            q.append('F0AB')
+            for state in hash_table:
+                hash_table.get(state).queue.append('F0AB')
+
+        if clock % S == 0:
+            if q: #not empty
+                p = q.pop(0)
+                hash_table = simu.pull(p, tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+                # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=S-1)
+            
+        else:
+            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+        
+        
+        
+        
+        if clock == 30:
+            simu.imprint_hash_table(hash_table, prob=0.9)
+            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_(withqueue)',prob=0.9)
+            sleep(0.5)
+            return hash_table
+        
+        clock += 1
+
 
 
     
@@ -138,15 +177,20 @@ def main():
     # while_with_condition()
     
     # === Step three ===
-    while_with_controled_frequency(S=100, R=100)
+    # while_with_controled_frequency(S=100, R=100)
+    
+    
+    # === Step four ===
+    while_with_controled_frequency_new(S=10, R=10, t=0, t_plus=200)
+    
     
     # Answer the same questions for
     #           R=100 S=50 and 
     #           R=50 S=100.
     
-    while_with_controled_frequency(S=50, R=100)
+    # while_with_controled_frequency(S=50, R=100)
     
-    while_with_controled_frequency(S=100, R=50)
+    # while_with_controled_frequency(S=100, R=50)
         
     # ============== Test Cases ===============
     

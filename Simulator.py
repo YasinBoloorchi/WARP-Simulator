@@ -13,6 +13,8 @@ class State:
         self.right = None
         self.left = None
         self.clock= 0
+        self.queue = list()
+        self.push_count = 0
         
     def tick_clock(self, tick_num):
         self.clock += tick_num
@@ -197,6 +199,8 @@ class Simulator:
         success_state = copy.deepcopy(state)
         # ----------------------------------
         
+        
+        
         # ------------------------------------
         # Create a new state for success -----
 
@@ -204,6 +208,7 @@ class Simulator:
         if state.workload[flow_name] != True:
             success_state.workload[flow_name] = True
             success_state.prob = success_state.prob * prob               # Multiply S probability
+            success_state.queue.pop(0)
         else:
             success_state.prob *= 1
         
@@ -216,13 +221,18 @@ class Simulator:
 
         else:
             hash_table[success_state.id] = success_state
+            hash_table[success_state.id].push_count += 1
             if flow_name != '':
                 if tick_clock_flag:
                     hash_table[success_state.id].tick_clock(tick_num)
                     # tick_clock_flag = False
-                
         
+        # Add to push count of the state
+                
+
         state.right = hash_table[success_state.id]
+        
+        
         
         # ------------------------------------
         # Create a new state for failure -----
@@ -230,7 +240,6 @@ class Simulator:
             return hash_table
 
         # Updat probability
-
         fail_state.prob = fail_state.prob * (1-prob)
         
         # Update unique id
@@ -242,7 +251,11 @@ class Simulator:
             hash_table[fail_state.id].tick_clock(tick_num)
             # tick_clock_flag = False
         
+        # Add to push count of the state
+        hash_table[fail_state.id].push_count += 1    
+        
         state.left = hash_table[fail_state.id]
+
 
         return hash_table
  
@@ -466,6 +479,8 @@ class Simulator:
                            +'Prob:'+str(factor(node.prob))+'\n'
                            +f'prob (S={prob}): '+str(round(node.prob.subs(success_prob, prob), 3))+'\n'
                            +'Clock: '+str(node.clock)+'\n'
+                           +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
+                           +f'Push Count: {node.push_count}'+'\n'
                            +repr(node))
                 
                 visited.add(node)
@@ -491,9 +506,12 @@ class Simulator:
                   hash_table.get(state).workload,'|',
                   factor(hash_table.get(state).prob), '|',
                   round(factor(hash_table.get(state).prob).subs(success_prob, prob), 3), '|',
+                  'Queue: ', ''.join(f'|{e}' for e in hash_table.get(state).queue),'|',
+                  'Push Count: ', hash_table.get(state).push_count,'|'
             )#hash_table.get(state))
 
         print('='*50)
+   
    
     def archive_print(self):
         """

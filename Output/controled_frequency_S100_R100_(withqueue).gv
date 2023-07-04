@@ -1,0 +1,115 @@
+digraph "./Output/./controled_frequency_S100_R100_(withqueue)" {
+	<Simulator.State object at 0x101d07c50> [label="ID: root
+Prob:1
+prob (S=0.9): 1
+Clock: 0
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x101d07c50>"]
+	<Simulator.State object at 0x101d07c50> -> <Simulator.State object at 0x103bec090> [label=S]
+	<Simulator.State object at 0x103bec090> [label="ID: F0AB:False
+Prob:1
+prob (S=0.9): 1
+Clock: 3
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x103bec090>"]
+	<Simulator.State object at 0x103bec090> -> <Simulator.State object at 0x10318fa10> [label=F]
+	<Simulator.State object at 0x103bec090> -> <Simulator.State object at 0x1034a7850> [label=S]
+	<Simulator.State object at 0x10318fa10> [label="ID: F0AB:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: 4
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x10318fa10>"]
+	<Simulator.State object at 0x10318fa10> -> <Simulator.State object at 0x103f50d50> [label=S]
+	<Simulator.State object at 0x1034a7850> [label="ID: F0AB:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: 4
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x1034a7850>"]
+	<Simulator.State object at 0x1034a7850> -> <Simulator.State object at 0x103e3c5d0> [label=S]
+	<Simulator.State object at 0x103f50d50> [label="ID: F0AB:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: 103
+Queue: |F0AB|F0AB
+Push Count: 1
+<Simulator.State object at 0x103f50d50>"]
+	<Simulator.State object at 0x103f50d50> -> <Simulator.State object at 0x104050810> [label=F]
+	<Simulator.State object at 0x103f50d50> -> <Simulator.State object at 0x104050590> [label=S]
+	<Simulator.State object at 0x103e3c5d0> [label="ID: F0AB:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: 103
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x103e3c5d0>"]
+	<Simulator.State object at 0x103e3c5d0> -> <Simulator.State object at 0x104050590> [label=S]
+	<Simulator.State object at 0x104050810> [label="ID: F0AB:False
+Prob:(S - 1)**2
+prob (S=0.9): 0.01
+Clock: 104
+Queue: |F0AB|F0AB
+Push Count: 2
+<Simulator.State object at 0x104050810>"]
+	<Simulator.State object at 0x104050810> -> <Simulator.State object at 0x103508810> [label=S]
+	<Simulator.State object at 0x104050590> [label="ID: F0AB:True
+Prob:-S*(S - 2)
+prob (S=0.9): 0.990
+Clock: 104
+Queue: |F0AB
+Push Count: 2
+<Simulator.State object at 0x104050590>"]
+	<Simulator.State object at 0x104050590> -> <Simulator.State object at 0x103b224d0> [label=S]
+	<Simulator.State object at 0x103508810> [label="ID: F0AB:False
+Prob:(S - 1)**2
+prob (S=0.9): 0.01
+Clock: 203
+Queue: |F0AB|F0AB|F0AB
+Push Count: 2
+<Simulator.State object at 0x103508810>"]
+	<Simulator.State object at 0x103508810> -> <Simulator.State object at 0x1034a5250> [label=F]
+	<Simulator.State object at 0x103508810> -> <Simulator.State object at 0x104051410> [label=S]
+	<Simulator.State object at 0x103b224d0> [label="ID: F0AB:True
+Prob:-S*(S - 2)
+prob (S=0.9): 0.990
+Clock: 203
+Queue: |F0AB|F0AB
+Push Count: 2
+<Simulator.State object at 0x103b224d0>"]
+	<Simulator.State object at 0x103b224d0> -> <Simulator.State object at 0x104051410> [label=S]
+	<Simulator.State object at 0x1034a5250> [label="ID: F0AB:False
+Prob:-(S - 1)**3
+prob (S=0.9): 0.001
+Clock: 204
+Queue: |F0AB|F0AB|F0AB
+Push Count: 3
+<Simulator.State object at 0x1034a5250>"]
+	<Simulator.State object at 0x1034a5250> -> <Simulator.State object at 0x103bcbcd0> [label=S]
+	<Simulator.State object at 0x104051410> [label="ID: F0AB:True
+Prob:S*(S**2 - 3*S + 3)
+prob (S=0.9): 0.999
+Clock: 204
+Queue: |F0AB|F0AB
+Push Count: 3
+<Simulator.State object at 0x104051410>"]
+	<Simulator.State object at 0x104051410> -> <Simulator.State object at 0x1026a3e90> [label=S]
+	<Simulator.State object at 0x103bcbcd0> [label="ID: F0AB:False
+Prob:-(S - 1)**3
+prob (S=0.9): 0.001
+Clock: 303
+Queue: |F0AB|F0AB|F0AB
+Push Count: 3
+<Simulator.State object at 0x103bcbcd0>"]
+	<Simulator.State object at 0x1026a3e90> [label="ID: F0AB:True
+Prob:S*(S**2 - 3*S + 3)
+prob (S=0.9): 0.999
+Clock: 303
+Queue: |F0AB|F0AB
+Push Count: 3
+<Simulator.State object at 0x1026a3e90>"]
+}
