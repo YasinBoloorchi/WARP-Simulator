@@ -1,0 +1,59 @@
+digraph "./Output/new_half_condition.wrp" {
+	<Simulator.State object at 0x7f813597ff10> [label="ID: root
+Prob:1
+prob (S=0.8): 1
+Clock: 0
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7f813597ff10>"]
+	<Simulator.State object at 0x7f813597ff10> -> <Simulator.State object at 0x7f813419e980> [label=S]
+	<Simulator.State object at 0x7f813419e980> [label="ID: F0AB:False
+Prob:1
+prob (S=0.8): 1
+Clock: 1
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x7f813419e980>"]
+	<Simulator.State object at 0x7f813419e980> -> <Simulator.State object at 0x7f81341d7100> [label=F]
+	<Simulator.State object at 0x7f813419e980> -> <Simulator.State object at 0x7f81341d6fb0> [label=S]
+	<Simulator.State object at 0x7f81341d7100> [label="ID: F0AB:False
+Prob:1 - S
+prob (S=0.8): 0.200
+Clock: 2
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x7f81341d7100>"]
+	<Simulator.State object at 0x7f81341d7100> -> <Simulator.State object at 0x7f813412a1d0> [label=F]
+	<Simulator.State object at 0x7f81341d7100> -> <Simulator.State object at 0x7f813412a1a0> [label=S]
+	<Simulator.State object at 0x7f81341d6fb0> [label="ID: F0AB:True
+Prob:S
+prob (S=0.8): 0.800
+Clock: 2
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7f81341d6fb0>"]
+	<Simulator.State object at 0x7f81341d6fb0> -> <Simulator.State object at 0x7f813412a1a0> [label=S]
+	<Simulator.State object at 0x7f813412a1d0> [label="ID: F0AB:False
+Prob:(S - 1)**2
+prob (S=0.8): 0.040
+Clock: 3
+Queue: |F0AB
+Push Count: 2
+<Simulator.State object at 0x7f813412a1d0>"]
+	<Simulator.State object at 0x7f813412a1d0> -> <Simulator.State object at 0x7f813412ba30> [label=S]
+	<Simulator.State object at 0x7f813412a1a0> [label="ID: F0AB:True
+Prob:-S*(S - 2)
+prob (S=0.8): 0.960
+Clock: 3
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7f813412a1a0>"]
+	<Simulator.State object at 0x7f813412a1a0> -> <Simulator.State object at 0x7f813412ba30> [label=S]
+	<Simulator.State object at 0x7f813412ba30> [label="ID: 
+Prob:1
+prob (S=0.8): 1.00000000000000
+Clock: 4
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7f813412ba30>"]
+}

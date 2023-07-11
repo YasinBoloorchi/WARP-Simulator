@@ -97,7 +97,6 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
     hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
     
     while(True):
-        print(clock)
         if clock % R == 0:
             # q.append(f'F{flow_counter}AB')
             hash_table = simu.release(f'F{flow_counter}AB', hash_table, tick_clock_flag=True, tick_num=0)
@@ -184,7 +183,7 @@ def main():
     
     
     # === Step four ===
-    while_with_controled_frequency_new(S=50, R=100, t=5, t_plus=200)
+    while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=200)
     
     
     # Answer the same questions for
