@@ -26,6 +26,9 @@ class State:
         key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
         unique_string = ','.join(key_value_strings)
         
+        # add queue to the id
+        # unique_string += '|' + '|'.join(member for member in self.queue)
+        
         self.id = unique_string
         return unique_string
 
@@ -218,7 +221,6 @@ class Simulator:
         # Update new hashtable with success state (Merge section)
         if success_state.id in hash_table:
             hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
-
         else:
             hash_table[success_state.id] = success_state
             hash_table[success_state.id].push_count += 1
@@ -228,7 +230,6 @@ class Simulator:
                     # tick_clock_flag = False
         
         # Add to push count of the state
-                
 
         state.right = hash_table[success_state.id]
         
@@ -274,9 +275,20 @@ class Simulator:
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
             self.archive.append(state)
-        
-            temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
             
+            if len(state.queue) > 0:
+                flow_name = state.queue[0]
+                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
+            else:
+                # temp_hash_table = self.add_sleep(tick_clock_flag=True, hash_table=temp_hash_table, tick_num=1)
+                if state.id in temp_hash_table:
+                    temp_hash_table[state.id].prob = temp_hash_table[state.id].prob + state.prob  # Sum similar state probablity
+                    # temp_hash_table[state.id].push_count += 1
+                else:
+                    temp_hash_table[state.id] = state
+                    temp_hash_table[state.id].tick_clock(tick_num)
+                    temp_hash_table[state.id].push_count += 1
+                
         # Replacing the new hash table with the old one
         return temp_hash_table
     
@@ -532,7 +544,7 @@ class Simulator:
             print('-'*50)
             
             
-    def test_of_correctness(self, hash_table):
+    def test_of_correctness(self, hash_table, std_out=True):
         """
             A funciton to test the result of the simulation
             by summing up the probabilities.
@@ -543,6 +555,10 @@ class Simulator:
             sum_of_probabilities += hash_table.get(state).prob
         
         if factor(sum_of_probabilities) == 1:
-            return '\033[92m'+'Correct'+'\033[0m'
+            if std_out:
+                print('Test of correctness result:', '\033[92m'+'Correct'+'\033[0m')
+            return True
         else:
-            return '\033[91m'+'Failed'+'\033[0m'
+            if std_out:
+                print('Test of correctness result:', '\033[91m'+'Failed'+'\033[0m')
+            return False

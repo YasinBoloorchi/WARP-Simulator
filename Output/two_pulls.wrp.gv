@@ -1,0 +1,25 @@
+digraph "./Output/two_pulls.wrp" {
+	<Simulator.State object at 0x7fd1b692bf10> [label="ID: root
+Prob:1
+prob (S=1): 1
+Clock: 0
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fd1b692bf10>"]
+	<Simulator.State object at 0x7fd1b692bf10> -> <Simulator.State object at 0x7fd1b515ab30> [label=S]
+	<Simulator.State object at 0x7fd1b515ab30> [label="ID: F0BA:False
+Prob:1
+prob (S=1): 1
+Clock: 3
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fd1b515ab30>"]
+	<Simulator.State object at 0x7fd1b515ab30> -> <Simulator.State object at 0x7fd1b518f5e0> [label=S]
+	<Simulator.State object at 0x7fd1b518f5e0> [label="ID: 
+Prob:1
+prob (S=1): 1
+Clock: 4
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fd1b518f5e0>"]
+}

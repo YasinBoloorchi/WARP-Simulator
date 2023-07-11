@@ -1,0 +1,295 @@
+digraph "./Output/./controled_frequency_S100_R100_t5_tPlus400" {
+	<Simulator.State object at 0x000001D27B30AB30> [label="ID: root
+Prob:1
+prob (S=0.9): 1
+Clock: 0
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x000001D27B30AB30>"]
+	<Simulator.State object at 0x000001D27B30AB30> -> <Simulator.State object at 0x000001D27D283760> [label=S]
+	<Simulator.State object at 0x000001D27D283760> [label="ID: 
+Prob:1
+prob (S=0.9): 1
+Clock: 5
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x000001D27D283760>"]
+	<Simulator.State object at 0x000001D27D283760> -> <Simulator.State object at 0x000001D27D2BBD00> [label=S]
+	<Simulator.State object at 0x000001D27D2BBD00> [label="ID: F0AB:False
+Prob:1
+prob (S=0.9): 1
+Clock: 5
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x000001D27D2BBD00>"]
+	<Simulator.State object at 0x000001D27D2BBD00> -> <Simulator.State object at 0x000001D27D2BBD30> [label=S]
+	<Simulator.State object at 0x000001D27D2BBD30> [label="ID: F0AB:False
+Prob:1
+prob (S=0.9): 1
+Clock: 100
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x000001D27D2BBD30>"]
+	<Simulator.State object at 0x000001D27D2BBD30> -> <Simulator.State object at 0x000001D27D2BBDC0> [label=F]
+	<Simulator.State object at 0x000001D27D2BBD30> -> <Simulator.State object at 0x000001D27D2BBE50> [label=S]
+	<Simulator.State object at 0x000001D27D2BBDC0> [label="ID: F0AB:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: 101
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x000001D27D2BBDC0>"]
+	<Simulator.State object at 0x000001D27D2BBDC0> -> <Simulator.State object at 0x000001D27D303610> [label=S]
+	<Simulator.State object at 0x000001D27D2BBE50> [label="ID: F0AB:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x000001D27D2BBE50>"]
+	<Simulator.State object at 0x000001D27D2BBE50> -> <Simulator.State object at 0x000001D27D300040> [label=S]
+	<Simulator.State object at 0x000001D27D303610> [label="ID: F0AB:False,F1AB:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: 101
+Queue: |F0AB|F1AB
+Push Count: 1
+<Simulator.State object at 0x000001D27D303610>"]
+	<Simulator.State object at 0x000001D27D303610> -> <Simulator.State object at 0x000001D27D41D5D0> [label=S]
+	<Simulator.State object at 0x000001D27D300040> [label="ID: F0AB:True,F1AB:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: 101
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x000001D27D300040>"]
+	<Simulator.State object at 0x000001D27D300040> -> <Simulator.State object at 0x000001D27D41D570> [label=S]
+	<Simulator.State object at 0x000001D27D41D5D0> [label="ID: F0AB:False,F1AB:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: 200
+Queue: |F0AB|F1AB
+Push Count: 1
+<Simulator.State object at 0x000001D27D41D5D0>"]
+	<Simulator.State object at 0x000001D27D41D5D0> -> <Simulator.State object at 0x000001D27D41D6C0> [label=F]
+	<Simulator.State object at 0x000001D27D41D5D0> -> <Simulator.State object at 0x000001D27D41D690> [label=S]
+	<Simulator.State object at 0x000001D27D41D570> [label="ID: F0AB:True,F1AB:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: 200
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x000001D27D41D570>"]
+	<Simulator.State object at 0x000001D27D41D570> -> <Simulator.State object at 0x000001D27D41D690> [label=F]
+	<Simulator.State object at 0x000001D27D41D570> -> <Simulator.State object at 0x000001D27D41D750> [label=S]
+	<Simulator.State object at 0x000001D27D41D6C0> [label="ID: F0AB:False,F1AB:False
+Prob:(S - 1)**2
+prob (S=0.9): 0.01
+Clock: 201
+Queue: |F0AB|F1AB
+Push Count: 2
+<Simulator.State object at 0x000001D27D41D6C0>"]
+	<Simulator.State object at 0x000001D27D41D6C0> -> <Simulator.State object at 0x000001D27D41DBA0> [label=S]
+	<Simulator.State object at 0x000001D27D41D690> [label="ID: F0AB:True,F1AB:False
+Prob:-2*S*(S - 1)
+prob (S=0.9): 0.180
+Clock: 201
+Queue: |F1AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41D690>"]
+	<Simulator.State object at 0x000001D27D41D690> -> <Simulator.State object at 0x000001D27D41D960> [label=S]
+	<Simulator.State object at 0x000001D27D41D750> [label="ID: F0AB:True,F1AB:True
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: 201
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x000001D27D41D750>"]
+	<Simulator.State object at 0x000001D27D41D750> -> <Simulator.State object at 0x000001D27D41D990> [label=S]
+	<Simulator.State object at 0x000001D27D41DBA0> [label="ID: F0AB:False,F1AB:False,F2AB:False
+Prob:(S - 1)**2
+prob (S=0.9): 0.01
+Clock: 201
+Queue: |F0AB|F1AB|F2AB
+Push Count: 2
+<Simulator.State object at 0x000001D27D41DBA0>"]
+	<Simulator.State object at 0x000001D27D41DBA0> -> <Simulator.State object at 0x000001D27D41DB70> [label=S]
+	<Simulator.State object at 0x000001D27D41D960> [label="ID: F0AB:True,F1AB:False,F2AB:False
+Prob:-2*S*(S - 1)
+prob (S=0.9): 0.180
+Clock: 201
+Queue: |F1AB|F2AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41D960>"]
+	<Simulator.State object at 0x000001D27D41D960> -> <Simulator.State object at 0x000001D27D41DD80> [label=S]
+	<Simulator.State object at 0x000001D27D41D990> [label="ID: F0AB:True,F1AB:True,F2AB:False
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: 201
+Queue: |F2AB
+Push Count: 2
+<Simulator.State object at 0x000001D27D41D990>"]
+	<Simulator.State object at 0x000001D27D41D990> -> <Simulator.State object at 0x000001D27D41DC90> [label=S]
+	<Simulator.State object at 0x000001D27D41DB70> [label="ID: F0AB:False,F1AB:False,F2AB:False
+Prob:(S - 1)**2
+prob (S=0.9): 0.01
+Clock: 300
+Queue: |F0AB|F1AB|F2AB
+Push Count: 2
+<Simulator.State object at 0x000001D27D41DB70>"]
+	<Simulator.State object at 0x000001D27D41DB70> -> <Simulator.State object at 0x000001D27D41E170> [label=F]
+	<Simulator.State object at 0x000001D27D41DB70> -> <Simulator.State object at 0x000001D27D41DF00> [label=S]
+	<Simulator.State object at 0x000001D27D41DD80> [label="ID: F0AB:True,F1AB:False,F2AB:False
+Prob:-2*S*(S - 1)
+prob (S=0.9): 0.180
+Clock: 300
+Queue: |F1AB|F2AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41DD80>"]
+	<Simulator.State object at 0x000001D27D41DD80> -> <Simulator.State object at 0x000001D27D41DF00> [label=F]
+	<Simulator.State object at 0x000001D27D41DD80> -> <Simulator.State object at 0x000001D27D41DC00> [label=S]
+	<Simulator.State object at 0x000001D27D41DC90> [label="ID: F0AB:True,F1AB:True,F2AB:False
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: 300
+Queue: |F2AB
+Push Count: 2
+<Simulator.State object at 0x000001D27D41DC90>"]
+	<Simulator.State object at 0x000001D27D41DC90> -> <Simulator.State object at 0x000001D27D41DC00> [label=F]
+	<Simulator.State object at 0x000001D27D41DC90> -> <Simulator.State object at 0x000001D27D41DCC0> [label=S]
+	<Simulator.State object at 0x000001D27D41E170> [label="ID: F0AB:False,F1AB:False,F2AB:False
+Prob:-(S - 1)**3
+prob (S=0.9): 0.001
+Clock: 301
+Queue: |F0AB|F1AB|F2AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41E170>"]
+	<Simulator.State object at 0x000001D27D41E170> -> <Simulator.State object at 0x000001D27D41E620> [label=S]
+	<Simulator.State object at 0x000001D27D41DF00> [label="ID: F0AB:True,F1AB:False,F2AB:False
+Prob:3*S*(S - 1)**2
+prob (S=0.9): 0.027
+Clock: 301
+Queue: |F1AB|F2AB
+Push Count: 5
+<Simulator.State object at 0x000001D27D41DF00>"]
+	<Simulator.State object at 0x000001D27D41DF00> -> <Simulator.State object at 0x000001D27D41E470> [label=S]
+	<Simulator.State object at 0x000001D27D41DC00> [label="ID: F0AB:True,F1AB:True,F2AB:False
+Prob:-3*S**2*(S - 1)
+prob (S=0.9): 0.243
+Clock: 301
+Queue: |F2AB
+Push Count: 4
+<Simulator.State object at 0x000001D27D41DC00>"]
+	<Simulator.State object at 0x000001D27D41DC00> -> <Simulator.State object at 0x000001D27D41E530> [label=S]
+	<Simulator.State object at 0x000001D27D41DCC0> [label="ID: F0AB:True,F1AB:True,F2AB:True
+Prob:S**3
+prob (S=0.9): 0.729
+Clock: 301
+Queue: 
+Push Count: 3
+<Simulator.State object at 0x000001D27D41DCC0>"]
+	<Simulator.State object at 0x000001D27D41DCC0> -> <Simulator.State object at 0x000001D27D41E1D0> [label=S]
+	<Simulator.State object at 0x000001D27D41E620> [label="ID: F0AB:False,F1AB:False,F2AB:False,F3AB:False
+Prob:-(S - 1)**3
+prob (S=0.9): 0.001
+Clock: 301
+Queue: |F0AB|F1AB|F2AB|F3AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41E620>"]
+	<Simulator.State object at 0x000001D27D41E620> -> <Simulator.State object at 0x000001D27D41E650> [label=S]
+	<Simulator.State object at 0x000001D27D41E470> [label="ID: F0AB:True,F1AB:False,F2AB:False,F3AB:False
+Prob:3*S*(S - 1)**2
+prob (S=0.9): 0.027
+Clock: 301
+Queue: |F1AB|F2AB|F3AB
+Push Count: 5
+<Simulator.State object at 0x000001D27D41E470>"]
+	<Simulator.State object at 0x000001D27D41E470> -> <Simulator.State object at 0x000001D27D41E6E0> [label=S]
+	<Simulator.State object at 0x000001D27D41E530> [label="ID: F0AB:True,F1AB:True,F2AB:False,F3AB:False
+Prob:-3*S**2*(S - 1)
+prob (S=0.9): 0.243
+Clock: 301
+Queue: |F2AB|F3AB
+Push Count: 4
+<Simulator.State object at 0x000001D27D41E530>"]
+	<Simulator.State object at 0x000001D27D41E530> -> <Simulator.State object at 0x000001D27D41E7A0> [label=S]
+	<Simulator.State object at 0x000001D27D41E1D0> [label="ID: F0AB:True,F1AB:True,F2AB:True,F3AB:False
+Prob:S**3
+prob (S=0.9): 0.729
+Clock: 301
+Queue: |F3AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41E1D0>"]
+	<Simulator.State object at 0x000001D27D41E1D0> -> <Simulator.State object at 0x000001D27D41E3B0> [label=S]
+	<Simulator.State object at 0x000001D27D41E650> [label="ID: F0AB:False,F1AB:False,F2AB:False,F3AB:False
+Prob:-(S - 1)**3
+prob (S=0.9): 0.001
+Clock: 400
+Queue: |F0AB|F1AB|F2AB|F3AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41E650>"]
+	<Simulator.State object at 0x000001D27D41E650> -> <Simulator.State object at 0x000001D27D41ED70> [label=F]
+	<Simulator.State object at 0x000001D27D41E650> -> <Simulator.State object at 0x000001D27D41EC80> [label=S]
+	<Simulator.State object at 0x000001D27D41E6E0> [label="ID: F0AB:True,F1AB:False,F2AB:False,F3AB:False
+Prob:3*S*(S - 1)**2
+prob (S=0.9): 0.027
+Clock: 400
+Queue: |F1AB|F2AB|F3AB
+Push Count: 5
+<Simulator.State object at 0x000001D27D41E6E0>"]
+	<Simulator.State object at 0x000001D27D41E6E0> -> <Simulator.State object at 0x000001D27D41EC80> [label=F]
+	<Simulator.State object at 0x000001D27D41E6E0> -> <Simulator.State object at 0x000001D27D41E9B0> [label=S]
+	<Simulator.State object at 0x000001D27D41E7A0> [label="ID: F0AB:True,F1AB:True,F2AB:False,F3AB:False
+Prob:-3*S**2*(S - 1)
+prob (S=0.9): 0.243
+Clock: 400
+Queue: |F2AB|F3AB
+Push Count: 4
+<Simulator.State object at 0x000001D27D41E7A0>"]
+	<Simulator.State object at 0x000001D27D41E7A0> -> <Simulator.State object at 0x000001D27D41E9B0> [label=F]
+	<Simulator.State object at 0x000001D27D41E7A0> -> <Simulator.State object at 0x000001D27D41E680> [label=S]
+	<Simulator.State object at 0x000001D27D41E3B0> [label="ID: F0AB:True,F1AB:True,F2AB:True,F3AB:False
+Prob:S**3
+prob (S=0.9): 0.729
+Clock: 400
+Queue: |F3AB
+Push Count: 3
+<Simulator.State object at 0x000001D27D41E3B0>"]
+	<Simulator.State object at 0x000001D27D41E3B0> -> <Simulator.State object at 0x000001D27D41E680> [label=F]
+	<Simulator.State object at 0x000001D27D41E3B0> -> <Simulator.State object at 0x000001D27D41E890> [label=S]
+	<Simulator.State object at 0x000001D27D41ED70> [label="ID: F0AB:False,F1AB:False,F2AB:False,F3AB:False
+Prob:(S - 1)**4
+prob (S=0.9): 0.0
+Clock: 401
+Queue: |F0AB|F1AB|F2AB|F3AB
+Push Count: 4
+<Simulator.State object at 0x000001D27D41ED70>"]
+	<Simulator.State object at 0x000001D27D41EC80> [label="ID: F0AB:True,F1AB:False,F2AB:False,F3AB:False
+Prob:-4*S*(S - 1)**3
+prob (S=0.9): 0.004
+Clock: 401
+Queue: |F1AB|F2AB|F3AB
+Push Count: 7
+<Simulator.State object at 0x000001D27D41EC80>"]
+	<Simulator.State object at 0x000001D27D41E9B0> [label="ID: F0AB:True,F1AB:True,F2AB:False,F3AB:False
+Prob:6*S**2*(S - 1)**2
+prob (S=0.9): 0.049
+Clock: 401
+Queue: |F2AB|F3AB
+Push Count: 6
+<Simulator.State object at 0x000001D27D41E9B0>"]
+	<Simulator.State object at 0x000001D27D41E680> [label="ID: F0AB:True,F1AB:True,F2AB:True,F3AB:False
+Prob:-4*S**3*(S - 1)
+prob (S=0.9): 0.292
+Clock: 401
+Queue: |F3AB
+Push Count: 5
+<Simulator.State object at 0x000001D27D41E680>"]
+	<Simulator.State object at 0x000001D27D41E890> [label="ID: F0AB:True,F1AB:True,F2AB:True,F3AB:True
+Prob:S**4
+prob (S=0.9): 0.656
+Clock: 401
+Queue: 
+Push Count: 4
+<Simulator.State object at 0x000001D27D41E890>"]
+}

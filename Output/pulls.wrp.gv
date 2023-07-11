@@ -1,0 +1,25 @@
+digraph "./Output/pulls.wrp" {
+	<Simulator.State object at 0x7face332c640> [label="ID: root
+Prob:1
+prob (S=1): 1
+Clock: 0
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7face332c640>"]
+	<Simulator.State object at 0x7face332c640> -> <Simulator.State object at 0x7face1ceebc0> [label=S]
+	<Simulator.State object at 0x7face1ceebc0> [label="ID: F0BA:False
+Prob:1
+prob (S=1): 1
+Clock: 5
+Queue: 
+Push Count: 4
+<Simulator.State object at 0x7face1ceebc0>"]
+	<Simulator.State object at 0x7face1ceebc0> -> <Simulator.State object at 0x7face1d23b80> [label=S]
+	<Simulator.State object at 0x7face1d23b80> [label="ID: 
+Prob:1
+prob (S=1): 1
+Clock: 6
+Queue: 
+Push Count: 4
+<Simulator.State object at 0x7face1d23b80>"]
+}

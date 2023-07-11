@@ -89,39 +89,42 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
     print(f'Running simulation for S={S} and R={R}')
     clock = t
     q = list()
-    hash_table = dict()
     simu = Simulator()
+    hash_table = dict({simu.root.id:simu.root})
+    sleep_count = 0
+    flow_counter = 0
     
-    
-    hash_table = simu.release('F0AB', hash_table, tick_clock_flag=True, tick_num=t)
+    hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
     
     while(True):
-        
+               
         if clock % R == 0:
-            q.append('F0AB')
+            q.append(f'F{flow_counter}AB')
+            hash_table = simu.release(f'F{flow_counter}AB', hash_table, tick_clock_flag=True, tick_num=0)
             for state in hash_table:
-                hash_table.get(state).queue.append('F0AB')
+                hash_table.get(state).queue.append(f'F{flow_counter}AB')
+            
+            flow_counter += 1
 
         if clock % S == 0:
-            if q: #not empty
-                p = q.pop(0)
-                hash_table = simu.pull(p, tick_clock_flag=True, hash_table=hash_table, tick_num=1)
-                # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=S-1)
-            
+            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
+            hash_table = simu.pull(' ', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+            sleep_count = 0    
         else:
-            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+            sleep_count += 1
         
         
-        
-        
-        if clock == 30:
+        if clock == t_plus:
+            if sleep_count > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
+                
             simu.imprint_hash_table(hash_table, prob=0.9)
-            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_(withqueue)',prob=0.9)
-            sleep(0.5)
+            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_t{t}_tPlus{t_plus}',prob=0.9)
+            simu.test_of_correctness(hash_table=hash_table, std_out=True)
+            # sleep(0.5)
             return hash_table
         
         clock += 1
-
 
 
     
@@ -181,7 +184,7 @@ def main():
     
     
     # === Step four ===
-    while_with_controled_frequency_new(S=10, R=10, t=0, t_plus=200)
+    # while_with_controled_frequency_new(S=50, R=100, t=5, t_plus=200)
     
     
     # Answer the same questions for
@@ -195,7 +198,7 @@ def main():
     # ============== Test Cases ===============
     
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
-    # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
+    run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
