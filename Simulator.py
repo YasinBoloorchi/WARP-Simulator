@@ -9,12 +9,13 @@ class State:
     def __init__(self, workload={}):
         self.workload = workload
         self.prob = Integer(1)
-        self.id = ''
+        self.id = str()
         self.right = None
         self.left = None
         self.clock= 0
         self.queue = list()
         self.push_count = 0
+        self.instruction = str()
         
     def tick_clock(self, tick_num):
         self.clock += tick_num
@@ -177,6 +178,7 @@ class Simulator:
             state = hash_table.pop(key)
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
+            new_state.queue.append(flow_name)
             new_state.update_id()
             hash_table[new_state.id] = new_state
             
@@ -221,6 +223,10 @@ class Simulator:
         # Update new hashtable with success state (Merge section)
         if success_state.id in hash_table:
             hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+            
+            if hash_table[success_state.id].push_count == state.push_count: # Golden fix of push count
+                hash_table[success_state.id].push_count += 1
+        
         else:
             hash_table[success_state.id] = success_state
             hash_table[success_state.id].push_count += 1
@@ -228,6 +234,7 @@ class Simulator:
                 if tick_clock_flag:
                     hash_table[success_state.id].tick_clock(tick_num)
                     # tick_clock_flag = False
+
         
         # Add to push count of the state
 
@@ -253,6 +260,8 @@ class Simulator:
             # tick_clock_flag = False
         
         # Add to push count of the state
+        
+        # if state.push_count
         hash_table[fail_state.id].push_count += 1    
         
         state.left = hash_table[fail_state.id]
@@ -282,12 +291,23 @@ class Simulator:
             else:
                 # temp_hash_table = self.add_sleep(tick_clock_flag=True, hash_table=temp_hash_table, tick_num=1)
                 if state.id in temp_hash_table:
-                    temp_hash_table[state.id].prob = temp_hash_table[state.id].prob + state.prob  # Sum similar state probablity
+                    old_state = temp_hash_table.pop(state.id)
+                    new_state = copy.deepcopy(old_state)
+                    old_state.right = new_state
+                    
+                    temp_hash_table[new_state.id] = new_state
+                    
+                    temp_hash_table[new_state.id].prob = temp_hash_table[new_state.id].prob + state.prob  # Sum similar state probablity
+                    
                     # temp_hash_table[state.id].push_count += 1
                 else:
-                    temp_hash_table[state.id] = state
-                    temp_hash_table[state.id].tick_clock(tick_num)
-                    temp_hash_table[state.id].push_count += 1
+                    old_state = state
+                    new_state = copy.deepcopy(old_state)
+                    old_state.right = new_state
+                    
+                    temp_hash_table[new_state.id] = new_state
+                    temp_hash_table[new_state.id].tick_clock(tick_num)
+                    # temp_hash_table[new_state.id].push_count += 1
                 
         # Replacing the new hash table with the old one
         return temp_hash_table

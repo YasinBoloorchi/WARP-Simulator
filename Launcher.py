@@ -97,12 +97,12 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
     hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
     
     while(True):
-               
+        print(clock)
         if clock % R == 0:
-            q.append(f'F{flow_counter}AB')
+            # q.append(f'F{flow_counter}AB')
             hash_table = simu.release(f'F{flow_counter}AB', hash_table, tick_clock_flag=True, tick_num=0)
-            for state in hash_table:
-                hash_table.get(state).queue.append(f'F{flow_counter}AB')
+            # for state in hash_table:
+            #     hash_table.get(state).queue.append(f'F{flow_counter}AB')
             
             flow_counter += 1
 
@@ -140,7 +140,7 @@ def simulate(file_name, instructions_slots):
         print('Test of Correctness: ', simu.test_of_correctness(hash_table), end='\n'+"="*50+'\n')
     
     # sleep(0.5)
-    simu.visualize_dag(file_name, prob=1)
+    simu.visualize_dag(file_name, prob=0.8)
     # simu.archive_print()
     del(simu)
     return
@@ -184,7 +184,7 @@ def main():
     
     
     # === Step four ===
-    # while_with_controled_frequency_new(S=50, R=100, t=5, t_plus=200)
+    while_with_controled_frequency_new(S=50, R=100, t=5, t_plus=200)
     
     
     # Answer the same questions for
@@ -198,7 +198,7 @@ def main():
     # ============== Test Cases ===============
     
     # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
-    run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
+    # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/PenTest.wrp') # Passed ✓
