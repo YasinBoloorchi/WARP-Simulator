@@ -1,4 +1,20 @@
 release (F0,BA)
+release (F1,BA)
+release (F2,BA)
+-----
+pull (F2,BA,#1)
+-----
+pull (F2,BA,#1)
+-----
+pull (F2,BA,#1)
+
+-----
+pull (F1,BA,#2)
+-----
+pull (F1,BA,#3)
+-----
+pull (F1,BA,#4)
+
 -----
 pull (F0,BA,#1)
 -----
@@ -7,5 +23,9 @@ pull (F0,BA,#1)
 pull (F0,BA,#1)
 -----
 pull (F0,BA,#1)
+
 -----
-drop (F0,BA)
+pull (F1,BA,#1)
+
+-----
+pull (F2,BA,#1)

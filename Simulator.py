@@ -284,31 +284,34 @@ class Simulator:
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
             self.archive.append(state)
-            
-            if len(state.queue) > 0:
-                flow_name = state.queue[0]
+            if flow_name != '':
                 temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
-            else:
-                # temp_hash_table = self.add_sleep(tick_clock_flag=True, hash_table=temp_hash_table, tick_num=1)
-                if state.id in temp_hash_table:
-                    old_state = temp_hash_table.pop(state.id)
-                    new_state = copy.deepcopy(old_state)
-                    old_state.right = new_state
-                    
-                    temp_hash_table[new_state.id] = new_state
-                    
-                    temp_hash_table[new_state.id].prob = temp_hash_table[new_state.id].prob + state.prob  # Sum similar state probablity
-                    
-                    # temp_hash_table[state.id].push_count += 1
-                else:
-                    old_state = state
-                    new_state = copy.deepcopy(old_state)
-                    old_state.right = new_state
-                    
-                    temp_hash_table[new_state.id] = new_state
-                    temp_hash_table[new_state.id].tick_clock(tick_num)
-                    # temp_hash_table[new_state.id].push_count += 1
                 
+            else:
+                if len(state.queue) > 0:
+                    flow_name = state.queue[0]
+                    temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
+                else:
+                    # temp_hash_table = self.add_sleep(tick_clock_flag=True, hash_table=temp_hash_table, tick_num=1)
+                    if state.id in temp_hash_table:
+                        old_state = temp_hash_table.pop(state.id)
+                        new_state = copy.deepcopy(old_state)
+                        old_state.right = new_state
+                        
+                        temp_hash_table[new_state.id] = new_state
+                        
+                        temp_hash_table[new_state.id].prob = temp_hash_table[new_state.id].prob + state.prob  # Sum similar state probablity
+                        
+                        # temp_hash_table[state.id].push_count += 1
+                    else:
+                        old_state = state
+                        new_state = copy.deepcopy(old_state)
+                        old_state.right = new_state
+                        
+                        temp_hash_table[new_state.id] = new_state
+                        temp_hash_table[new_state.id].tick_clock(tick_num)
+                        # temp_hash_table[new_state.id].push_count += 1
+                    
         # Replacing the new hash table with the old one
         return temp_hash_table
     

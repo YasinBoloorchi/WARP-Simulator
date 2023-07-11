@@ -126,6 +126,18 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
         clock += 1
 
 
+def kowsars_work():
+    
+    simu = Simulator()
+    hash_table = dict({simu.root.id:simu.root})
+    
+    hash_table = simu.release('F0BA', hash_table=hash_table, tick_clock_flag=True, tick_num=1)
+    
+    
+    simu.visualize_dag()
+    
+    
+
     
 def simulate(file_name, instructions_slots):
     # Generate States simu and initial state    
@@ -183,9 +195,12 @@ def main():
     
     
     # === Step four ===
-    while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=200)
+    # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=200)
     
     
+    # === Kowsar's ==
+    # kowsars_work()
+
     # Answer the same questions for
     #           R=100 S=50 and 
     #           R=50 S=100.
@@ -196,7 +211,7 @@ def main():
         
     # ============== Test Cases ===============
     
-    # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
+    run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
