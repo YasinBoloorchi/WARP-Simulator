@@ -1,9 +1,12 @@
-from Simulator import State, Simulator
+import subprocess
+from time import sleep
+
+from sympy import expand, factor, symbols
+
 # from Old_Parser import parse_instructions, inst_parser, recreate_file
 from Parser import file_parser, recreate_file
-from time import sleep
-from sympy import symbols, factor, expand
-import subprocess
+from Simulator import Simulator, State
+
 
 # ======== Step one ==========
 def simple_while_loop():
@@ -90,25 +93,30 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
     clock = t
     q = list()
     simu = Simulator()
-    hash_table = dict({simu.root.id:simu.root})
+    hash_table = dict()
     sleep_count = 0
     flow_counter = 0
     
-    hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
+    if t > 0:
+        hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
     
     while(True):
         if clock % R == 0:
+            if sleep_count > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
+                sleep_count = 0    
             # q.append(f'F{flow_counter}AB')
-            hash_table = simu.release(f'F{flow_counter}AB', hash_table, tick_clock_flag=True, tick_num=0)
+            hash_table = simu.release(f'F{flow_counter}AB', hash_table, tick_clock_flag=False, tick_num=0)
             # for state in hash_table:
             #     hash_table.get(state).queue.append(f'F{flow_counter}AB')
             
             flow_counter += 1
 
         if clock % S == 0:
-            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
-            hash_table = simu.pull(' ', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
-            sleep_count = 0    
+            if sleep_count > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
+                sleep_count = 0    
+            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         else:
             sleep_count += 1
         
@@ -195,7 +203,7 @@ def main():
     
     
     # === Step four ===
-    # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=200)
+    while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=200)
     
     
     # === Kowsar's ==
@@ -211,7 +219,7 @@ def main():
         
     # ============== Test Cases ===============
     
-    run_loop('./WARP-codes/pulls.wrp') # Passed ✓
+    # run_loop('./WARP-codes/pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/two_pulls.wrp') # Passed ✓
     # run_loop('./WARP-codes/half_condition.wrp') # Passed ✓
     # run_loop('./WARP-codes/full_condition.wrp') # Passed ✓
