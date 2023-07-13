@@ -1,0 +1,57 @@
+digraph "./Output/./controled_frequency_S50_R100_t5_tPlus100" {
+	<Simulator.State object at 0x7f08ac485300> [label="ID: root
+Prob:1
+prob (S=0.9): 1
+Clock: 0
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7f08ac485300>"]
+	<Simulator.State object at 0x7f08ac485300> -> <Simulator.State object at 0x7f08ac485750> [label=S]
+	<Simulator.State object at 0x7f08ac485750> [label="ID: 
+Prob:1
+prob (S=0.9): 1
+Clock: 45
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7f08ac485750>"]
+	<Simulator.State object at 0x7f08ac485750> -> <Simulator.State object at 0x7f08ac3789a0> [label=S]
+	<Simulator.State object at 0x7f08ac3789a0> [label="ID: 
+Prob:1
+prob (S=0.9): 1
+Clock: 46
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7f08ac3789a0>"]
+	<Simulator.State object at 0x7f08ac3789a0> -> <Simulator.State object at 0x7f08ac378a00> [label=S]
+	<Simulator.State object at 0x7f08ac378a00> [label="ID: 
+Prob:1
+prob (S=0.9): 1
+Clock: 95
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7f08ac378a00>"]
+	<Simulator.State object at 0x7f08ac378a00> -> <Simulator.State object at 0x7f08ac378a90> [label=S]
+	<Simulator.State object at 0x7f08ac378a90> [label="ID: F0AB:False
+Prob:1
+prob (S=0.9): 1
+Clock: 95
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x7f08ac378a90>"]
+	<Simulator.State object at 0x7f08ac378a90> -> <Simulator.State object at 0x7f08ac378b20> [label=F]
+	<Simulator.State object at 0x7f08ac378a90> -> <Simulator.State object at 0x7f08ac378bb0> [label=S]
+	<Simulator.State object at 0x7f08ac378b20> [label="ID: F0AB:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: 96
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x7f08ac378b20>"]
+	<Simulator.State object at 0x7f08ac378bb0> [label="ID: F0AB:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: 96
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7f08ac378bb0>"]
+}

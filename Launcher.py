@@ -93,7 +93,7 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
     clock = t
     q = list()
     simu = Simulator()
-    hash_table = dict()
+    hash_table = dict({simu.root.id:simu.root})
     sleep_count = 0
     flow_counter = 0
     
@@ -119,6 +119,83 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
             hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         else:
             sleep_count += 1
+        
+        
+        if clock == t_plus:
+            if sleep_count > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
+                
+            simu.imprint_hash_table(hash_table, prob=0.9)
+            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_t{t}_tPlus{t_plus}',prob=0.9)
+            simu.test_of_correctness(hash_table=hash_table, std_out=True)
+            # sleep(0.5)
+            return hash_table
+        
+        clock += 1
+
+
+
+# === Step five ====
+def while_with_conditional_split(S=100, R=100, t=0, t_plus=200):
+    print(f'Running simulation for S={S} and R={R}')
+    clock = 0
+    q = list()
+    simu = Simulator()
+    hash_table = dict({simu.root.id:simu.root})
+    sleep_count = 0
+    flow_counter = 0
+    
+    # if t > 0:
+    #     hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
+    
+    while(True):
+        if clock % R == 0:
+            condition_name = f't%{clock}R'
+            flow_name = f'F{flow_counter}AB'
+            
+            # add skipped sleeps
+            if sleep_count > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
+                sleep_count = 0
+                
+            # Split the states based on condition
+            hash_table = simu.c_split(condition_name, tick_clock_flag=False, hash_table=hash_table)
+            
+            for state_id in list(hash_table.keys()):
+                state = hash_table.get(state_id)
+                
+                if not state.conditions[condition_name]: # It's reverse be cause we DO when mod is 0
+                    hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=True, tick_num=0)
+                else:
+                    hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=0)
+            
+            # for state in hash_table:
+            #     hash_table.get(state).queue.append(f'F{flow_counter}AB')
+            
+            flow_counter += 1
+
+        if clock % S == 0:
+            
+            # Add skipped sleeps
+            if sleep_count > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
+                sleep_count = 0   
+            
+            # Split the states based on condition    
+            hash_table = simu.c_split(f't%{clock}S', tick_clock_flag=False, hash_table=hash_table)
+            
+            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+            # for state_id in list(hash_table.keys()):
+            #     state = hash_table.get(state_id)
+                
+            #     if len(state.queue)>0:
+            #         hash_table = simu.apply_pull(state.queue[0], tick_clock_flag=True, state=state, hash_table=hash_table, tick_num=1)
+            #     else:
+            #         hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
+                
+                
+        # else:
+        sleep_count += 1
         
         
         if clock == t_plus:
@@ -203,7 +280,10 @@ def main():
     
     
     # === Step four ===
-    while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=200)
+    while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
+    
+    # === Step five ===
+    # while_with_conditional_split(S=100, R=100, t=0, t_plus=100)
     
     
     # === Kowsar's ==

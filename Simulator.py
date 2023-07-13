@@ -1,9 +1,12 @@
-from graphviz import Digraph, Graph
-from Parser import inst_parser
-from time import sleep
-from sympy import symbols, factor, Integer
 import copy
 from collections import deque
+from time import sleep
+
+from graphviz import Digraph, Graph
+from sympy import Integer, factor, symbols
+
+from Parser import inst_parser
+
 
 class State:
     def __init__(self, workload={}):
@@ -16,6 +19,7 @@ class State:
         self.queue = list()
         self.push_count = 0
         self.instruction = str()
+        self.conditions=dict()
         
     def tick_clock(self, tick_num):
         self.clock += tick_num
@@ -27,6 +31,14 @@ class State:
         key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
         unique_string = ','.join(key_value_strings)
         
+        # add conditions to the unique ID
+        if self.conditions:
+            dictionary_keys = list(self.conditions.keys())
+            dictionary_keys.sort()
+            sorted_dictionary = {key: self.conditions[key] for key in dictionary_keys}
+            key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
+            unique_string += ','.join(key_value_strings)
+            
         # add queue to the id
         # unique_string += '|' + '|'.join(member for member in self.queue)
         
@@ -188,6 +200,27 @@ class Simulator:
             state.right = hash_table[new_state.id]
             
         return hash_table
+    
+
+    def single_release(self, flow_name, hash_table, state, tick_clock_flag=False, tick_num=1):
+        # flow_name = 'F0BA'    
+        """Add the given flow_name with False status
+        to all the states' workloads in the hash table
+        """
+              
+        state = hash_table.pop(state.id)
+        new_state = copy.deepcopy(state)
+        new_state.workload[flow_name] = False
+        new_state.queue.append(flow_name)
+        new_state.update_id()
+        hash_table[new_state.id] = new_state
+        
+        if tick_clock_flag:
+            new_state.tick_clock(tick_num)
+        
+        state.right = hash_table[new_state.id]
+        
+        return hash_table
 
     
     def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1):
@@ -195,6 +228,9 @@ class Simulator:
             state.tick_clock(tick_num)
             hash_table[state.id] = state
             return hash_table
+
+        state = hash_table.pop(state.id)
+        # self.archive.append(state)
         
         # -------- Copy fail_state --------
         fail_state = copy.deepcopy(state)
@@ -281,41 +317,133 @@ class Simulator:
         """       
         # hash_table = {}
         temp_hash_table= {}
-        for key in list(hash_table.keys()):
-            state = hash_table.pop(key)
-            self.archive.append(state)
+        
+        for state_id in list(hash_table.keys()):
+            state = hash_table.get(state_id)
+            
             if flow_name != '':
-                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
+                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num)
                 
             else:
                 if len(state.queue) > 0:
-                    flow_name = state.queue[0]
-                    temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, temp_hash_table, prob, tick_num)
+                    hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num)
+
                 else:
-                    # temp_hash_table = self.add_sleep(tick_clock_flag=True, hash_table=temp_hash_table, tick_num=1)
-                    if state.id in temp_hash_table:
-                        old_state = temp_hash_table.pop(state.id)
-                        new_state = copy.deepcopy(old_state)
-                        old_state.right = new_state
+                    
+                    # OLD CODE
+                    # hash_table = self.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+                    # if state.id in hash_table:
+                    #     old_state = hash_table.pop(state.id)
+                    #     new_state = copy.deepcopy(old_state)
+                    #     old_state.right = new_state
                         
-                        temp_hash_table[new_state.id] = new_state
+                    #     hash_table[new_state.id] = new_state
                         
-                        temp_hash_table[new_state.id].prob = temp_hash_table[new_state.id].prob + state.prob  # Sum similar state probablity
+                    #     # hash_table[new_state.id].prob = hash_table[new_state.id].prob + old_state.prob  # Sum similar state probablity
                         
-                        # temp_hash_table[state.id].push_count += 1
-                    else:
-                        old_state = state
-                        new_state = copy.deepcopy(old_state)
-                        old_state.right = new_state
+                    #     # hash_table[state.id].push_count += 1
+                    # else:
+                    #     old_state = state
+                    #     new_state = copy.deepcopy(old_state)
+                    #     old_state.right = new_state
                         
-                        temp_hash_table[new_state.id] = new_state
-                        temp_hash_table[new_state.id].tick_clock(tick_num)
-                        # temp_hash_table[new_state.id].push_count += 1
+                    #     hash_table[new_state.id] = new_state
+                    #     hash_table[new_state.id].tick_clock(tick_num)
+                    #     # temp_hash_table[new_state.id].push_count += 1
+                    
+                    # NEW CODE
+                    old_state = hash_table.pop(state.id)
+                    new_state = copy.deepcopy(old_state)
+                    old_state.right = new_state
+                        
+                    hash_table[new_state.id] = new_state
+                    if tick_clock_flag:
+                        hash_table[new_state.id].tick_clock(tick_num)
+                    
                     
         # Replacing the new hash table with the old one
+        return hash_table
+    
+
+    def apply_c_split(self, condition_name, tick_clock_flag, state, hash_table, tick_num=1):
+        if condition_name == '':
+            state.tick_clock(tick_num)
+            hash_table[state.id] = state
+            return hash_table
+        
+        
+        # -------- Copy fail_state --------
+        fail_state = copy.deepcopy(state)
+        # ---------------------------------
+        
+        # ------ Copy success_state --------
+        success_state = copy.deepcopy(state)
+        # ----------------------------------
+        
+        
+        
+        # ------------------------------------
+        # Create a new state for success -----
+
+        # Update workloads and probablity
+        success_state.conditions[condition_name] = 0
+        if tick_clock_flag:
+            hash_table[success_state.id].tick_clock(tick_num)
+        
+        # Generate unique id
+        success_state.update_id()
+        
+        # Update new hashtable with success state
+        hash_table[success_state.id] = success_state
+        
+        # Add to right child of the old state
+        state.right = hash_table[success_state.id]
+        
+        
+        # ------------------------------------
+        # Create a new state for failure -----
+
+        # Updat probability
+        # Update workloads and probablity
+        fail_state.conditions[condition_name] = 1
+        
+        if tick_clock_flag:
+            hash_table[fail_state.id].tick_clock(tick_num)
+            
+        # Generate unique id
+        fail_state.update_id()
+        
+        # Update new hashtable with success state
+        hash_table[fail_state.id] = fail_state
+
+        # Add to right child of the old state
+        state.left = hash_table[fail_state.id]
+        
+        
+        return hash_table
+ 
+    
+    def c_split(self, condition_name, tick_clock_flag, hash_table, tick_num=1):
+        # flow_name = 'F0BA',
+        # prob = 0.8
+        
+        """ * pop every state
+            * multiply one by S and another by F
+            * put the two new states in the new hash table
+            * merge similar states
+        """       
+        # hash_table = {}
+        temp_hash_table= {}
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
+            self.archive.append(state)
+            
+            temp_hash_table = self.apply_c_split(condition_name, tick_clock_flag, state, temp_hash_table, tick_num)
+                
+        # Replacing the new hash table with the old one
         return temp_hash_table
-    
-    
+
+
     def condition(self, condition_type, condition, condition_is_true_inst, condition_is_false_inst, tick_clock_flag, hash_table, prob=symbols('S')):
         
         def check_if_condition(state, condition_type, condition):
@@ -485,6 +613,31 @@ class Simulator:
         
         return hash_table
     
+    def single_sleep(self, tick_clock_flag, hash_table, state, tick_num=1):
+        
+        
+        state = hash_table.pop(state.id)
+        self.archive.append(state)
+        
+        # ------------------------------------
+        # Create a new reduced state ---------
+        slept_state = copy.deepcopy(state)
+        
+
+        
+        slept_state.update_id()
+        # Update new hashtable with success state (Merge section)
+        hash_table[slept_state.id] = slept_state
+        
+        if tick_clock_flag:
+            slept_state.tick_clock(tick_num)
+            # tick_clock_flag = False
+            
+        
+        state.right = slept_state
+        
+        return hash_table
+    
 
     def visualize_dag(self, file_name='Digraph' ,prob=0.8):
         if not self.root:
@@ -504,10 +657,12 @@ class Simulator:
         success_prob = symbols('S')
         visited = set()
         queue = deque([self.root])
+        
+
 
         while queue:
             node = queue.popleft()
-
+            
             if node not in visited:
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
@@ -542,7 +697,8 @@ class Simulator:
                   factor(hash_table.get(state).prob), '|',
                   round(factor(hash_table.get(state).prob).subs(success_prob, prob), 3), '|',
                   'Queue: ', ''.join(f'|{e}' for e in hash_table.get(state).queue),'|',
-                  'Push Count: ', hash_table.get(state).push_count,'|'
+                  'Push Count: ', hash_table.get(state).push_count,'|',
+                  'Conditions:', hash_table.get(state).conditions , '|'
             )#hash_table.get(state))
 
         print('='*50)
