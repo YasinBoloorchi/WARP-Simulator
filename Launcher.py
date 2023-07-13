@@ -136,7 +136,7 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
 
 
 # === Step five ====
-def while_with_conditional_split(S=100, R=100, t=0, t_plus=200):
+def while_with_conditional_split(S=100, R=100, t_plus=200):
     print(f'Running simulation for S={S} and R={R}')
     clock = 0
     q = list()
@@ -193,7 +193,7 @@ def while_with_conditional_split(S=100, R=100, t=0, t_plus=200):
             #     else:
             #         hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
                 
-                
+            
         # else:
         sleep_count += 1
         
@@ -203,7 +203,7 @@ def while_with_conditional_split(S=100, R=100, t=0, t_plus=200):
                 hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
                 
             simu.imprint_hash_table(hash_table, prob=0.9)
-            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_t{t}_tPlus{t_plus}',prob=0.9)
+            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_tPlus{t_plus}',prob=0.9)
             simu.test_of_correctness(hash_table=hash_table, std_out=True)
             # sleep(0.5)
             return hash_table
@@ -283,7 +283,7 @@ def main():
     while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    # while_with_conditional_split(S=100, R=100, t=0, t_plus=100)
+    # while_with_conditional_split(S=100, R=100, t_plus=100)
     
     
     # === Kowsar's ==

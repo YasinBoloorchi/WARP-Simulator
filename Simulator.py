@@ -188,6 +188,7 @@ class Simulator:
         for key in list(hash_table.keys()):
             
             state = hash_table.pop(key)
+            state.instruction = f'Release({flow_name})'
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
             new_state.queue.append(flow_name)
@@ -209,6 +210,7 @@ class Simulator:
         """
               
         state = hash_table.pop(state.id)
+        state.instruction = f'Release({flow_name})'
         new_state = copy.deepcopy(state)
         new_state.workload[flow_name] = False
         new_state.queue.append(flow_name)
@@ -230,6 +232,7 @@ class Simulator:
             return hash_table
 
         state = hash_table.pop(state.id)
+        state.instruction = f'Pull ({flow_name})'
         # self.archive.append(state)
         
         # -------- Copy fail_state --------
@@ -329,6 +332,8 @@ class Simulator:
                     hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num)
 
                 else:
+                    # NEW NEW CODE
+                    hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
                     
                     # OLD CODE
                     # hash_table = self.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
@@ -352,13 +357,13 @@ class Simulator:
                     #     # temp_hash_table[new_state.id].push_count += 1
                     
                     # NEW CODE
-                    old_state = hash_table.pop(state.id)
-                    new_state = copy.deepcopy(old_state)
-                    old_state.right = new_state
-                        
-                    hash_table[new_state.id] = new_state
-                    if tick_clock_flag:
-                        hash_table[new_state.id].tick_clock(tick_num)
+                    # old_state = hash_table.pop(state.id)
+                    # new_state = copy.deepcopy(old_state)
+                    # old_state.right = new_state
+                    
+                    # hash_table[new_state.id] = new_state
+                    # if tick_clock_flag:
+                    #     hash_table[new_state.id].tick_clock(tick_num)
                     
                     
         # Replacing the new hash table with the old one
@@ -436,6 +441,7 @@ class Simulator:
         temp_hash_table= {}
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
+            state.instruction = f'Condition Split({condition_name})'
             self.archive.append(state)
             
             temp_hash_table = self.apply_c_split(condition_name, tick_clock_flag, state, temp_hash_table, tick_num)
@@ -563,6 +569,7 @@ class Simulator:
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
+            state.instruction = f'Drop'
             self.archive.append(state)
             
             # ------------------------------------
@@ -592,6 +599,7 @@ class Simulator:
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
+            state.instruction = f'Sleep({tick_num})'
             self.archive.append(state)
             
             # ------------------------------------
@@ -613,10 +621,12 @@ class Simulator:
         
         return hash_table
     
+    
     def single_sleep(self, tick_clock_flag, hash_table, state, tick_num=1):
         
         
         state = hash_table.pop(state.id)
+        state.instruction = f'Sleep({tick_num})'
         self.archive.append(state)
         
         # ------------------------------------
@@ -676,11 +686,11 @@ class Simulator:
                 visited.add(node)
 
                 if node.left: # and node.left.prob.subs(success_prob, prob) != 0:
-                    graph.edge(repr(node), repr(node.left), label='F')
+                    graph.edge(repr(node), repr(node.left), label=node.instruction+' [F]')
                     queue.append(node.left)
 
                 if node.right: # and node.right.prob.subs(success_prob, prob) != 0:
-                    graph.edge(repr(node), repr(node.right), label='S')
+                    graph.edge(repr(node), repr(node.right), label=node.instruction+' [S]')
                     queue.append(node.right)
 
 
@@ -697,8 +707,8 @@ class Simulator:
                   factor(hash_table.get(state).prob), '|',
                   round(factor(hash_table.get(state).prob).subs(success_prob, prob), 3), '|',
                   'Queue: ', ''.join(f'|{e}' for e in hash_table.get(state).queue),'|',
-                  'Push Count: ', hash_table.get(state).push_count,'|',
-                  'Conditions:', hash_table.get(state).conditions , '|'
+                  'Push Count: ', hash_table.get(state).push_count,'|'#,
+                #   'Conditions:', hash_table.get(state).conditions , '|'
             )#hash_table.get(state))
 
         print('='*50)
