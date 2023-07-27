@@ -6,7 +6,7 @@ from sympy import expand, factor, symbols
 # from Old_Parser import parse_instructions, inst_parser, recreate_file
 from Parser import file_parser, recreate_file
 from Simulator import Simulator, State
-
+from datetime import datetime
 
 # ======== Step one ==========
 def simple_while_loop():
@@ -150,7 +150,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     
     while(True):
         if clock % R == 0:
-            condition_name = f't%{clock}R'
+            condition_name = f't+{clock}%R'
             flow_name = f'F{flow_counter}AB'
             
             # add skipped sleeps
@@ -164,7 +164,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             for state_id in list(hash_table.keys()):
                 state = hash_table.get(state_id)
                 
-                if not state.conditions[condition_name]: # It's reverse be cause we DO when mod is 0
+                if state.conditions[condition_name]: # It's reverse be cause we DO when mod is 0
                     hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=True, tick_num=0)
                 else:
                     hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=0)
@@ -182,9 +182,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                 sleep_count = 0   
             
             # Split the states based on condition    
-            hash_table = simu.c_split(f't%{clock}S', tick_clock_flag=False, hash_table=hash_table)
+            hash_table = simu.c_split(f't+{clock}%S', tick_clock_flag=False, hash_table=hash_table)
             
-            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.9)
+            # hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.9)
             # for state_id in list(hash_table.keys()):
             #     state = hash_table.get(state_id)
                 
@@ -201,11 +202,14 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         if clock == t_plus:
             if sleep_count > 0:
                 hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
-                
-            simu.imprint_hash_table(hash_table, prob=0.9)
-            simu.visualize_dag(f'./controled_frequency_S{S}_R{R}_tPlus{t_plus}',prob=0.9)
-            simu.test_of_correctness(hash_table=hash_table, std_out=True)
-            # sleep(0.5)
+            
+            today_date = datetime.now().strftime('%B_%d')    
+            simulation_name = f'./{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
+            
+            simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+            simu.visualize_dag(simulation_name,const_prob=0.9)
+            # simu.test_of_correctness(hash_table=hash_table, std_out=True)
+            print('Length of Hashtable: ',len(hash_table))
             return hash_table
         
         clock += 1
@@ -280,10 +284,10 @@ def main():
     
     
     # === Step four ===
-    while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
+    # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    # while_with_conditional_split(S=100, R=100, t_plus=100)
+    while_with_conditional_split(S=100, R=100, t_plus=100)
     
     
     # === Kowsar's ==

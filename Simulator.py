@@ -15,7 +15,7 @@ class State:
         self.id = str()
         self.right = None
         self.left = None
-        self.clock= 0
+        self.clock= symbols('t')
         self.queue = list()
         self.push_count = 0
         self.instruction = str()
@@ -33,6 +33,7 @@ class State:
         
         # add conditions to the unique ID
         if self.conditions:
+            unique_string +='|'
             dictionary_keys = list(self.conditions.keys())
             dictionary_keys.sort()
             sorted_dictionary = {key: self.conditions[key] for key in dictionary_keys}
@@ -225,7 +226,7 @@ class Simulator:
         return hash_table
 
     
-    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1):
+    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1, threshold=0.15, const_prob=0.8):
         if flow_name == '':
             state.tick_clock(tick_num)
             hash_table[state.id] = state
@@ -279,6 +280,9 @@ class Simulator:
 
         state.right = hash_table[success_state.id]
         
+        # Check for prune base on the threshold
+        if hash_table[success_state.id].prob.subs(prob, const_prob) <= threshold:
+            hash_table.pop(success_state.id)
         
         
         # ------------------------------------
@@ -305,11 +309,14 @@ class Simulator:
         
         state.left = hash_table[fail_state.id]
 
+        # Check for prune base on the threshold
+        if hash_table[fail_state.id].prob.subs(prob, const_prob) <= threshold:
+            hash_table.pop(fail_state.id)
 
         return hash_table
  
     
-    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1):
+    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.15, const_prob=0.8):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -325,11 +332,11 @@ class Simulator:
             state = hash_table.get(state_id)
             
             if flow_name != '':
-                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num)
+                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
                 
             else:
                 if len(state.queue) > 0:
-                    hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num)
+                    hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
 
                 else:
                     # NEW NEW CODE
@@ -391,7 +398,7 @@ class Simulator:
         # Create a new state for success -----
 
         # Update workloads and probablity
-        success_state.conditions[condition_name] = 0
+        success_state.conditions[condition_name] = True
         if tick_clock_flag:
             hash_table[success_state.id].tick_clock(tick_num)
         
@@ -410,7 +417,7 @@ class Simulator:
 
         # Updat probability
         # Update workloads and probablity
-        fail_state.conditions[condition_name] = 1
+        fail_state.conditions[condition_name] = False
         
         if tick_clock_flag:
             hash_table[fail_state.id].tick_clock(tick_num)
@@ -649,21 +656,21 @@ class Simulator:
         return hash_table
     
 
-    def visualize_dag(self, file_name='Digraph' ,prob=0.8):
+    def visualize_dag(self, file_name='Digraph' ,const_prob=0.8):
         if not self.root:
             return False
         
         # self.root = self.archive[0]
 
-        graph = Digraph(f'./Output/{file_name}', format='png')
-        self.add_nodes_and_edges(graph, prob)
+        graph = Digraph(f'./Output/Graphs/{file_name}', format='png')
+        self.add_nodes_and_edges(graph, const_prob)
         
         graph.view()
         
         return
 
 
-    def add_nodes_and_edges(self, graph, prob):
+    def add_nodes_and_edges(self, graph, const_prob):
         success_prob = symbols('S')
         visited = set()
         queue = deque([self.root])
@@ -674,17 +681,28 @@ class Simulator:
             node = queue.popleft()
             
             if node not in visited:
+                prob_float = round(node.prob.subs(success_prob, const_prob), 3)
+                probability = int(prob_float * 100)
+                if probability <=51:
+                    font_color = 'white'
+                else:
+                    font_color = 'Black'
+                    
+               
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Prob:'+str(factor(node.prob))+'\n'
-                           +f'prob (S={prob}): '+str(round(node.prob.subs(success_prob, prob), 3))+'\n'
+                           +f'prob (S={const_prob}): '+str(prob_float)+'\n'
                            +'Clock: '+str(node.clock)+'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
                            +f'Push Count: {node.push_count}'+'\n'
-                           +repr(node))
+                           +repr(node), style='filled', fillcolor=f'gray{probability}', fontcolor=font_color)
                 
                 visited.add(node)
 
+                # if probability <= 1:
+                #     continue
+                
                 if node.left: # and node.left.prob.subs(success_prob, prob) != 0:
                     graph.edge(repr(node), repr(node.left), label=node.instruction+' [F]')
                     queue.append(node.left)
@@ -694,25 +712,33 @@ class Simulator:
                     queue.append(node.right)
 
 
-    def imprint_hash_table(self, hash_table, prob=0.8):
+    def imprint_hash_table(self, simulation_name, hash_table, const_prob=0.8):
         """
         Printout the hash table of the simulation
         """
+        
+        open(f'./Output/hashtables/{simulation_name}.txt', 'w')
         print('='*50)
         print('Hash table:')
         success_prob = symbols('S')
         for state in hash_table:
-            print('\t','[ ]',state, '|',
-                  hash_table.get(state).workload,'|',
-                  factor(hash_table.get(state).prob), '|',
-                  round(factor(hash_table.get(state).prob).subs(success_prob, prob), 3), '|',
-                  'Queue: ', ''.join(f'|{e}' for e in hash_table.get(state).queue),'|',
-                  'Push Count: ', hash_table.get(state).push_count,'|'#,
-                #   'Conditions:', hash_table.get(state).conditions , '|'
-            )#hash_table.get(state))
+            log = '[ ]'+str(state)+ '\t|'+\
+                  str(hash_table.get(state).workload)+'\t|'+\
+                  'Prob(Symbo): '+str(factor(hash_table.get(state).prob))+ '\t|'+\
+                  'Prob(Const): '+str(round(factor(hash_table.get(state).prob).subs(success_prob, const_prob), 3))+ '\t|'+\
+                  'Queue: '+ ''.join(f'|{e}' for e in hash_table.get(state).queue)+'\t|'+\
+                  'Push Count: '+ str(hash_table.get(state).push_count)+'\t|'+'\n'#+
+                #   'Conditions:'+ hash_table.get(state).conditions + '|'
+            #hash_table.get(state))
+        
+            print(log)
+            
+            with open(f'./Output/hashtables/{simulation_name}.txt', 'a+') as hash_table_file:
+                hash_table_file.write(log)
 
+        
         print('='*50)
-   
+
    
     def archive_print(self):
         """

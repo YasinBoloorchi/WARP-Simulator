@@ -1,0 +1,256 @@
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**4	|Prob(Const): 0.656	|Queue: 	|Push Count: 4	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F1AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:0,t+200%R:1,t+300%R:1	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:0	|{'F0AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:0,t+300%R:1	|{'F0AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:0	|{'F0AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F0AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F0AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:0,t+100%R:1,t+200%R:1,t+300%R:1	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:0,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:0,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:0,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:0,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:0,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:0,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:0,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:0,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:0	|{'F1AB': True, 'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**3	|Prob(Const): 0.729	|Queue: 	|Push Count: 3	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:0,t+300%R:1	|{'F1AB': True, 'F2AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:0	|{'F1AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F1AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F1AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:0,t+200%R:1,t+300%R:1	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:1,t%100S:0,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:1,t%100S:0,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:1,t%100S:0,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:1,t%100S:0,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:True,F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:0	|{'F2AB': True, 'F3AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ]F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F2AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:0,t+300%R:1	|{'F2AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:1,t%100S:1,t%200S:0,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:1,t%100S:1,t%200S:0,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]F3AB:Truet%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:0	|{'F3AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ]t%0S:1,t%100S:1,t%200S:1,t%300S:0,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ]t%0S:1,t%100S:1,t%200S:1,t%300S:1,t+0%R:1,t+100%R:1,t+200%R:1,t+300%R:1	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|

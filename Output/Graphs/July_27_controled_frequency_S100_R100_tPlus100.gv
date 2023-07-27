@@ -1,0 +1,729 @@
+digraph "./Output/Graphs/./July_27_controled_frequency_S100_R100_tPlus100" {
+	<Simulator.State object at 0x7fec54a4c130> [label="ID: root
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec54a4c130>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54a4c130> -> <Simulator.State object at 0x7fec54871660> [label="Condition Split(t+0%R) [F]"]
+	<Simulator.State object at 0x7fec54a4c130> -> <Simulator.State object at 0x7fec54871750> [label="Condition Split(t+0%R) [S]"]
+	<Simulator.State object at 0x7fec54871660> [label="ID: |t+0%R:False
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec54871660>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54871660> -> <Simulator.State object at 0x7fec548716c0> [label="Sleep(0) [S]"]
+	<Simulator.State object at 0x7fec54871750> [label="ID: |t+0%R:True
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec54871750>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54871750> -> <Simulator.State object at 0x7fec548717b0> [label="Release(F0AB) [S]"]
+	<Simulator.State object at 0x7fec548716c0> [label="ID: |t+0%R:False
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec548716c0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec548716c0> -> <Simulator.State object at 0x7fec54872e30> [label="Condition Split(t+0%S) [F]"]
+	<Simulator.State object at 0x7fec548716c0> -> <Simulator.State object at 0x7fec54872da0> [label="Condition Split(t+0%S) [S]"]
+	<Simulator.State object at 0x7fec548717b0> [label="ID: F0AB:False|t+0%R:True
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x7fec548717b0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec548717b0> -> <Simulator.State object at 0x7fec54873610> [label="Condition Split(t+0%S) [F]"]
+	<Simulator.State object at 0x7fec548717b0> -> <Simulator.State object at 0x7fec54872ec0> [label="Condition Split(t+0%S) [S]"]
+	<Simulator.State object at 0x7fec54872e30> [label="ID: |t+0%R:False,t+0%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec54872e30>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54872e30> -> <Simulator.State object at 0x7fec5483cac0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec54872da0> [label="ID: |t+0%R:False,t+0%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec54872da0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54872da0> -> <Simulator.State object at 0x7fec5483c5e0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec54873610> [label="ID: F0AB:False|t+0%R:True,t+0%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x7fec54873610>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54873610> -> <Simulator.State object at 0x7fec54871b10> [label="Pull (F0AB) [F]"]
+	<Simulator.State object at 0x7fec54873610> -> <Simulator.State object at 0x7fec5483c490> [label="Pull (F0AB) [S]"]
+	<Simulator.State object at 0x7fec54872ec0> [label="ID: F0AB:False|t+0%R:True,t+0%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t
+Queue: |F0AB
+Push Count: 0
+<Simulator.State object at 0x7fec54872ec0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec54872ec0> -> <Simulator.State object at 0x7fec54873430> [label="Pull (F0AB) [F]"]
+	<Simulator.State object at 0x7fec54872ec0> -> <Simulator.State object at 0x7fec548733a0> [label="Pull (F0AB) [S]"]
+	<Simulator.State object at 0x7fec5483cac0> [label="ID: |t+0%R:False,t+0%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 1
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483cac0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483cac0> -> <Simulator.State object at 0x7fec5483cf70> [label="Sleep(99) [S]"]
+	<Simulator.State object at 0x7fec5483c5e0> [label="ID: |t+0%R:False,t+0%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 1
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483c5e0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483c5e0> -> <Simulator.State object at 0x7fec5483cee0> [label="Sleep(99) [S]"]
+	<Simulator.State object at 0x7fec54871b10> [label="ID: F0AB:False|t+0%R:True,t+0%S:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: t + 1
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x7fec54871b10>" fillcolor=gray10 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483c490> [label="ID: F0AB:True|t+0%R:True,t+0%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 1
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483c490>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483c490> -> <Simulator.State object at 0x7fec5483cf40> [label="Sleep(99) [S]"]
+	<Simulator.State object at 0x7fec54873430> [label="ID: F0AB:False|t+0%R:True,t+0%S:True
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: t + 1
+Queue: |F0AB
+Push Count: 1
+<Simulator.State object at 0x7fec54873430>" fillcolor=gray10 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec548733a0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 1
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec548733a0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec548733a0> -> <Simulator.State object at 0x7fec5483ceb0> [label="Sleep(99) [S]"]
+	<Simulator.State object at 0x7fec5483cf70> [label="ID: |t+0%R:False,t+0%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483cf70>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483cf70> -> <Simulator.State object at 0x7fec5483d360> [label="Condition Split(t+100%R) [F]"]
+	<Simulator.State object at 0x7fec5483cf70> -> <Simulator.State object at 0x7fec5483d3f0> [label="Condition Split(t+100%R) [S]"]
+	<Simulator.State object at 0x7fec5483cee0> [label="ID: |t+0%R:False,t+0%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483cee0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483cee0> -> <Simulator.State object at 0x7fec5483d270> [label="Condition Split(t+100%R) [F]"]
+	<Simulator.State object at 0x7fec5483cee0> -> <Simulator.State object at 0x7fec5483d2d0> [label="Condition Split(t+100%R) [S]"]
+	<Simulator.State object at 0x7fec5483cf40> [label="ID: F0AB:True|t+0%R:True,t+0%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483cf40>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483cf40> -> <Simulator.State object at 0x7fec5483d150> [label="Condition Split(t+100%R) [F]"]
+	<Simulator.State object at 0x7fec5483cf40> -> <Simulator.State object at 0x7fec5483d210> [label="Condition Split(t+100%R) [S]"]
+	<Simulator.State object at 0x7fec5483ceb0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483ceb0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483ceb0> -> <Simulator.State object at 0x7fec5483d000> [label="Condition Split(t+100%R) [F]"]
+	<Simulator.State object at 0x7fec5483ceb0> -> <Simulator.State object at 0x7fec5483d180> [label="Condition Split(t+100%R) [S]"]
+	<Simulator.State object at 0x7fec5483d360> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483d360>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d360> -> <Simulator.State object at 0x7fec5483d720> [label="Sleep(0) [S]"]
+	<Simulator.State object at 0x7fec5483d3f0> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483d3f0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d3f0> -> <Simulator.State object at 0x7fec5483d690> [label="Release(F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483d270> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483d270>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d270> -> <Simulator.State object at 0x7fec5483d630> [label="Sleep(0) [S]"]
+	<Simulator.State object at 0x7fec5483d2d0> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483d2d0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d2d0> -> <Simulator.State object at 0x7fec5483d5d0> [label="Release(F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483d150> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d150>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d150> -> <Simulator.State object at 0x7fec5483d570> [label="Sleep(0) [S]"]
+	<Simulator.State object at 0x7fec5483d210> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d210>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d210> -> <Simulator.State object at 0x7fec5483d510> [label="Release(F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483d000> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d000>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d000> -> <Simulator.State object at 0x7fec5483d0f0> [label="Sleep(0) [S]"]
+	<Simulator.State object at 0x7fec5483d180> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d180>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d180> -> <Simulator.State object at 0x7fec5483d480> [label="Release(F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483d720> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483d720>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d720> -> <Simulator.State object at 0x7fec5483ded0> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d720> -> <Simulator.State object at 0x7fec5483df60> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d690> [label="ID: F1AB:False|t+0%R:False,t+0%S:False,t+100%R:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: |F1AB
+Push Count: 0
+<Simulator.State object at 0x7fec5483d690>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d690> -> <Simulator.State object at 0x7fec5483ddb0> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d690> -> <Simulator.State object at 0x7fec5483de40> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d630> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483d630>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d630> -> <Simulator.State object at 0x7fec5483dc90> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d630> -> <Simulator.State object at 0x7fec5483dd20> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d5d0> [label="ID: F1AB:False|t+0%R:False,t+0%S:True,t+100%R:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: |F1AB
+Push Count: 0
+<Simulator.State object at 0x7fec5483d5d0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d5d0> -> <Simulator.State object at 0x7fec5483dba0> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d5d0> -> <Simulator.State object at 0x7fec5483dc00> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d570> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d570>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d570> -> <Simulator.State object at 0x7fec5483dae0> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d570> -> <Simulator.State object at 0x7fec5483db40> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d510> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:False,t+100%R:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483d510>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d510> -> <Simulator.State object at 0x7fec5483da20> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d510> -> <Simulator.State object at 0x7fec5483da80> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d0f0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d0f0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d0f0> -> <Simulator.State object at 0x7fec5483d960> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d0f0> -> <Simulator.State object at 0x7fec5483d9c0> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483d480> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:True,t+100%R:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483d480>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d480> -> <Simulator.State object at 0x7fec5483d7b0> [label="Condition Split(t+100%S) [F]"]
+	<Simulator.State object at 0x7fec5483d480> -> <Simulator.State object at 0x7fec5483d900> [label="Condition Split(t+100%S) [S]"]
+	<Simulator.State object at 0x7fec5483ded0> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483ded0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483ded0> -> <Simulator.State object at 0x7fec5483f3a0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483df60> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483df60>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483df60> -> <Simulator.State object at 0x7fec5483efe0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483ddb0> [label="ID: F1AB:False|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: |F1AB
+Push Count: 0
+<Simulator.State object at 0x7fec5483ddb0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483ddb0> -> <Simulator.State object at 0x7fec5483ef20> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483ddb0> -> <Simulator.State object at 0x7fec5483f010> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483de40> [label="ID: F1AB:False|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: |F1AB
+Push Count: 0
+<Simulator.State object at 0x7fec5483de40>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483de40> -> <Simulator.State object at 0x7fec5483ebc0> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483de40> -> <Simulator.State object at 0x7fec5483ef80> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483dc90> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483dc90>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483dc90> -> <Simulator.State object at 0x7fec5483ec80> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483dd20> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483dd20>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483dd20> -> <Simulator.State object at 0x7fec5483e8c0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483dba0> [label="ID: F1AB:False|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: |F1AB
+Push Count: 0
+<Simulator.State object at 0x7fec5483dba0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483dba0> -> <Simulator.State object at 0x7fec5483e890> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483dba0> -> <Simulator.State object at 0x7fec5483e8f0> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483dc00> [label="ID: F1AB:False|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 100
+Queue: |F1AB
+Push Count: 0
+<Simulator.State object at 0x7fec5483dc00>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483dc00> -> <Simulator.State object at 0x7fec5483e5c0> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483dc00> -> <Simulator.State object at 0x7fec5483e830> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483dae0> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483dae0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483dae0> -> <Simulator.State object at 0x7fec5483e590> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483db40> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483db40>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483db40> -> <Simulator.State object at 0x7fec5483c670> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483da20> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483da20>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483da20> -> <Simulator.State object at 0x7fec5483c640> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483da20> -> <Simulator.State object at 0x7fec5483c4f0> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483da80> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483da80>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483da80> -> <Simulator.State object at 0x7fec5483ca00> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483da80> -> <Simulator.State object at 0x7fec5483c6a0> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483d960> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d960>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d960> -> <Simulator.State object at 0x7fec5483ca30> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483d9c0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483d9c0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d9c0> -> <Simulator.State object at 0x7fec5483e0e0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483d7b0> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483d7b0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d7b0> -> <Simulator.State object at 0x7fec5483e0b0> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483d7b0> -> <Simulator.State object at 0x7fec5483d870> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483d900> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 100
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483d900>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d900> -> <Simulator.State object at 0x7fec5483dff0> [label="Pull (F1AB) [F]"]
+	<Simulator.State object at 0x7fec5483d900> -> <Simulator.State object at 0x7fec5483e080> [label="Pull (F1AB) [S]"]
+	<Simulator.State object at 0x7fec5483f3a0> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 101
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483f3a0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f3a0> -> <Simulator.State object at 0x7fec5483fbe0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483efe0> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 101
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483efe0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483efe0> -> <Simulator.State object at 0x7fec5483fb80> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483ef20> [label="ID: F1AB:False|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: t + 101
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483ef20>" fillcolor=gray10 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483f010> [label="ID: F1AB:True|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f010>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f010> -> <Simulator.State object at 0x7fec5483faf0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483ebc0> [label="ID: F1AB:False|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: t + 101
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483ebc0>" fillcolor=gray10 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483ef80> [label="ID: F1AB:True|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483ef80>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483ef80> -> <Simulator.State object at 0x7fec5483fa60> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483ec80> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 101
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483ec80>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483ec80> -> <Simulator.State object at 0x7fec5483fa00> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483e8c0> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 101
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483e8c0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483e8c0> -> <Simulator.State object at 0x7fec5483f9a0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483e890> [label="ID: F1AB:False|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: t + 101
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483e890>" fillcolor=gray10 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483e8f0> [label="ID: F1AB:True|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483e8f0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483e8f0> -> <Simulator.State object at 0x7fec5483f940> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483e5c0> [label="ID: F1AB:False|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:1 - S
+prob (S=0.9): 0.10
+Clock: t + 101
+Queue: |F1AB
+Push Count: 1
+<Simulator.State object at 0x7fec5483e5c0>" fillcolor=gray10 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483e830> [label="ID: F1AB:True|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483e830>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483e830> -> <Simulator.State object at 0x7fec5483f8e0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483e590> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483e590>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483e590> -> <Simulator.State object at 0x7fec5483f880> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483c670> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483c670>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483c670> -> <Simulator.State object at 0x7fec5483f820> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483c640> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:-S*(S - 1)
+prob (S=0.9): 0.090
+Clock: t + 101
+Queue: |F1AB
+Push Count: 2
+<Simulator.State object at 0x7fec5483c640>" fillcolor=gray9 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483c4f0> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 101
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483c4f0>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483c4f0> -> <Simulator.State object at 0x7fec5483f7c0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483ca00> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:-S*(S - 1)
+prob (S=0.9): 0.090
+Clock: t + 101
+Queue: |F1AB
+Push Count: 2
+<Simulator.State object at 0x7fec5483ca00>" fillcolor=gray9 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483c6a0> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 101
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483c6a0>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483c6a0> -> <Simulator.State object at 0x7fec5483f760> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483ca30> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483ca30>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483ca30> -> <Simulator.State object at 0x7fec5483f6d0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483e0e0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 101
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483e0e0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483e0e0> -> <Simulator.State object at 0x7fec5483f5e0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483e0b0> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:-S*(S - 1)
+prob (S=0.9): 0.090
+Clock: t + 101
+Queue: |F1AB
+Push Count: 2
+<Simulator.State object at 0x7fec5483e0b0>" fillcolor=gray9 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483d870> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 101
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483d870>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483d870> -> <Simulator.State object at 0x7fec5483f700> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483dff0> [label="ID: F0AB:True,F1AB:False|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:-S*(S - 1)
+prob (S=0.9): 0.090
+Clock: t + 101
+Queue: |F1AB
+Push Count: 2
+<Simulator.State object at 0x7fec5483dff0>" fillcolor=gray9 fontcolor=white style=filled]
+	<Simulator.State object at 0x7fec5483e080> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 101
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483e080>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483e080> -> <Simulator.State object at 0x7fec5483f2e0> [label="Sleep(1) [S]"]
+	<Simulator.State object at 0x7fec5483fbe0> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 102
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483fbe0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483fb80> [label="ID: |t+0%R:False,t+0%S:False,t+100%R:False,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 102
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483fb80>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483faf0> [label="ID: F1AB:True|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483faf0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483fa60> [label="ID: F1AB:True|t+0%R:False,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483fa60>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483fa00> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False,t+100%S:False
+Prob:1
+prob (S=0.9): 1
+Clock: t + 102
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483fa00>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f9a0> [label="ID: |t+0%R:False,t+0%S:True,t+100%R:False,t+100%S:True
+Prob:1
+prob (S=0.9): 1
+Clock: t + 102
+Queue: 
+Push Count: 0
+<Simulator.State object at 0x7fec5483f9a0>" fillcolor=gray100 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f940> [label="ID: F1AB:True|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f940>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f8e0> [label="ID: F1AB:True|t+0%R:False,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f8e0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f880> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f880>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f820> [label="ID: F0AB:True|t+0%R:True,t+0%S:False,t+100%R:False,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f820>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f7c0> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:False
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 102
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483f7c0>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f760> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:False,t+100%R:True,t+100%S:True
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 102
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483f760>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f6d0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False,t+100%S:False
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f6d0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f5e0> [label="ID: F0AB:True|t+0%R:True,t+0%S:True,t+100%R:False,t+100%S:True
+Prob:S
+prob (S=0.9): 0.900
+Clock: t + 102
+Queue: 
+Push Count: 1
+<Simulator.State object at 0x7fec5483f5e0>" fillcolor=gray90 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f700> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:False
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 102
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483f700>" fillcolor=gray81 fontcolor=Black style=filled]
+	<Simulator.State object at 0x7fec5483f2e0> [label="ID: F0AB:True,F1AB:True|t+0%R:True,t+0%S:True,t+100%R:True,t+100%S:True
+Prob:S**2
+prob (S=0.9): 0.810
+Clock: t + 102
+Queue: 
+Push Count: 2
+<Simulator.State object at 0x7fec5483f2e0>" fillcolor=gray81 fontcolor=Black style=filled]
+}
