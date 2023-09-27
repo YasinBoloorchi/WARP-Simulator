@@ -145,9 +145,6 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     sleep_count = 0
     flow_counter = 0
     
-    # if t > 0:
-    #     hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=t)
-    
     while(True):
         if clock % R == 0:
             condition_name = f't+{clock}%R'
@@ -164,14 +161,12 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             for state_id in list(hash_table.keys()):
                 state = hash_table.get(state_id)
                 
-                if state.conditions[condition_name]: # It's reverse be cause we DO when mod is 0
+                if state.conditions[condition_name] == "==0": # It's reverse be cause we DO when mod is 0
                     hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=True, tick_num=0)
                 else:
                     hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=0)
             
-            # for state in hash_table:
-            #     hash_table.get(state).queue.append(f'F{flow_counter}AB')
-            
+
             flow_counter += 1
 
         if clock % S == 0:
@@ -183,22 +178,13 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             
             # Split the states based on condition    
             hash_table = simu.c_split(f't+{clock}%S', tick_clock_flag=False, hash_table=hash_table)
-            
-            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.9)
-            # hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.9)
-            # for state_id in list(hash_table.keys()):
-            #     state = hash_table.get(state_id)
-                
-            #     if len(state.queue)>0:
-            #         hash_table = simu.apply_pull(state.queue[0], tick_clock_flag=True, state=state, hash_table=hash_table, tick_num=1)
-            #     else:
-            #         hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
-                
-            
-        # else:
+
+            # Apply a pull
+            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0, const_prob=0.9)
+
         sleep_count += 1
         
-        
+        # End loop condition
         if clock == t_plus:
             if sleep_count > 0:
                 hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
