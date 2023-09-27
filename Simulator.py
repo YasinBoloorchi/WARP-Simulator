@@ -7,7 +7,7 @@ from sympy import Integer, factor, symbols
 
 from Parser import inst_parser
 import hashlib
-
+from z3 import Int, Solver
 
 
 class State:
@@ -31,7 +31,7 @@ class State:
         dictionary_keys = list(self.workload.keys())
         dictionary_keys.sort()
         sorted_dictionary = {key: self.workload[key] for key in dictionary_keys}
-        key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
+        key_value_strings = [f"{key}={value}" for key, value in sorted_dictionary.items()]
         unique_string = ' && '.join(key_value_strings)
         
         # add conditions to the path constraint
@@ -40,7 +40,7 @@ class State:
             dictionary_keys = list(self.conditions.keys())
             dictionary_keys.sort()
             sorted_dictionary = {key: self.conditions[key] for key in dictionary_keys}
-            key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
+            key_value_strings = [f"{key}{value}" for key, value in sorted_dictionary.items()]
             unique_string += ' && '.join(key_value_strings)
             
         # add queue to the path_cons
@@ -791,3 +791,12 @@ class Simulator:
             if std_out:
                 print('Test of correctness result:', '\033[91m'+'Failed'+'\033[0m')
             return False
+        
+        
+    def path_eval(self, state):
+        
+        constraints_string = state.path_cons.split(" && ")
+        print("*** constraints_string", constraints_string)
+        
+        
+    
