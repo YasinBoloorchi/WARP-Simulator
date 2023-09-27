@@ -196,7 +196,7 @@ class Simulator:
         """
         
         if not hash_table:
-            hash_table[self.root.path_cons] = self.root
+            hash_table[self.root.id] = self.root
 
         
         for key in list(hash_table.keys()):
@@ -207,12 +207,12 @@ class Simulator:
             new_state.workload[flow_name] = False
             new_state.queue.append(flow_name)
             new_state.update_id()
-            hash_table[new_state.path_cons] = new_state
+            hash_table[new_state.id] = new_state
             
             if tick_clock_flag:
                 new_state.tick_clock(tick_num)
             
-            state.right = hash_table[new_state.path_cons]
+            state.right = hash_table[new_state.id]
             
         return hash_table
     
@@ -223,18 +223,18 @@ class Simulator:
         to all the states' workloads in the hash table
         """
               
-        state = hash_table.pop(state.path_cons)
+        state = hash_table.pop(state.id)
         state.instruction = f'Release({flow_name})'
         new_state = copy.deepcopy(state)
         new_state.workload[flow_name] = False
         new_state.queue.append(flow_name)
         new_state.update_id()
-        hash_table[new_state.path_cons] = new_state
+        hash_table[new_state.id] = new_state
         
         if tick_clock_flag:
             new_state.tick_clock(tick_num)
         
-        state.right = hash_table[new_state.path_cons]
+        state.right = hash_table[new_state.id]
         
         return hash_table
 
@@ -242,10 +242,10 @@ class Simulator:
     def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1, threshold=0.15, const_prob=0.8):
         if flow_name == '':
             state.tick_clock(tick_num)
-            hash_table[state.path_cons] = state
+            hash_table[state.id] = state
             return hash_table
 
-        state = hash_table.pop(state.path_cons)
+        state = hash_table.pop(state.id)
         state.instruction = f'Pull ({flow_name})'
         # self.archive.append(state)
         
@@ -270,32 +270,32 @@ class Simulator:
         else:
             success_state.prob *= 1
         
-        # Generate unique path_cons
+        # Generate unique id
         success_state.update_id()
         
         # Update new hashtable with success state (Merge section)
-        if success_state.path_cons in hash_table:
-            hash_table[success_state.path_cons].prob = hash_table[success_state.path_cons].prob + success_state.prob  # Sum similar state probablity
+        if success_state.id in hash_table:
+            hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
             
-            if hash_table[success_state.path_cons].push_count == state.push_count: # Golden fix of push count
-                hash_table[success_state.path_cons].push_count += 1
+            if hash_table[success_state.id].push_count == state.push_count: # Golden fix of push count
+                hash_table[success_state.id].push_count += 1
         
         else:
-            hash_table[success_state.path_cons] = success_state
-            hash_table[success_state.path_cons].push_count += 1
+            hash_table[success_state.id] = success_state
+            hash_table[success_state.id].push_count += 1
             if flow_name != '':
                 if tick_clock_flag:
-                    hash_table[success_state.path_cons].tick_clock(tick_num)
+                    hash_table[success_state.id].tick_clock(tick_num)
                     # tick_clock_flag = False
 
         
         # Add to push count of the state
 
-        state.right = hash_table[success_state.path_cons]
+        state.right = hash_table[success_state.id]
         
         # Check for prune base on the threshold
-        if hash_table[success_state.path_cons].prob.subs(prob, const_prob) <= threshold:
-            hash_table.pop(success_state.path_cons)
+        if hash_table[success_state.id].prob.subs(prob, const_prob) <= threshold:
+            hash_table.pop(success_state.id)
         
         
         # ------------------------------------
@@ -306,25 +306,25 @@ class Simulator:
         # Updat probability
         fail_state.prob = fail_state.prob * (1-prob)
         
-        # Update unique path_cons
+        # Update unique id
         fail_state.update_id()
         
         # Update new hashtable with failure state
-        hash_table[fail_state.path_cons] = fail_state
+        hash_table[fail_state.id] = fail_state
         if tick_clock_flag:
-            hash_table[fail_state.path_cons].tick_clock(tick_num)
+            hash_table[fail_state.id].tick_clock(tick_num)
             # tick_clock_flag = False
         
         # Add to push count of the state
         
         # if state.push_count
-        hash_table[fail_state.path_cons].push_count += 1    
+        hash_table[fail_state.id].push_count += 1    
         
-        state.left = hash_table[fail_state.path_cons]
+        state.left = hash_table[fail_state.id]
 
         # Check for prune base on the threshold
-        if hash_table[fail_state.path_cons].prob.subs(prob, const_prob) <= threshold:
-            hash_table.pop(fail_state.path_cons)
+        if hash_table[fail_state.id].prob.subs(prob, const_prob) <= threshold:
+            hash_table.pop(fail_state.id)
 
         return hash_table
  
@@ -341,8 +341,8 @@ class Simulator:
         # hash_table = {}
         temp_hash_table= {}
         
-        for state_path_cons in list(hash_table.keys()):
-            state = hash_table.get(state_path_cons)
+        for state_id in list(hash_table.keys()):
+            state = hash_table.get(state_id)
             
             if flow_name != '':
                 hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
@@ -357,33 +357,33 @@ class Simulator:
                     
                     # OLD CODE
                     # hash_table = self.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
-                    # if state.path_cons in hash_table:
-                    #     old_state = hash_table.pop(state.path_cons)
+                    # if state.id in hash_table:
+                    #     old_state = hash_table.pop(state.id)
                     #     new_state = copy.deepcopy(old_state)
                     #     old_state.right = new_state
                         
-                    #     hash_table[new_state.path_cons] = new_state
+                    #     hash_table[new_state.id] = new_state
                         
-                    #     # hash_table[new_state.path_cons].prob = hash_table[new_state.path_cons].prob + old_state.prob  # Sum similar state probablity
+                    #     # hash_table[new_state.id].prob = hash_table[new_state.id].prob + old_state.prob  # Sum similar state probablity
                         
-                    #     # hash_table[state.path_cons].push_count += 1
+                    #     # hash_table[state.id].push_count += 1
                     # else:
                     #     old_state = state
                     #     new_state = copy.deepcopy(old_state)
                     #     old_state.right = new_state
                         
-                    #     hash_table[new_state.path_cons] = new_state
-                    #     hash_table[new_state.path_cons].tick_clock(tick_num)
-                    #     # temp_hash_table[new_state.path_cons].push_count += 1
+                    #     hash_table[new_state.id] = new_state
+                    #     hash_table[new_state.id].tick_clock(tick_num)
+                    #     # temp_hash_table[new_state.id].push_count += 1
                     
                     # NEW CODE
-                    # old_state = hash_table.pop(state.path_cons)
+                    # old_state = hash_table.pop(state.id)
                     # new_state = copy.deepcopy(old_state)
                     # old_state.right = new_state
                     
-                    # hash_table[new_state.path_cons] = new_state
+                    # hash_table[new_state.id] = new_state
                     # if tick_clock_flag:
-                    #     hash_table[new_state.path_cons].tick_clock(tick_num)
+                    #     hash_table[new_state.id].tick_clock(tick_num)
                     
                     
         # Replacing the new hash table with the old one
@@ -393,7 +393,7 @@ class Simulator:
     def apply_c_split(self, condition_name, tick_clock_flag, state, hash_table, tick_num=1):
         if condition_name == '':
             state.tick_clock(tick_num)
-            hash_table[state.path_cons] = state
+            hash_table[state.id] = state
             return hash_table
         
         
@@ -413,16 +413,16 @@ class Simulator:
         # Update workloads and probablity
         success_state.conditions[condition_name] = "==0"
         if tick_clock_flag:
-            hash_table[success_state.path_cons].tick_clock(tick_num)
+            hash_table[success_state.id].tick_clock(tick_num)
         
-        # Generate unique path_cons
+        # Generate unique id
         success_state.update_id()
         
         # Update new hashtable with success state
-        hash_table[success_state.path_cons] = success_state
+        hash_table[success_state.id] = success_state
         
         # Add to right child of the old state
-        state.right = hash_table[success_state.path_cons]
+        state.right = hash_table[success_state.id]
         
         
         # ------------------------------------
@@ -433,16 +433,16 @@ class Simulator:
         fail_state.conditions[condition_name] = "!=0"
         
         if tick_clock_flag:
-            hash_table[fail_state.path_cons].tick_clock(tick_num)
+            hash_table[fail_state.id].tick_clock(tick_num)
             
-        # Generate unique path_cons
+        # Generate unique id
         fail_state.update_id()
         
         # Update new hashtable with success state
-        hash_table[fail_state.path_cons] = fail_state
+        hash_table[fail_state.id] = fail_state
 
         # Add to right child of the old state
-        state.left = hash_table[fail_state.path_cons]
+        state.left = hash_table[fail_state.id]
         
         
         return hash_table
@@ -538,7 +538,7 @@ class Simulator:
         
         for key in list(condition_is_false_hash_table.keys()):
             if key in hash_table:
-                # hash_table[success_state.path_cons].prob = hash_table[success_state.path_cons].prob + success_state.prob  # Sum similar state probablity
+                # hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
                 
                 hash_table[key].prob += condition_is_false_hash_table.get(key).prob
                 
@@ -601,16 +601,16 @@ class Simulator:
             reduced_state.update_id()
             
             # Update new hashtable with success state (Merge section)
-            if reduced_state.path_cons in hash_table:
-                hash_table[reduced_state.path_cons].prob = hash_table[reduced_state.path_cons].prob + reduced_state.prob     # Sum similar state probablity
+            if reduced_state.id in hash_table:
+                hash_table[reduced_state.id].prob = hash_table[reduced_state.id].prob + reduced_state.prob     # Sum similar state probablity
 
             else:
-                hash_table[reduced_state.path_cons] = reduced_state
+                hash_table[reduced_state.id] = reduced_state
                 if tick_clock_flag:
                     reduced_state.tick_clock(tick_num)
                     # tick_clock_flag = False
             
-            state.right = hash_table[reduced_state.path_cons]
+            state.right = hash_table[reduced_state.id]
         
         return hash_table
             
@@ -630,7 +630,7 @@ class Simulator:
             
             slept_state.update_id()
             # Update new hashtable with success state (Merge section)
-            hash_table[slept_state.path_cons] = slept_state
+            hash_table[slept_state.id] = slept_state
             
             if tick_clock_flag:
                 slept_state.tick_clock(tick_num)
@@ -645,7 +645,7 @@ class Simulator:
     def single_sleep(self, tick_clock_flag, hash_table, state, tick_num=1):
         
         
-        state = hash_table.pop(state.path_cons)
+        state = hash_table.pop(state.id)
         state.instruction = f'Sleep({tick_num})'
         self.archive.append(state)
         
@@ -657,7 +657,7 @@ class Simulator:
         
         slept_state.update_id()
         # Update new hashtable with success state (Merge section)
-        hash_table[slept_state.path_cons] = slept_state
+        hash_table[slept_state.id] = slept_state
         
         if tick_clock_flag:
             slept_state.tick_clock(tick_num)
@@ -760,10 +760,10 @@ class Simulator:
         that has been created in the simulation
         """
         
-        print('Archive root is:', self.root.path_cons, self.root)
+        print('Archive root is:', self.root.id, self.root)
         print('Length of Archive is:', len(self.archive))
         for state in self.archive:
-            print('Path Constraints: ',state.path_cons, state.clock, state)
+            print('Path Constraints: ',state.id, state.clock, state)
             
             if state.left:
                 print('\tLeft ID: ',state.left.id, state.clock, state.left)
@@ -795,7 +795,7 @@ class Simulator:
         
     def path_eval(self, state):
         
-        constraints_string = state.path_cons.split(" && ")
+        constraints_string = state.id.split(" && ")
         print("*** constraints_string", constraints_string)
         
         
