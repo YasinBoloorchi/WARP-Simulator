@@ -7,7 +7,7 @@ from sympy import Integer, factor, symbols
 
 from Parser import inst_parser
 import hashlib
-from z3 import Int, Solver
+import z3
 
 
 class State:
@@ -21,7 +21,8 @@ class State:
         self.queue = list()
         self.push_count = 0
         self.instruction = str()
-        self.conditions=dict()
+        self.conditions={'t':'>=0'}
+        self.model = dict()
         
         
     def tick_clock(self, tick_num):
@@ -31,9 +32,12 @@ class State:
         dictionary_keys = list(self.workload.keys())
         dictionary_keys.sort()
         sorted_dictionary = {key: self.workload[key] for key in dictionary_keys}
-        key_value_strings = [f"{key}={value}" for key, value in sorted_dictionary.items()]
+        key_value_strings = [f"{key}=={value}" for key, value in sorted_dictionary.items()]
         unique_string = ' && '.join(key_value_strings)
         
+        if unique_string == '':
+            unique_string = "True"
+            
         # add conditions to the path constraint
         if self.conditions:
             unique_string +=' && '
@@ -239,13 +243,12 @@ class Simulator:
         return hash_table
 
     
-    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1, threshold=0.15, const_prob=0.8):
+    def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1, threshold=0.1, const_prob=0.8):
         if flow_name == '':
             state.tick_clock(tick_num)
             hash_table[state.id] = state
             return hash_table
 
-        state = hash_table.pop(state.id)
         state.instruction = f'Pull ({flow_name})'
         # self.archive.append(state)
         
@@ -329,7 +332,7 @@ class Simulator:
         return hash_table
  
     
-    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.15, const_prob=0.8):
+    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.2, const_prob=0.8):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -341,51 +344,56 @@ class Simulator:
         # hash_table = {}
         temp_hash_table= {}
         
-        for state_id in list(hash_table.keys()):
-            state = hash_table.get(state_id)
+        for key in list(hash_table.keys()):
+            state = hash_table.pop(key)
             
-            if flow_name != '':
-                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-                
-            else:
-                if len(state.queue) > 0:
-                    hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-
+            
+            state_probability = round(state.prob.subs(prob, const_prob), 3)
+            
+            if state_probability >= threshold:
+            
+                if flow_name != '':
+                    hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+                    
                 else:
-                    # NEW NEW CODE
-                    hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
-                    
-                    # OLD CODE
-                    # hash_table = self.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
-                    # if state.id in hash_table:
-                    #     old_state = hash_table.pop(state.id)
-                    #     new_state = copy.deepcopy(old_state)
-                    #     old_state.right = new_state
+                    if len(state.queue) > 0:
+                        hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+
+                    else:
+                        # NEW NEW CODE
+                        hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
                         
-                    #     hash_table[new_state.id] = new_state
+                        # OLD CODE
+                        # hash_table = self.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+                        # if state.id in hash_table:
+                        #     old_state = hash_table.pop(state.id)
+                        #     new_state = copy.deepcopy(old_state)
+                        #     old_state.right = new_state
+                            
+                        #     hash_table[new_state.id] = new_state
+                            
+                        #     # hash_table[new_state.id].prob = hash_table[new_state.id].prob + old_state.prob  # Sum similar state probablity
+                            
+                        #     # hash_table[state.id].push_count += 1
+                        # else:
+                        #     old_state = state
+                        #     new_state = copy.deepcopy(old_state)
+                        #     old_state.right = new_state
+                            
+                        #     hash_table[new_state.id] = new_state
+                        #     hash_table[new_state.id].tick_clock(tick_num)
+                        #     # temp_hash_table[new_state.id].push_count += 1
                         
-                    #     # hash_table[new_state.id].prob = hash_table[new_state.id].prob + old_state.prob  # Sum similar state probablity
+                        # NEW CODE
+                        # old_state = hash_table.pop(state.id)
+                        # new_state = copy.deepcopy(old_state)
+                        # old_state.right = new_state
                         
-                    #     # hash_table[state.id].push_count += 1
-                    # else:
-                    #     old_state = state
-                    #     new_state = copy.deepcopy(old_state)
-                    #     old_state.right = new_state
+                        # hash_table[new_state.id] = new_state
+                        # if tick_clock_flag:
+                        #     hash_table[new_state.id].tick_clock(tick_num)
                         
-                    #     hash_table[new_state.id] = new_state
-                    #     hash_table[new_state.id].tick_clock(tick_num)
-                    #     # temp_hash_table[new_state.id].push_count += 1
-                    
-                    # NEW CODE
-                    # old_state = hash_table.pop(state.id)
-                    # new_state = copy.deepcopy(old_state)
-                    # old_state.right = new_state
-                    
-                    # hash_table[new_state.id] = new_state
-                    # if tick_clock_flag:
-                    #     hash_table[new_state.id].tick_clock(tick_num)
-                    
-                    
+                        
         # Replacing the new hash table with the old one
         return hash_table
     
@@ -464,7 +472,9 @@ class Simulator:
             state.instruction = f'Condition Split({condition_name})'
             self.archive.append(state)
             
-            temp_hash_table = self.apply_c_split(condition_name, tick_clock_flag, state, temp_hash_table, tick_num)
+            path_eval_result = self.path_eval(state)
+            if path_eval_result == 'sat':
+                temp_hash_table = self.apply_c_split(condition_name, tick_clock_flag, state, temp_hash_table, tick_num)
                 
         # Replacing the new hash table with the old one
         return temp_hash_table
@@ -644,8 +654,6 @@ class Simulator:
     
     def single_sleep(self, tick_clock_flag, hash_table, state, tick_num=1):
         
-        
-        state = hash_table.pop(state.id)
         state.instruction = f'Sleep({tick_num})'
         self.archive.append(state)
         
@@ -705,6 +713,7 @@ class Simulator:
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Path_cons: '+str(node.path_cons)+'\n'
+                           +'Model: '+str(node.model)+'\n'
                            +'Prob:'+str(factor(node.prob))+'\n'
                            +f'prob (S={const_prob}): '+str(prob_float)+'\n'
                            +'Clock: '+str(node.clock)+'\n'
@@ -736,7 +745,8 @@ class Simulator:
         print('Hash table:')
         success_prob = symbols('S')
         for state in hash_table:
-            log = '[ ]'+str(state)+ '\t|'+\
+            log = '[ ] '+str(state)[:5]+ "..." +'\t|'+\
+                  'Path Cons: '+hash_table.get(state).path_cons + '\t|'+\
                   str(hash_table.get(state).workload)+'\t|'+\
                   'Prob(Symbo): '+str(factor(hash_table.get(state).prob))+ '\t|'+\
                   'Prob(Const): '+str(round(factor(hash_table.get(state).prob).subs(success_prob, const_prob), 3))+ '\t|'+\
@@ -794,9 +804,46 @@ class Simulator:
         
         
     def path_eval(self, state):
+        if state.path_cons == "":
+            return "sat"
         
-        constraints_string = state.id.split(" && ")
-        print("*** constraints_string", constraints_string)
+        
+        # print("Path Constraints: ", state.path_cons)
+        solver = z3.Solver()
+        
+        time_var = ['t', 'R', 'S']
+        variables = {}
+        wrkload_var = list(state.workload.keys())
+        
+        
+        for var_name in wrkload_var + time_var:
+            locals()[var_name] = z3.Int(var_name)
+            variables[var_name] = locals()[var_name]
+            
+        
+        
+        constraints_string = state.path_cons.split(" && ")
+        
+        for constraint_str in constraints_string:
+            constraint = eval(constraint_str, globals(), locals())
+            solver.add(constraint)
+        
+        result = solver.check()
+        
+        if str(result) == 'sat':
+            model = solver.model()
+            
+            model_dict = {}
+            for decl in model:
+                model_dict[str(decl)] = model[decl].as_long()
+            
+            # print('Variables: ', variables)
+            print(constraints_string ,"Sat =>", model_dict)
+            state.model = model_dict
+        else:
+            print(result, constraints_string)
+
+        return str(result)
         
         
     

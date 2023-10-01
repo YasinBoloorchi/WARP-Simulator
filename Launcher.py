@@ -147,7 +147,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     
     while(True):
         if clock % R == 0:
-            condition_name = f't+{clock}%R'
+            condition_name = f'(t+{clock})%{R}'
             flow_name = f'F{flow_counter}AB'
             
             # add skipped sleeps
@@ -177,10 +177,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                 sleep_count = 0   
             
             # Split the states based on condition    
-            hash_table = simu.c_split(f't+{clock}%S', tick_clock_flag=False, hash_table=hash_table)
+            hash_table = simu.c_split(f'(t+{clock})%{S}', tick_clock_flag=False, hash_table=hash_table)
 
             # Apply a pull
-            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0, const_prob=0.9)
+            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.9)
 
         sleep_count += 1
         
@@ -273,7 +273,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=100, R=100, t_plus=100)
+    while_with_conditional_split(S=50, R=100, t_plus=200)
     
     
     # === Kowsar's ==

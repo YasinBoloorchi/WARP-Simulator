@@ -1,0 +1,24 @@
+[ ] 05562...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+51%S==0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: |F1AB	|Push Count: 2	|
+[ ] 23646...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+51%S==0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] 8d6a3...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+51%S!=0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: |F1AB	|Push Count: 2	|
+[ ] 249fa...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+51%S!=0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] 09a6b...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+51%S==0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] d8a3a...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+51%S==0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] d2908...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+51%S!=0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] 2b5b4...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+51%S!=0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] 1820f...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+51%S==0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: |F1AB	|Push Count: 2	|
+[ ] c1452...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+51%S==0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] cad0c...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+51%S!=0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: |F1AB	|Push Count: 2	|
+[ ] c13b4...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+51%S!=0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] af790...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+51%S==0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] 2e5db...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+51%S==0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] b3941...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+51%S!=0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] 02efc...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+51%S!=0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] 7a7c2...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S==0 && t+100%R==0 && t+51%S==0	|{'F1AB': False}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: |F1AB	|Push Count: 0	|
+[ ] b4c21...	|Path Cons: True && t+0%R!=0 && t+0%S==0 && t+100%R!=0 && t+51%S==0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] a94ad...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S==0 && t+100%R==0 && t+51%S!=0	|{'F1AB': False}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: |F1AB	|Push Count: 0	|
+[ ] ce47e...	|Path Cons: True && t+0%R!=0 && t+0%S==0 && t+100%R!=0 && t+51%S!=0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] db3c8...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S!=0 && t+100%R==0 && t+51%S==0	|{'F1AB': False}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: |F1AB	|Push Count: 0	|
+[ ] c4314...	|Path Cons: True && t+0%R!=0 && t+0%S!=0 && t+100%R!=0 && t+51%S==0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] 62a86...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S!=0 && t+100%R==0 && t+51%S!=0	|{'F1AB': False}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: |F1AB	|Push Count: 0	|
+[ ] 127d0...	|Path Cons: True && t+0%R!=0 && t+0%S!=0 && t+100%R!=0 && t+51%S!=0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|

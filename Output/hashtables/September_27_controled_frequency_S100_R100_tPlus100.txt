@@ -1,32 +1,32 @@
-[ ]0a959bbb06d6c892e56c91b11e80d5c18b4852c31fc56e1bf99d4487015db17e	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
-[ ]e52de060da1ce864df147ca04d7f6984f49502f62d45ec8f677206d7b9307c8e	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
-[ ]5e1079798884f994197595af1b5116b12e1e77f2b6c504d9286d28a7f57f43f7	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
-[ ]93104e930281ff844c10fedf959c2bd0892b549426ff31edf5ec8361963efda4	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
-[ ]810e1120077cb93d7e9d26859f733640a8da0a6e8236f686562812264d9fc6cd	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
-[ ]0e20411ed54626333e418b7e6c7ab931c37ccd06b98f1fcb1c67eb4266bc1b4e	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
-[ ]e1b191347dd2aea3696237c49e6694b3f9551ba7f888d5fde66cfe90266f4812	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
-[ ]149628b2afe0a78d3e12045bccd20bb936ae97a2536d3c3080e8d56c7831abac	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
-[ ]29722a55e3943e3d9c5843b6d9808f241ca39d5bae2c4f6f252366f022fb6f1c	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
-[ ]d443d65fb48c39daf20d7e374dac42517dd093dc2fd9575f9b1b8b7c49a37b6c	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
-[ ]15aa7a151da43ecdbe4d68090568cda31b06293745b278e4ca119f24cfe02673	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
-[ ]0cf3812cfe79098d21cb860c8ad9900773ae9f51dc5d8e512c3755ae17aff541	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
-[ ]4781f5340eab40d065c0edd39970bcb683bd9bef320ef363fd926138e808f036	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
-[ ]bce56ef4b26e5647351739daf01843306721dcf1efc2b2d8c31b07fadd31f6cb	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
-[ ]fc4fb37e83a7a860fb9030329caa162242ea7aa93d6cae64342b9f603bd767c1	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
-[ ]9a8f2d484734ea54db4482911f3828bca282d6edfe2044c206f2fab97eeec96c	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
-[ ]bad6fd84023d0a4443b4eb89c9efe370737e823368a8aa932d247f17186574f2	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
-[ ]c07a0eb69bc5cf25c47aa8c8962130bc79787121b2af292092200311d63484c1	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
-[ ]294d7d6695eff76edc36f08bbbb50b3f87f570138c726bbc77e4c60938812a49	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
-[ ]a52488e795462ba6854bc8e9a9629973941b899ba7609a65fadf5e3aeac532e8	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
-[ ]8ac6118f65e38d9ffacf88190b07c603d2d8223fe1602e3ecb429ed9b8a5c29d	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
-[ ]a85b581528468ce622b9bcf9b69cbc263ef3891f72ff647dfe65e529c7042f83	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
-[ ]dae742700805386bb928f5b21c140835734a9610e83deda85ce42ca149bb8e30	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
-[ ]8f1a35fc6a4e6ef5809c10a55f1e865f521563c66533383a1deea028ae479ff3	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
-[ ]c7dd526ca6e6f78481d9357d51ecb83cc206bbe3874b393c092b5e219ba51728	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
-[ ]8664c921877074a3664a67a0509ff44c5bd0cbae080d9eaff837be8aff2a3005	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
-[ ]3312dc04c932b550cf5072711523627aedd83dbb96a8832b1135b030fab50b94	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
-[ ]1f37d7db1e6248bd88597ad770709594744d0e42f6ab5ded08680f98ef27cba5	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
-[ ]beeb2a36aa0897fa95e4b9c951eb3f54fb2a31b2c7ecf043d48c8dc31511b8fc	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
-[ ]ba137b8d212cfcd7d0c2ee77f702a0a2ead9a7d40884f8cd8cef91bf6ba24bea	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
-[ ]6fc53a5312a43383e3a08dfd5e9a82edef6eb2ee37d68d11660f9d046fae3762	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
-[ ]4f76b017848b1a0140d5ec9e0794edec056783313a60d7c9f4affcae2f91bb2b	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] bf239...	|Path Cons: F0AB==True && F1AB==True && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+100%S==0	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ] 4a2ca...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+100%S==0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
+[ ] 8a8da...	|Path Cons: F0AB==True && F1AB==True && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+100%S!=0	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ] b2ec7...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+100%S!=0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
+[ ] 5de28...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+100%S==0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] bb286...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+100%S!=0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] 43aa5...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+100%S==0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] 40d97...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S==0 && t+100%R==0 && t+100%S!=0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] e0472...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+100%S==0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] 69d34...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S==0 && t+100%R!=0 && t+100%S!=0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] 3126a...	|Path Cons: F0AB==True && F1AB==True && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+100%S==0	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ] 42061...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+100%S==0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
+[ ] 6b804...	|Path Cons: F0AB==True && F1AB==True && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+100%S!=0	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ] fab5c...	|Path Cons: F0AB==True && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+100%S!=0	|{'F0AB': True, 'F1AB': False}	|Prob(Symbo): -2*S*(S - 1)	|Prob(Const): 0.180	|Queue: |F1AB	|Push Count: 2	|
+[ ] a8f0a...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+100%S==0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] 7d017...	|Path Cons: F0AB==True && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+100%S!=0	|{'F0AB': True}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.990	|Queue: 	|Push Count: 2	|
+[ ] a217d...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+100%S==0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] 7ea92...	|Path Cons: F0AB==False && F1AB==False && t+0%R==0 && t+0%S!=0 && t+100%R==0 && t+100%S!=0	|{'F0AB': False, 'F1AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB|F1AB	|Push Count: 2	|
+[ ] 2bdf7...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+100%S==0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] 0b9a7...	|Path Cons: F0AB==False && t+0%R==0 && t+0%S!=0 && t+100%R!=0 && t+100%S!=0	|{'F0AB': False}	|Prob(Symbo): (S - 1)**2	|Prob(Const): 0.01	|Queue: |F0AB	|Push Count: 2	|
+[ ] d3c6a...	|Path Cons: F1AB==True && t+0%R!=0 && t+0%S==0 && t+100%R==0 && t+100%S==0	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ] 5ed17...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S==0 && t+100%R==0 && t+100%S==0	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
+[ ] 3820d...	|Path Cons: F1AB==True && t+0%R!=0 && t+0%S==0 && t+100%R==0 && t+100%S!=0	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ] 7db9b...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S==0 && t+100%R==0 && t+100%S!=0	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
+[ ] 4b83c...	|Path Cons: True && t+0%R!=0 && t+0%S==0 && t+100%R!=0 && t+100%S==0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] 7b595...	|Path Cons: True && t+0%R!=0 && t+0%S==0 && t+100%R!=0 && t+100%S!=0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] 5bbbd...	|Path Cons: F1AB==True && t+0%R!=0 && t+0%S!=0 && t+100%R==0 && t+100%S==0	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ] 618e6...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S!=0 && t+100%R==0 && t+100%S==0	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
+[ ] adb28...	|Path Cons: F1AB==True && t+0%R!=0 && t+0%S!=0 && t+100%R==0 && t+100%S!=0	|{'F1AB': True}	|Prob(Symbo): S	|Prob(Const): 0.900	|Queue: 	|Push Count: 1	|
+[ ] 38350...	|Path Cons: F1AB==False && t+0%R!=0 && t+0%S!=0 && t+100%R==0 && t+100%S!=0	|{'F1AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.10	|Queue: |F1AB	|Push Count: 1	|
+[ ] bb87a...	|Path Cons: True && t+0%R!=0 && t+0%S!=0 && t+100%R!=0 && t+100%S==0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] 5cb9c...	|Path Cons: True && t+0%R!=0 && t+0%S!=0 && t+100%R!=0 && t+100%S!=0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
