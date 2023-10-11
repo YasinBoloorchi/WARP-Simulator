@@ -21,41 +21,49 @@ class State:
         self.queue = list()
         self.push_count = 0
         self.instruction = str()
-        self.conditions={'t':'>=0'}
+        self.conditions=set({'t>0'})
         self.model = dict()
         
         
     def tick_clock(self, tick_num):
         self.clock += tick_num
 
+    # def update_path_cons(self):
+    #     # add conditions to the path constraint
+    #     path_constraint = str()
+    #     if self.conditions:
+    #         dictionary_keys = list(self.conditions.keys())
+    #         dictionary_keys.sort()
+    #         sorted_dictionary = {key: self.conditions[key] for key in dictionary_keys}
+    #         key_value_strings = [f"{key}{value}" for key, value in sorted_dictionary.items()]
+    #         path_constraint += ' && '.join(key_value_strings)
+            
+    #     self.path_cons = path_constraint
+        
+    #     return path_constraint
+    
+    
     def update_path_cons(self):
+        # add conditions to the path constraint
+        if self.conditions:
+            self.path_cons = ' && '.join(self.conditions)
+            
+
+    def get_workload_string(self):
         dictionary_keys = list(self.workload.keys())
         dictionary_keys.sort()
         sorted_dictionary = {key: self.workload[key] for key in dictionary_keys}
-        key_value_strings = [f"{key}=={value}" for key, value in sorted_dictionary.items()]
-        unique_string = ' && '.join(key_value_strings)
+        key_value_strings = [f"{key}:{value}" for key, value in sorted_dictionary.items()]
+        unique_string = ', '.join(key_value_strings)
         
         if unique_string == '':
             unique_string = "True"
             
-        # add conditions to the path constraint
-        if self.conditions:
-            unique_string +=' && '
-            dictionary_keys = list(self.conditions.keys())
-            dictionary_keys.sort()
-            sorted_dictionary = {key: self.conditions[key] for key in dictionary_keys}
-            key_value_strings = [f"{key}{value}" for key, value in sorted_dictionary.items()]
-            unique_string += ' && '.join(key_value_strings)
-            
-        # add queue to the path_cons
-        # unique_string += '|' + '|'.join(member for member in self.queue)
-        
-        self.path_cons = unique_string
         return unique_string
 
     def update_id(self):
         self.update_path_cons()
-        data = self.path_cons
+        data = self.get_workload_string() + " | " + self.path_cons
         sha256_hash = hashlib.sha256()
         sha256_hash.update(data.encode('utf-8'))
         result = sha256_hash.hexdigest()
@@ -332,7 +340,7 @@ class Simulator:
         return hash_table
  
     
-    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.2, const_prob=0.8):
+    def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.1, const_prob=0.8):
         # flow_name = 'F0BA',
         # prob = 0.8
         
@@ -417,11 +425,14 @@ class Simulator:
         
         # ------------------------------------
         # Create a new state for success -----
-
+        
         # Update workloads and probablity
-        success_state.conditions[condition_name] = "==0"
+        success_state.conditions.add(condition_name+"==0")
         if tick_clock_flag:
             hash_table[success_state.id].tick_clock(tick_num)
+        
+        # Remove sat model
+        success_state.model = ''
         
         # Generate unique id
         success_state.update_id()
@@ -438,11 +449,14 @@ class Simulator:
 
         # Updat probability
         # Update workloads and probablity
-        fail_state.conditions[condition_name] = "!=0"
+        fail_state.conditions.add(condition_name+"!=0")
         
         if tick_clock_flag:
             hash_table[fail_state.id].tick_clock(tick_num)
-            
+        
+        # Remove sat model
+        fail_state.model = ''
+        
         # Generate unique id
         fail_state.update_id()
         
@@ -686,7 +700,7 @@ class Simulator:
         graph = Digraph(f'./Output/Graphs/{file_name}', format='png')
         self.add_nodes_and_edges(graph, const_prob)
         
-        graph.view()
+        graph.view(cleanup=True)
         
         return
 
@@ -703,7 +717,14 @@ class Simulator:
             
             if node not in visited:
                 prob_float = round(node.prob.subs(success_prob, const_prob), 3)
-                probability = int(prob_float * 100)
+                probability = int(prob_float * 100)                
+                
+                if node.model == 'unsat':
+                    fill_color = 'pink'
+                else:
+                    fill_color = f'gray{probability}'
+                
+                
                 if probability <=51:
                     font_color = 'white'
                 else:
@@ -713,13 +734,14 @@ class Simulator:
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Path_cons: '+str(node.path_cons)+'\n'
-                           +'Model: '+str(node.model)+'\n'
+                           +'Workload: '+str(node.get_workload_string())+'\n'
+                           +'Sat model: '+str(node.model)+'\n'
                            +'Prob:'+str(factor(node.prob))+'\n'
                            +f'prob (S={const_prob}): '+str(prob_float)+'\n'
                            +'Clock: '+str(node.clock)+'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
                            +f'Push Count: {node.push_count}'+'\n'
-                           +repr(node), style='filled', fillcolor=f'gray{probability}', fontcolor=font_color)
+                           +repr(node), style='filled', fillcolor=fill_color, fontcolor=font_color)
                 
                 visited.add(node)
 
@@ -842,6 +864,7 @@ class Simulator:
             state.model = model_dict
         else:
             print(result, constraints_string)
+            state.model = 'unsat'
 
         return str(result)
         

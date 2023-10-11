@@ -1,0 +1,2 @@
+[ ] 3ca5b...	|Path Cons: F0AB==True && t>=0	|{'F0AB': True}	|Prob(Symbo): S*(S**4 - 5*S**3 + 10*S**2 - 10*S + 5)	|Prob(Const): 1.00000000000000	|Queue: 	|Push Count: 5	|
+[ ] 2f4be...	|Path Cons: F0AB==False && t>=0	|{'F0AB': False}	|Prob(Symbo): -(S - 1)**5	|Prob(Const): 0.0	|Queue: |F0AB	|Push Count: 5	|

@@ -26,7 +26,7 @@ def simple_while_loop():
         
 
 # ======== Step two ==========
-def while_with_condition():
+def while_with_condition(end_clock):
     simu = Simulator()
     hash_table = dict()
     clock = 0
@@ -37,20 +37,47 @@ def while_with_condition():
     while(True):
         print(clock)
         if clock % 100 == 0:
-            hash_table = simu.pull('F0AB', tick_clock_flag=True, hash_table=hash_table, tick_num=1)
+            hash_table = simu.pull('F0AB', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0)
             
-            simu.imprint_hash_table(hash_table)
-            simu.visualize_dag(f'./while_with_condition_{clock}_clock',prob=1)
-        
             hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=99)
-            sleep(2)
+            # sleep(2)
             
-        if clock == 200:
+        if clock == end_clock:
+            simu.imprint_hash_table(f'while_with_condition_{clock}_clock',hash_table)
+            simu.visualize_dag(f'./while_with_condition_{clock}_clock', const_prob=0.6)
+        
             return hash_table
         
         clock += 1
 
+# ===== Step Two (Under construction) =====
+def while_with_condition(end_clock, RS=100):
+    simu = Simulator()
+    hash_table = dict()
+    clock = 0
+    sleep_time = 0
+    # WARP Code:
+    hash_table = simu.release('F0AB', hash_table, tick_clock_flag=False)
+    
+    while(True):
+        if clock % RS == 0:
+            if sleep_time > 0:
+                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_time-1)
+                sleep_time = 0
+                
+            hash_table = simu.pull('F0AB', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0)
+            
+            
+        if clock == end_clock:
+            simu.imprint_hash_table(f'while_with_condition_{clock}_clock',hash_table)
+            simu.visualize_dag(f'./while_with_condition_{clock}_clock', const_prob=0.6)
+        
+            return hash_table
+        
+        clock += 1
+        sleep_time +=1
 
+            
 # ===== Step three =====
 def while_with_controled_frequency(S=100, R=100):
     print(f'Running simulation for S={S} and R={R}')
@@ -146,41 +173,41 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     flow_counter = 0
     
     while(True):
-        if clock % R == 0:
-            condition_name = f'(t+{clock})%{R}'
-            flow_name = f'F{flow_counter}AB'
+        # if clock % R == 0:
+        condition_name = f'(t+{clock})%{R}'
+        flow_name = f'F{flow_counter}AB'
+        
+        # add skipped sleeps
+        if sleep_count > 0:
+            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
+            sleep_count = 0
             
-            # add skipped sleeps
-            if sleep_count > 0:
-                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
-                sleep_count = 0
-                
-            # Split the states based on condition
-            hash_table = simu.c_split(condition_name, tick_clock_flag=False, hash_table=hash_table)
+        # Split the states based on condition
+        hash_table = simu.c_split(condition_name, tick_clock_flag=False, hash_table=hash_table)
+        
+        for state_id in list(hash_table.keys()):
+            state = hash_table.get(state_id)
             
-            for state_id in list(hash_table.keys()):
-                state = hash_table.get(state_id)
-                
-                if state.conditions[condition_name] == "==0": # It's reverse be cause we DO when mod is 0
-                    hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=True, tick_num=0)
-                else:
-                    hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=0)
-            
+            if condition_name+"==0" in state.conditions:
+                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=True, tick_num=0)
+            else:
+                hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=0)
+        
 
-            flow_counter += 1
+        flow_counter += 1
 
-        if clock % S == 0:
-            
-            # Add skipped sleeps
-            if sleep_count > 0:
-                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
-                sleep_count = 0   
-            
-            # Split the states based on condition    
-            hash_table = simu.c_split(f'(t+{clock})%{S}', tick_clock_flag=False, hash_table=hash_table)
+        # if clock % S == 0:
+        
+        # Add skipped sleeps
+        if sleep_count > 0:
+            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
+            sleep_count = 0   
+        
+        # Split the states based on condition    
+        hash_table = simu.c_split(f'(t+{clock})%{S}', tick_clock_flag=False, hash_table=hash_table)
 
-            # Apply a pull
-            hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.9)
+        # Apply a pull
+        hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.8)
 
         sleep_count += 1
         
@@ -212,8 +239,6 @@ def kowsars_work():
     simu.visualize_dag()
     
     
-
-    
 def simulate(file_name, instructions_slots):
     # Generate States simu and initial state    
     simu = Simulator()
@@ -222,11 +247,11 @@ def simulate(file_name, instructions_slots):
     # warp code execution losiop
     for slot in instructions_slots:
         hash_table = simu.run_slot(slot, hash_table)
-        simu.imprint_hash_table(hash_table)
+        simu.imprint_hash_table(file_name, hash_table)
         print('Test of Correctness: ', simu.test_of_correctness(hash_table), end='\n'+"="*50+'\n')
     
     # sleep(0.5)
-    simu.visualize_dag(file_name, prob=0.8)
+    simu.visualize_dag(file_name, const_prob=0.8)
     # simu.archive_print()
     del(simu)
     return
@@ -263,7 +288,7 @@ def main():
     # simple_while_loop()
     
     # === Step two ===
-    # while_with_condition()
+    # while_with_condition(end_clock=200, RS=50)
     
     # === Step three ===
     # while_with_controled_frequency(S=100, R=100)
@@ -273,7 +298,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=50, R=100, t_plus=200)
+    while_with_conditional_split(S=5, R=5, t_plus=8)
     
     
     # === Kowsar's ==
