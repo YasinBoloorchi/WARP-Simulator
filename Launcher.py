@@ -171,56 +171,68 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     hash_table = dict({simu.root.id:simu.root})
     sleep_count = 0
     flow_counter = 0
+    const_prob = 0.8
+    threshold = 0.2
+    
     
     while(True):
-        # if clock % R == 0:
-        condition_name = f'(t+{clock})%{R}'
+        tick_flag = True
+        tick_flag_flag = False
+        print("Clock: ", clock)
+        print('Length of hash_table: ', len(hash_table))
+        
+        ##### if clock % R == 0: Release Section
+        R_condition_name = f'(t+{clock})%{R}'
         flow_name = f'F{flow_counter}AB'
         
-        # add skipped sleeps
-        if sleep_count > 0:
-            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
-            sleep_count = 0
-            
         # Split the states based on condition
-        hash_table = simu.c_split(condition_name, tick_clock_flag=False, hash_table=hash_table)
+        hash_table = simu.c_split(R_condition_name, tick_clock_flag=False, hash_table=hash_table)
         
-        for state_id in list(hash_table.keys()):
-            state = hash_table.get(state_id)
-            
-            if condition_name+"==0" in state.conditions:
-                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=True, tick_num=0)
+        for state in list(hash_table.values()):
+            tick_flag = True
+            if R_condition_name+"==0" in state.conditions:
+                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=tick_flag, tick_num=1)
+                tick_flag = False
+                
             else:
-                hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=0)
-        
-
+                hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
+                tick_flag = False
+                    # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
-
-        # if clock % S == 0:
         
-        # Add skipped sleeps
-        if sleep_count > 0:
-            hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count-1)
-            sleep_count = 0   
+        ##### if clock % S == 0: Push section
+        S_condition_name = f'(t+{clock})%{S}'
         
-        # Split the states based on condition    
-        hash_table = simu.c_split(f'(t+{clock})%{S}', tick_clock_flag=False, hash_table=hash_table)
+        if clock % R == clock % S:
+            tick_flag_flag = True
+        
+        # Split the states based on condition
+        hash_table = simu.c_split(S_condition_name, tick_clock_flag=False, hash_table=hash_table)
 
         # Apply a pull
-        hash_table = simu.pull('', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=0.1, const_prob=0.8)
-
-        sleep_count += 1
-        
-        # End loop condition
-        if clock == t_plus:
-            if sleep_count > 0:
-                hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=sleep_count)
+        for state in list(hash_table.values()):
+            if tick_flag_flag:
+                tick_flag = False
+            else:
+                tick_flag = True
+                
+            if S_condition_name+"==0" in state.conditions:
+                hash_table = simu.single_pull(state, '', tick_clock_flag=tick_flag, hash_table=hash_table, tick_num=1, const_prob=const_prob)
+                tick_flag = False
+            else:
+                hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
+                tick_flag = False
             
-            today_date = datetime.now().strftime('%B_%d')    
+        
+        ### End loop condition
+        if clock == t_plus:
+              
+            today_date = datetime.now().strftime('%B_%d') 
             simulation_name = f'./{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
             
-            simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
-            simu.visualize_dag(simulation_name,const_prob=0.9)
+            # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+            simu.test_of_correctenss2(hash_table)
+            simu.visualize_dag(simulation_name, const_prob=const_prob)
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
             print('Length of Hashtable: ',len(hash_table))
             return hash_table
@@ -298,8 +310,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=5, R=5, t_plus=8)
-    
+    while_with_conditional_split(S=2, R=4, t_plus=4)
     
     # === Kowsar's ==
     # kowsars_work()
