@@ -29,20 +29,6 @@ class State:
     def tick_clock(self, tick_num):
         self.clock += tick_num
 
-    # def update_path_cons(self):
-    #     # add conditions to the path constraint
-    #     path_constraint = str()
-    #     if self.conditions:
-    #         dictionary_keys = list(self.conditions.keys())
-    #         dictionary_keys.sort()
-    #         sorted_dictionary = {key: self.conditions[key] for key in dictionary_keys}
-    #         key_value_strings = [f"{key}{value}" for key, value in sorted_dictionary.items()]
-    #         path_constraint += ' && '.join(key_value_strings)
-            
-    #     self.path_cons = path_constraint
-        
-    #     return path_constraint
-    
     
     def update_path_cons(self):
         # add conditions to the path constraint
@@ -80,12 +66,6 @@ class Simulator:
         self.root = State()
         self.root.path_cons = 'True'
         self.root.update_id()
-        # Hash table: {
-                        # F0AC:True,F0BA:True 0.922 <Simulator.State object at 0x7f95e511a410>
-                        # F0AC:False,F0BA:True 0.038 <Simulator.State object at 0x7f95e511a470>
-                        # F0AC:True,F0BA:False 0.038 <Simulator.State object at 0x7f95e511a4d0>
-                        # F0AC:False,F0BA:False 0.002 <Simulator.State object at 0x7f95e511a530>
-                    #  } 
 
 
     def run_slot(self, slot, hash_table={}):
@@ -204,8 +184,24 @@ class Simulator:
         return hash_table
 
 
+    def condition(self, condition_type, condition, condition_is_true_inst, condition_is_false_inst, tick_clock_flag, hash_table, prob=symbols('S')):
+        
+        def check_if_condition(state, condition_type, condition):
+            
+            if condition_type == '!has':
+                if not state.workload.get(condition):
+                    return True
+                else:
+                    return False
+                
+            elif condition_type == 'has':
+                if state.workload.get(condition):
+                    return True
+                else:
+                    return False
+
+
     def release(self, flow_name, hash_table, tick_clock_flag=False, tick_num=1):
-        # flow_name = 'F0BA'    
         """Add the given flow_name with False status
         to all the states' workloads in the hash table
         """
@@ -233,9 +229,8 @@ class Simulator:
     
 
     def single_release(self, flow_name, hash_table, state, tick_clock_flag=False, tick_num=1):
-        # flow_name = 'F0BA'    
         """Add the given flow_name with False status
-        to all the states' workloads in the hash table
+        to the given state's workload
         """
               
         state = hash_table.pop(state.id)
@@ -255,13 +250,29 @@ class Simulator:
 
     
     def apply_pull(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1, threshold=0, const_prob=0.8):
+        """Fork the given state into two possible non-deterministic state (success or failure)
+        based on the probability given and adding them to the given hashtable
+
+        Args:
+            flow_name (_type_): _description_
+            tick_clock_flag (_type_): _description_
+            state (_type_): _description_
+            hash_table (bool): _description_
+            prob (_type_, optional): _description_. Defaults to symbols('S').
+            tick_num (int, optional): _description_. Defaults to 1.
+            threshold (int, optional): _description_. Defaults to 0.
+            const_prob (float, optional): _description_. Defaults to 0.8.
+
+        Returns:
+            _type_: _description_
+        """
+        
         if flow_name == '':
             state.tick_clock(tick_num)
             hash_table[state.id] = state
             return hash_table
 
         state.instruction = f'Pull ({flow_name})'
-        # self.archive.append(state)
         
         # -------- Copy fail_state --------
         fail_state = copy.deepcopy(state)
@@ -279,7 +290,7 @@ class Simulator:
         # Update workloads and probablity
         if state.workload[flow_name] != True:
             success_state.workload[flow_name] = True
-            success_state.prob = success_state.prob * prob               # Multiply S probability
+            success_state.prob = success_state.prob * prob  # Multiply S probability
             success_state.queue.pop(0)
         else:
             success_state.prob *= 1
@@ -292,6 +303,7 @@ class Simulator:
             hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
             
             if hash_table[success_state.id].push_count == state.push_count: # Golden fix of push count
+                # Add to push count of the state
                 hash_table[success_state.id].push_count += 1
         
         else:
@@ -302,9 +314,8 @@ class Simulator:
                     hash_table[success_state.id].tick_clock(tick_num)
                     # tick_clock_flag = False
 
-        
-        # Add to push count of the state
-
+        # Last step of generating soccess state: 
+        #   Adding the success state to the hash_table
         state.right = hash_table[success_state.id]
         
         
@@ -326,20 +337,21 @@ class Simulator:
             # tick_clock_flag = False
         
         # Add to push count of the state
-        
-        # if state.push_count
         hash_table[fail_state.id].push_count += 1    
         
+        # Last step of generating failure state: 
+        #   Adding the success state to the hash_table
         state.left = hash_table[fail_state.id]
 
         return hash_table
  
     
     def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0, const_prob=0.8):
-        # flow_name = 'F0BA',
-        # prob = 0.8
-        
-        """ * pop every state
+        """Applying the pull function for all the states in the hash_table.
+            Replacing each state with two new fork of it (Success and failure)
+            by the follwoing order:
+            
+            * pop every state
             * multiply one by S and another by F
             * put the two new states in the new hash table
             * merge similar states
@@ -352,72 +364,78 @@ class Simulator:
             
             state_probability = round(state.prob.subs(prob, const_prob), 3)
             
+            # If state's probability is less than the threshold, purge it.
             if state_probability >= threshold:
-            
-                if flow_name != '':
-                    hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-                    
-                else:
-                    if len(state.queue) > 0:
-                        hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-                    else:
-                        # NEW NEW CODE
-                        hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
+                continue
+             
+            # If a flow name has been given, then pull the flow with the given name
+            elif flow_name != '':
+                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+                
+            # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
+            elif len(state.queue) > 0:
+                hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+
+            # If no flow has been left in the queue then just go to sleep
+            else:        
+                hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
                         
-                        # OLD CODE
-                        # hash_table = self.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
-                        # if state.id in hash_table:
-                        #     old_state = hash_table.pop(state.id)
-                        #     new_state = copy.deepcopy(old_state)
-                        #     old_state.right = new_state
-                            
-                        #     hash_table[new_state.id] = new_state
-                            
-                        #     # hash_table[new_state.id].prob = hash_table[new_state.id].prob + old_state.prob  # Sum similar state probablity
-                            
-                        #     # hash_table[state.id].push_count += 1
-                        # else:
-                        #     old_state = state
-                        #     new_state = copy.deepcopy(old_state)
-                        #     old_state.right = new_state
-                            
-                        #     hash_table[new_state.id] = new_state
-                        #     hash_table[new_state.id].tick_clock(tick_num)
-                        #     # temp_hash_table[new_state.id].push_count += 1
-                        
-                        # NEW CODE
-                        # old_state = hash_table.pop(state.id)
-                        # new_state = copy.deepcopy(old_state)
-                        # old_state.right = new_state
-                        
-                        # hash_table[new_state.id] = new_state
-                        # if tick_clock_flag:
-                        #     hash_table[new_state.id].tick_clock(tick_num)
-                        
-            old_hash_table = hash_table.copy()
         # Replacing the new hash table with the old one
         return hash_table
+
     
     def single_pull(self, state, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.2, const_prob=0.8):
+        """Apply a pull only on the given state
+
+        Args:
+            state (_type_): _description_
+            flow_name (_type_): _description_
+            tick_clock_flag (_type_): _description_
+            hash_table (bool): _description_
+            prob (_type_, optional): _description_. Defaults to symbols('S').
+            tick_num (int, optional): _description_. Defaults to 1.
+            threshold (float, optional): _description_. Defaults to 0.2.
+            const_prob (float, optional): _description_. Defaults to 0.8.
+
+        Returns:
+            _type_: _description_
+        """
         
         hash_table.pop(state.id)
         self.archive[state] = state
     
+        # If a flow name has been given, then pull the flow with the given name
         if flow_name != '':
             hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-            
+        
+        # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
+        elif len(state.queue) > 0:
+            hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+        
+        # If no flow has been left in the queue then just go to sleep
         else:
-            if len(state.queue) > 0:
-                hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-
-            else:
-                # NEW NEW CODE
-                hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
+            hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
     
         # Replacing the new hash table with the old one
         return hash_table
 
+
     def apply_c_split(self, condition_name, tick_clock_flag, state, hash_table, tick_num=1):
+        """Apply a conditional fork on the given state and adding the two possible
+        deterministic state to the given hash_table
+
+        Args:
+            condition_name (_type_): _description_
+            tick_clock_flag (_type_): _description_
+            state (_type_): _description_
+            hash_table (bool): _description_
+            tick_num (int, optional): _description_. Defaults to 1.
+
+        Returns:
+            _type_: _description_
+        """
+        
+        
         if condition_name == '':
             state.tick_clock(tick_num)
             hash_table[state.id] = state
@@ -448,6 +466,9 @@ class Simulator:
         # Generate unique id
         success_state.update_id()
         
+        # add one to the split count
+        success_state.split_count += 1
+        
         # Update new hashtable with success state
         hash_table[success_state.id] = success_state
         
@@ -471,6 +492,9 @@ class Simulator:
         # Generate unique id
         fail_state.update_id()
         
+        # Add one to the split count
+        fail_state.split_count += 1
+        
         # Update new hashtable with success state
         hash_table[fail_state.id] = fail_state
 
@@ -482,143 +506,33 @@ class Simulator:
  
     
     def c_split(self, condition_name, tick_clock_flag, hash_table, tick_num=1):
-        # flow_name = 'F0BA',
-        # prob = 0.8
+        """Applying the conditional deterministic split function 
+        for all the states in the hash_table and replacing each 
+        state with two new fork of it (Success and failure) by
+        the following order:
         
-        """ * pop every state
+            * pop every state
             * multiply one by S and another by F
             * put the two new states in the new hash table
             * merge similar states
-        """       
-        # hash_table = {}
+        """
+        
         temp_hash_table= {}
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
             state.instruction = f'Condition Split({condition_name})'
-            # self.archive[key] = state
+            self.archive[key] = state
             
+            # Evaluate each state before forking
             path_eval_result = self.path_eval(state)[0]
+            
+            # Fork state only if the state path condition is satisfiable.
             if path_eval_result == 'sat':
-                state.split_count += 1
                 temp_hash_table = self.apply_c_split(condition_name, tick_clock_flag, state, temp_hash_table, tick_num)
             
         # Replacing the new hash table with the old one
         return temp_hash_table
 
-
-    def condition(self, condition_type, condition, condition_is_true_inst, condition_is_false_inst, tick_clock_flag, hash_table, prob=symbols('S')):
-        
-        def check_if_condition(state, condition_type, condition):
-            
-            if condition_type == '!has':
-                if not state.workload.get(condition):
-                    return True
-                else:
-                    return False
-                
-            elif condition_type == 'has':
-                if state.workload.get(condition):
-                    return True
-                else:
-                    return False
-            
-        
-        # condition_is_true_hash_table = {}
-        # condition_is_false_hash_table = {}
-        # temp_hash_table = {}
-         
-        # for key in list(hash_table.keys()):
-        #     state = hash_table.pop(key)
-        #     self.archive[key] = state
-        #     temp_hash_table.append(state)
-
-        #     if check_if_condition(state, condition_type, condition):
-
-        #         condition_is_true_hash_table = self.run_slot(condition_is_true_inst, {key: state})
-                
-                
-        #     elif condition_is_false_inst:
-        #         condition_is_false_hash_table = self.run_slot(condition_is_false_inst, {key: state})
-            
-        #     else:
-        #         temp_hash_table[key] = state
-        
-        
-
-        
-        # =======================Previouse (works)============================
-        
-        condition_is_true_hash_table = {}
-        condition_is_false_hash_table = {}
-        
-        for key in list(hash_table.keys()):
-            state = hash_table.pop(key)
-            self.archive[key] = state
-
-            if check_if_condition(state, condition_type, condition):
-                
-                condition_is_true_hash_table[key] = state
-                
-            else:
-                
-                condition_is_false_hash_table[key] = state
-        
-        
-        condition_is_true_hash_table = self.run_slot(condition_is_true_inst, condition_is_true_hash_table)
-        
-        if condition_is_false_inst:
-            condition_is_false_hash_table = self.run_slot(condition_is_false_inst, condition_is_false_hash_table)
-
-
-        hash_table = condition_is_true_hash_table
-        
-        for key in list(condition_is_false_hash_table.keys()):
-            if key in hash_table:
-                # hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
-                
-                hash_table[key].prob += condition_is_false_hash_table.get(key).prob
-                
-                condition_is_false_hash_table.get(key).right = hash_table[key]  # Sum similar state probablity
-            else:
-                hash_table[key] = condition_is_false_hash_table.pop(key)
-            
-        print(hash_table)
-        
-        return hash_table
-    
-    
-    # ==================== Old one =======================
-        
-        for key in list(hash_table.keys()):
-            state = hash_table.pop(key)
-            self.archive[key] = state
-            
-            # Checking the main condition
-            # vvvvvvvvvvvvvvvvvvvvvvvvvvv
-            # !has F0AB == Ture
-            if not state.workload.get(condition): 
-                
-                
-                
-                
-                # If it's pull command:
-                flow_name = condition_is_true[1]+condition_is_true[2]
-                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob)
-
-            # Checking the main condition
-            # vvvvvvvvvvvvvvvvvvvvvvvvvvv
-            # !has F0AB == False
-            else:                     
-                
-                
-                
-                
-                # If it's pull command
-                flow_name = condition_is_false[1]+condition_is_false[2]
-                temp_hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob)
-                
-        # Replacing the new hash table with the old one
-        return temp_hash_table.copy()
         
         
     def drop_flow(self, flow_name, tick_clock_flag, hash_table, tick_num=1):
@@ -652,6 +566,17 @@ class Simulator:
             
 
     def add_sleep(self, tick_clock_flag, hash_table, tick_num=1):
+        """Add a number of sleep (no operation) to 
+        all states of the given hash_table
+
+        Args:
+            tick_clock_flag (_type_): _description_
+            hash_table (bool): _description_
+            tick_num (int, optional): _description_. Defaults to 1.
+
+        Returns:
+            _type_: _description_
+        """
         
         for key in list(hash_table.keys()):
             state = hash_table.pop(key)
@@ -661,17 +586,15 @@ class Simulator:
             # ------------------------------------
             # Create a new reduced state ---------
             slept_state = copy.deepcopy(state)
-            
 
             
             slept_state.update_id()
+            
             # Update new hashtable with success state (Merge section)
             hash_table[slept_state.id] = slept_state
             
             if tick_clock_flag:
                 slept_state.tick_clock(tick_num)
-                # tick_clock_flag = False
-                
             
             state.right = slept_state
         
@@ -679,19 +602,31 @@ class Simulator:
     
     
     def single_sleep(self, tick_clock_flag, hash_table, state, tick_num=1):
+        """Add a number of sleep (no op) only to the  
+        given state and add to the given hash_table
+
+        Args:
+            tick_clock_flag (_type_): _description_
+            hash_table (bool): _description_
+            state (_type_): _description_
+            tick_num (int, optional): _description_. Defaults to 1.
+
+        Returns:
+            _type_: _description_
+        """
+        
         
         state.instruction = f'Sleep({tick_num})'
         
         # ------------------------------------
         # Create a new reduced state ---------
         slept_state = copy.deepcopy(state)
-        
-
-        
-        slept_state.update_id()
+                                          
+        slept_state.update_id()           
+                                
         # Update new hashtable with success state (Merge section)
         hash_table[slept_state.id] = slept_state
-        
+
         if tick_clock_flag:
             slept_state.tick_clock(tick_num)
             # tick_clock_flag = False
@@ -703,33 +638,61 @@ class Simulator:
     
 
     def visualize_dag(self, file_name='Digraph' ,const_prob=0.8):
+        """Visualize the graph of the simulator and
+        save it with the given file name in the ./Output/Graphs/ directory
+
+        Args:
+            file_name (str, optional): _description_. Defaults to 'Digraph'.
+            const_prob (float, optional): _description_. Defaults to 0.8.
+
+        Returns:
+            _type_: _description_
+        """
+        
+        
         if not self.root:
             return False
         
-        # self.root = self.archive[0]
+        # Set the root of the simulator as the root to be explored
+        root = self.root
 
+        # Defining the file and format of the output graph
         graph = Digraph(f'./Output/Graphs/{file_name}', format='png')
-        self.draw_nodes_and_edges(graph, const_prob)
         
+        # Calling the helper function to draw the graph with the given parameters
+        self.draw_nodes_and_edges(root, graph, const_prob)
+        
+        # Generate the graph and clean the redundent files
         graph.view(cleanup=True)
-        
         return
 
 
-    def draw_nodes_and_edges(self, graph, const_prob):
+    def draw_nodes_and_edges(self, root, graph, const_prob):
+        """Helpper function for the visualize_dag function to generate
+        every node accessible from the root
+
+        Args:
+            root (_type_): _description_
+            graph (_type_): _description_
+            const_prob (_type_): _description_
+        """
+        
         success_prob = symbols('S')
         visited = set()
-        queue = deque([self.root])
-        
-
+        queue = deque([root])
 
         while queue:
+            
+            # pop one node from the queue to visit
             node = queue.popleft()
             
             if node not in visited:
+                
+                # Gathering node's info to use to set it's vizual atribute
                 prob_float = round(node.prob.subs(success_prob, const_prob), 3)
                 probability = int(prob_float * 100)                
                 
+                # Set the vizual atribute of the node based on it's info
                 if node.model == 'unsat':
                     fill_color = 'pink'
                     font_color = 'Black'
@@ -741,7 +704,7 @@ class Simulator:
                     else:
                         font_color = 'Black'
                     
-               
+               # Generate node's vizual reperesentation
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Path_cons: '+str(node.path_cons)+'\n'
@@ -755,11 +718,10 @@ class Simulator:
                            +f'Push Count: {node.push_count}'+'\n'
                            +repr(node), style='filled', fillcolor=fill_color, fontcolor=font_color)
                 
+                # Add node to the visited nodes
                 visited.add(node)
-
-                # if probability <= 1:
-                #     continue
                 
+                # Add new nodes to the queue if there are any
                 if node.left: # and node.left.prob.subs(success_prob, prob) != 0:
                     graph.edge(repr(node), repr(node.left), label=node.instruction+' [F]')
                     queue.append(node.left)
@@ -771,13 +733,16 @@ class Simulator:
 
     def imprint_hash_table(self, simulation_name, hash_table, const_prob=0.8):
         """
-        Printout the hash table of the simulation
+        Printout the hash table of the simulation into the stdout
+        and save a log of it in the ./Output/hashtables/ directory
         """
-        
-        open(f'./Output/hashtables/{simulation_name}.txt', 'w')
-        print('='*50)
-        print('Hash table:')
         success_prob = symbols('S')
+        
+        # open a new file to write the log (or rewrite it to be used for the most recent run)
+        open(f'./Output/hashtables/{simulation_name}.txt', 'w')
+        
+        print('='*50, '\n','Hash table:')
+        
         for state in hash_table:
             log = '[ ] '+str(state)[:5]+ "..." +'\t|'+\
                   'Path Cons: '+hash_table.get(state).path_cons + '\t|'+\
@@ -791,10 +756,10 @@ class Simulator:
         
             print(log)
             
+            # Write (or rewrite) the log into the generated file
             with open(f'./Output/hashtables/{simulation_name}.txt', 'a+') as hash_table_file:
                 hash_table_file.write(log)
 
-        
         print('='*50)
 
    
@@ -815,8 +780,71 @@ class Simulator:
             if state.right:
                 print('\tRight ID: ', state.right.id, state.clock, state.right)
             print('-'*50)
+
+        
+    def path_eval(self, state):
+        """A function to evaluate the path constrain of a state
+        with help of z3 to see if it is satisfiable or not and
+        returns the result as: [sat/unsat, model]
+
+        Args:
+            state (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        
+        # If there is no path constraint then it is satisfiable
+        if state.path_cons == "":
+            return "sat"
+        
+        # Create an instance of z3 and call it sovler
+        solver = z3.Solver()
+        
+        # set the initial variables
+        time_var = ['t', 'R', 'S']
+        variables = {}
+        wrkload_var = list(state.workload.keys())
+        
+        # Converting the workload variables of a state 
+        # to valid python variabl so they can be evaluate
+        for var_name in wrkload_var + time_var:
+            locals()[var_name] = z3.Int(var_name)
+            variables[var_name] = locals()[var_name]
             
+        # Separate path constraint strings to with and operators
+        constraints_string = state.path_cons.split(" && ")
+        
+        # Converting all constraint strings into valid python
+        # variables and then adding to the solver instance
+        for constraint_str in constraints_string:
+            constraint = eval(constraint_str, globals(), locals())
+            solver.add(constraint)
+        
+        # Evaluating the constraints
+        result = solver.check()
+        
+        # Configuring the correct output based on the result
+        if str(result) == 'sat':
+            model = solver.model()
+            model_dict = {}
             
+            for decl in model:
+                model_dict[str(decl)] = model[decl].as_long()
+            
+            # print('Variables: ', variables)
+            # print(constraints_string ,"Sat =>", model_dict)
+            state.model = model_dict
+            
+        else:
+            model = 'unsat'
+            # print(result, constraints_string)
+            state.model = model
+
+        # Returning the output
+        return [str(result), state.model]
+
+                        
     def test_of_correctness(self, hash_table, std_out=True):
         """
             A funciton to test the result of the simulation
@@ -837,51 +865,19 @@ class Simulator:
             return False
         
         
-    def path_eval(self, state):
-        if state.path_cons == "":
-            return "sat"
-        
-        
-        # print("Path Constraints: ", state.path_cons)
-        solver = z3.Solver()
-        
-        time_var = ['t', 'R', 'S']
-        variables = {}
-        wrkload_var = list(state.workload.keys())
-        
-        
-        for var_name in wrkload_var + time_var:
-            locals()[var_name] = z3.Int(var_name)
-            variables[var_name] = locals()[var_name]
-            
-        
-        
-        constraints_string = state.path_cons.split(" && ")
-        
-        for constraint_str in constraints_string:
-            constraint = eval(constraint_str, globals(), locals())
-            solver.add(constraint)
-        
-        result = solver.check()
-        
-        if str(result) == 'sat':
-            model = solver.model()
-            
-            model_dict = {}
-            for decl in model:
-                model_dict[str(decl)] = model[decl].as_long()
-            
-            # print('Variables: ', variables)
-            # print(constraints_string ,"Sat =>", model_dict)
-            state.model = model_dict
-        else:
-            model = 'unsat'
-            # print(result, constraints_string)
-            state.model = model
+    def test_of_correctenss2(self, hash_table, std_out=True):
+        """Evaluating the correctness of the current state of hash_table
+        based on the probabilities for all possible constraint paths
 
-        return [str(result), state.model]
+        Args:
+            hash_table (bool): _description_
+            std_out (bool, optional): _description_. Defaults to True.
+
+        Returns:
+            _type_: _description_
+        """
         
-    def test_of_correctenss2(self, hash_table):
+        
         const_to_state_dict = {}
         for state in hash_table.values():
             if state.path_cons not in const_to_state_dict:
@@ -893,17 +889,24 @@ class Simulator:
         sum_of_all_probabilities = 0
         
         for const in const_to_state_dict:
-            print("Path constraint: ", const)
-            print('Path constraint solution: ', self.path_eval(const_to_state_dict.get(const)[0])[1])
-            print('Number of state with the same condition: ',len(const_to_state_dict.get(const)))
+            if std_out:
+                print("Path constraint: ", const)
+                print('Path constraint solution: ', self.path_eval(const_to_state_dict.get(const)[0])[1])
+                print('Number of state with the same condition: ',len(const_to_state_dict.get(const)))
+                
             sum_of_probabilities = 0
+            
+            
             for state in const_to_state_dict.get(const):
-                print(state.get_workload_string() , '--Prob-->',state.prob.subs(symbols('S'), 0.8))
+                if std_out:
+                    print(state.get_workload_string() , '--Prob-->',state.prob.subs(symbols('S'), 0.8))
+                    
                 sum_of_probabilities += state.prob
 
             sum_of_all_probabilities += factor(sum_of_probabilities)
 
-            print('\n\n')
+            if std_out:
+                print('\n\n')
             
             
         final_result = factor(factor(sum_of_all_probabilities)/ number_of_pathconst)
@@ -915,5 +918,3 @@ class Simulator:
             print('final_result: (prob/count): ', final_result)
             return 1
             
-    
-    
