@@ -67,6 +67,8 @@ class Simulator:
         self.root.path_cons = 'True'
         self.root.update_id()
 
+    def gen_hash_table(self):
+        return dict({self.root.id: self.root})
 
     def run_slot(self, slot, hash_table={}):
         
@@ -365,7 +367,7 @@ class Simulator:
             state_probability = round(state.prob.subs(prob, const_prob), 3)
             
             # If state's probability is less than the threshold, purge it.
-            if state_probability >= threshold:
+            if state_probability <= threshold:
                 continue
              
             # If a flow name has been given, then pull the flow with the given name

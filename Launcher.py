@@ -161,14 +161,14 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
         clock += 1
 
 
-
 # === Step five ====
 def while_with_conditional_split(S=100, R=100, t_plus=200):
     print(f'Running simulation for S={S} and R={R}')
     clock = 0
     q = list()
     simu = Simulator()
-    hash_table = dict({simu.root.id:simu.root})
+    hash_table = simu.gen_hash_table()
+
     sleep_count = 0
     flow_counter = 0
     const_prob = 0.8
@@ -200,6 +200,9 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                     # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
         
+        
+        
+        
         ##### if clock % S == 0: Push section
         S_condition_name = f'(t+{clock})%{S}'
         
@@ -222,7 +225,9 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             else:
                 hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
                 tick_flag = False
-            
+        
+        
+        
         
         ### End loop condition
         if clock == t_plus:
@@ -241,14 +246,20 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
 
 
 def kowsars_work():
-    
+    # Initial simulator
     simu = Simulator()
-    hash_table = dict({simu.root.id:simu.root})
+    hash_table = simu.gen_hash_table()
     
+    # Release a packet
     hash_table = simu.release('F0BA', hash_table=hash_table, tick_clock_flag=True, tick_num=1)
+    simu.imprint_hash_table("Kowsar",hash_table=hash_table)
     
+    # Pull the packet 
+    hash_table = simu.pull('F0BA', tick_clock_flag=True, hash_table=hash_table, const_prob=0.9)
     
-    simu.visualize_dag()
+    # Show the graph and the hash table
+    simu.imprint_hash_table("Kowsar",hash_table=hash_table)
+    simu.visualize_dag(file_name="KowsarGraph", const_prob=0.9)
     
     
 def simulate(file_name, instructions_slots):
