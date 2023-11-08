@@ -204,9 +204,6 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         ##### if clock % S == 0: Push section
         S_condition_name = f'(t+{clock})%{S}'
         
-        # if clock % R == clock % S:
-        #     tick_flag_flag = True
-        
         tick_flag = True
         
         # Split the states based on condition
@@ -228,15 +225,17 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         
         ### End loop condition
         if clock == t_plus:
-              
-            today_date = datetime.now().strftime('%B_%d') 
-            simulation_name = f'./{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
             
-            # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
-            simu.test_of_correctenss2(hash_table)
-            simu.visualize_dag(simulation_name, const_prob=const_prob)
+            today_date = datetime.now().strftime('%B_%d') 
+            simulation_name = f'{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
-            print('Length of Hashtable: ',len(hash_table))
+            
+            simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+            # simu.test_of_correctenss2(hash_table, std_out=False)
+            # simu.findPaths(hash_table)
+            # simu.paths_to_curves(hash_table)
+            simu.plot_curves(hash_table, './Output/Plots/'+simulation_name+'_Service_curve')
+            simu.visualize_dag(simulation_name, const_prob=const_prob)
             return hash_table
         
         clock += 1
@@ -312,7 +311,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=100, t_plus=10)
+    while_with_conditional_split(S=1, R=2, t_plus=4)
     
     # === Kowsar's ==
     # kowsars_work()

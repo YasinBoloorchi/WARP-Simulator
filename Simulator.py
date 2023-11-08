@@ -9,6 +9,7 @@ from Parser import inst_parser
 import hashlib
 import z3
 
+import matplotlib.pyplot as plt
 
 class State:
     def __init__(self, workload={}):
@@ -778,7 +779,10 @@ class Simulator:
                   'Prob(Symbo): '+str(factor(hash_table.get(state).prob))+ '\t|'+\
                   'Prob(Const): '+str(round(factor(hash_table.get(state).prob).subs(success_prob, const_prob), 3))+ '\t|'+\
                   'Queue: '+ ''.join(f'|{e}' for e in hash_table.get(state).queue)+'\t|'+\
-                  'Push Count: '+ str(hash_table.get(state).push_count)+'\t|'+'\n'#+
+                  'Release Count: '+ str(hash_table.get(state).release_count)+'\t|'+'\n'+\
+                  'Push Count: '+ str(hash_table.get(state).push_count)+'\t|'+'\n'#+\
+                  
+                          
                 #   'Conditions:'+ hash_table.get(state).conditions + '|'
             #hash_table.get(state))
         
@@ -945,4 +949,80 @@ class Simulator:
             print('Test of correctness result:', '\033[91m'+'Failed'+'\033[0m')
             print('final_result: (prob/count): ', final_result)
             return 1
-            
+
+
+    def find_largest_success(self, hash_table):
+        """Search through all the nodes in the hash table and find the
+        largest release count that is the same as successful push_count
+        """
+        largest_success = 0
+        for node in hash_table.values():
+            if node.release_count == node.push_count and node.release_count > largest_success:
+                largest_success = node.release_count
+        
+        return largest_success
+   
+                
+    def findPaths(self, hash_table):
+        largest_push_count = self.find_largest_success(hash_table)
+        visited = set()
+        paths = []
+
+        def dfs(node, path):
+            # if node in visited:
+            #     return
+            # visited.add(node)
+
+            if node.release_count == node.push_count == largest_push_count:
+                paths.append(path)
+            else:
+                if node.left:
+                    dfs(node.left, path + [node.left])
+
+                if node.right:
+                    dfs(node.right, path + [node.right])
+
+        dfs(self.root, [self.root])
+        
+        print('Number of paths: ',len(paths))
+        for path in paths:
+            for node in path:
+                print(str(node.id)[:5])
+            print('-'*50)
+        return paths
+    
+         
+    def paths_to_curves(self, hash_table):
+        all_paths = self.findPaths(hash_table)
+        all_curves = list()
+        for path in all_paths:
+            curve = list()
+            for node in path:
+                curve.append((node.push_count, node.release_count))
+            all_curves.append(curve)
+        
+        # for c in all_curves:
+        #     print(c,',')
+        
+        return all_curves
+
+
+    def plot_curves(self, hash_table, plot_name):
+        curves = self.paths_to_curves(hash_table)
+        
+        for i, data_list in enumerate(curves):
+            x, y = zip(*data_list)
+            # y = [val + i * 0.01 for val in y]  # Adjust the y-values to separate the lines
+            # x = [val + i * 0.01 for val in x]  # Adjust the x-values to separate the lines
+            plt.plot(x, y, marker='o', label=f'Line {i+1}')
+
+        plt.title('Arrival Curve and Service Curve Plot')
+        plt.xlabel(f'Successful Push Count ({len(curves)} paths)')
+        plt.ylabel('Release Count')
+        
+        info_text = f"Number of Lists: {len(curves)}"
+        plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
+        # plt.legend()
+        plt.savefig(plot_name)
+        # plt.show()
+        
