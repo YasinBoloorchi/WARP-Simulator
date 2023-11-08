@@ -1008,11 +1008,15 @@ class Simulator:
         for path in all_paths:
             curve = list()
             for node in path:
-                curve.append((node.push_count, node.release_count))
-            all_curves.append(curve)
+                if (node.push_count, node.release_count) not in curve:
+                    curve.append((node.push_count, node.release_count))
+            
+            if curve not in all_curves:
+                all_curves.append(curve)
         
         # for c in all_curves:
         #     print(c,',')
+        # print('LENGH OF all_curves:', len(all_curves))
         
         return all_curves
 
@@ -1048,7 +1052,7 @@ class Simulator:
         plt.xlabel(f'Successful Push Count ({len(curves)} paths)')
         plt.ylabel('Release Count')
         
-        info_text = f"Number of Lists: {len(curves)}"
+        info_text = f"Number of curves: {len(curves)}"
         plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
         # plt.legend()
         plt.savefig(plot_name)

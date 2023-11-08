@@ -321,7 +321,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=2, t_plus=20)
+    while_with_conditional_split(S=1, R=2, t_plus=10)
     
     # === Kowsar's ==
     # kowsars_work()
