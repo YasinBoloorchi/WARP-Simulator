@@ -665,7 +665,7 @@ class Simulator:
         return hash_table
     
 
-    def visualize_dag(self, file_name='Digraph' ,const_prob=0.8):
+    def visualize_dag(self, file_name='Digraph' ,const_prob=0.8, path_trace=[]):
         """Visualize the graph of the simulator and
         save it with the given file name in the ./Output/Graphs/ directory
 
@@ -688,14 +688,14 @@ class Simulator:
         graph = Digraph(f'./Output/Graphs/{file_name}', format='png')
         
         # Calling the helper function to draw the graph with the given parameters
-        self.draw_nodes_and_edges(root, graph, const_prob)
+        self.draw_nodes_and_edges(root, graph, const_prob, path_trace)
         
         # Generate the graph and clean the redundent files
         graph.view(cleanup=True)
         return
 
 
-    def draw_nodes_and_edges(self, root, graph, const_prob):
+    def draw_nodes_and_edges(self, root, graph, const_prob, path_trace):
         """Helpper function for the visualize_dag function to generate
         every node accessible from the root
 
@@ -721,9 +721,12 @@ class Simulator:
                 probability = int(prob_float * 100)                
                 
                 # Set the vizual atribute of the node based on it's info
+                
+                
                 if node.model == 'unsat':
                     fill_color = 'pink'
                     font_color = 'Black'
+                    
                 else:
                     fill_color = f'gray{probability}'
                                     
@@ -731,6 +734,13 @@ class Simulator:
                         font_color = 'white'
                     else:
                         font_color = 'Black'
+                
+                for nodeID_prob in path_trace:
+                    if nodeID_prob[0] == node.id and nodeID_prob[1] == str(node.prob):
+                        fill_color = 'gold'
+                        font_color = 'Black'
+                
+                
                     
                # Generate node's vizual reperesentation
                 graph.node(repr(node), 
@@ -985,10 +995,10 @@ class Simulator:
         dfs(self.root, [self.root])
         
         print('Number of paths: ',len(paths))
-        for path in paths:
-            for node in path:
-                print(str(node.id)[:5])
-            print('-'*50)
+        # for path in paths:
+        #     for node in path:
+        #         print(str(node.id)[:5])
+        #     print('-'*50)
         return paths
     
          
@@ -1006,7 +1016,25 @@ class Simulator:
         
         return all_curves
 
-
+    
+    def path_to_id(self, hash_table):
+        all_paths = self.findPaths(hash_table)
+        all_IDs = list()
+        for path in all_paths:
+            IDs = list()
+            for node in path:
+                IDs.append([node.id, str(node.prob)])
+                
+            all_IDs.append(IDs)
+        
+        # for path in all_IDs:
+        #     for nodeID in path:
+        #         print(nodeID[0][:5], str(nodeID[1]))
+        #     print('-'*50)
+        
+        return all_IDs
+            
+            
     def plot_curves(self, hash_table, plot_name):
         curves = self.paths_to_curves(hash_table)
         

@@ -230,12 +230,22 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             simulation_name = f'{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
             
-            simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+            # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
             # simu.test_of_correctenss2(hash_table, std_out=False)
             # simu.findPaths(hash_table)
             # simu.paths_to_curves(hash_table)
             simu.plot_curves(hash_table, './Output/Plots/'+simulation_name+'_Service_curve')
-            simu.visualize_dag(simulation_name, const_prob=const_prob)
+            # simu.visualize_dag(simulation_name, const_prob=const_prob)
+            
+            
+            # --- Verify every single curve by visualizing them all (TIME CONSUMING)
+            # ids_of_paths = simu.path_to_id(hash_table)
+            # path_counter = 0
+            # for path in ids_of_paths:
+            #     simu.visualize_dag(simulation_name+f'Path#{path_counter}', const_prob=const_prob, path_trace=path)
+            #     path_counter += 1
+                
+                
             return hash_table
         
         clock += 1
@@ -311,7 +321,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=2, t_plus=4)
+    while_with_conditional_split(S=1, R=2, t_plus=20)
     
     # === Kowsar's ==
     # kowsars_work()
