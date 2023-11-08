@@ -20,6 +20,7 @@ class State:
         self.clock= symbols('t')
         self.queue = list()
         self.push_count = 0
+        self.release_count = 0
         self.instruction = str()
         self.conditions=set({'t>=0'})
         self.model = dict()
@@ -219,6 +220,7 @@ class Simulator:
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
             new_state.queue.append(flow_name)
+            new_state.release_count += 1
             new_state.update_id()
             hash_table[new_state.id] = new_state
             
@@ -240,6 +242,7 @@ class Simulator:
         new_state = copy.deepcopy(state)
         new_state.workload[flow_name] = False
         new_state.queue.append(flow_name)
+        new_state.release_count += 1
         new_state.update_id()
         hash_table[new_state.id] = new_state
         
@@ -311,10 +314,10 @@ class Simulator:
         else:
             hash_table[success_state.id] = success_state
             hash_table[success_state.id].push_count += 1
-            if flow_name != '':
-                if tick_clock_flag:
-                    hash_table[success_state.id].tick_clock(tick_num)
-                    # tick_clock_flag = False
+            # if flow_name != '':
+            if tick_clock_flag:
+                hash_table[success_state.id].tick_clock(tick_num)
+                # tick_clock_flag = False
 
         # Last step of generating soccess state: 
         #   Adding the success state to the hash_table
@@ -338,8 +341,6 @@ class Simulator:
             hash_table[fail_state.id].tick_clock(tick_num)
             # tick_clock_flag = False
         
-        # Add to push count of the state
-        hash_table[fail_state.id].push_count += 1    
         
         # Last step of generating failure state: 
         #   Adding the success state to the hash_table
@@ -366,22 +367,28 @@ class Simulator:
             
             state_probability = round(state.prob.subs(prob, const_prob), 3)
             
-            # If state's probability is less than the threshold, purge it.
-            if state_probability <= threshold:
-                continue
-             
-            # If a flow name has been given, then pull the flow with the given name
-            elif flow_name != '':
-                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+            # Evaluate each state before forking
+            path_eval_result = self.path_eval(state)[0]
+            
+            # Fork state only if the state path condition is satisfiable.
+            if path_eval_result == 'sat':
                 
-            # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
-            elif len(state.queue) > 0:
-                hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+                # If state's probability is less than the threshold, purge it.
+                if state_probability <= threshold:
+                    continue
+                
+                # If a flow name has been given, then pull the flow with the given name
+                elif flow_name != '':
+                    hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+                    
+                # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
+                elif len(state.queue) > 0:
+                    hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
 
-            # If no flow has been left in the queue then just go to sleep
-            else:        
-                hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
-                        
+                # If no flow has been left in the queue then just go to sleep
+                else:        
+                    hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
+                            
         # Replacing the new hash table with the old one
         return hash_table
 
@@ -406,18 +413,25 @@ class Simulator:
         hash_table.pop(state.id)
         self.archive[state] = state
     
-        # If a flow name has been given, then pull the flow with the given name
-        if flow_name != '':
-            hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-        
-        # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
-        elif len(state.queue) > 0:
-            hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
-        
-        # If no flow has been left in the queue then just go to sleep
-        else:
-            hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
     
+        # Evaluate each state before forking
+        path_eval_result = self.path_eval(state)[0]
+            
+        # Fork state only if the state path condition is satisfiable.
+        if path_eval_result == 'sat':
+                
+            # If a flow name has been given, then pull the flow with the given name
+            if flow_name != '':
+                hash_table = self.apply_pull(flow_name, tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+            
+            # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
+            elif len(state.queue) > 0:
+                hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+            
+            # If no flow has been left in the queue then just go to sleep
+            else:
+                hash_table = self.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
+        
         # Replacing the new hash table with the old one
         return hash_table
 
@@ -536,7 +550,6 @@ class Simulator:
         return temp_hash_table
 
         
-        
     def drop_flow(self, flow_name, tick_clock_flag, hash_table, tick_num=1):
         
         for key in list(hash_table.keys()):
@@ -592,14 +605,20 @@ class Simulator:
             
             slept_state.update_id()
             
-            # Update new hashtable with success state (Merge section)
-            hash_table[slept_state.id] = slept_state
+            # Evaluate each state before forking
+            path_eval_result = self.path_eval(state)[0]
+                
+            # Fork state only if the state path condition is satisfiable.
+            if path_eval_result == 'sat':
+                    
+                # Update new hashtable with success state (Merge section)
+                hash_table[slept_state.id] = slept_state
+                
+                if tick_clock_flag:
+                    slept_state.tick_clock(tick_num)
+                
+                state.right = slept_state
             
-            if tick_clock_flag:
-                slept_state.tick_clock(tick_num)
-            
-            state.right = slept_state
-        
         return hash_table
     
     
@@ -625,16 +644,22 @@ class Simulator:
         slept_state = copy.deepcopy(state)
                                           
         slept_state.update_id()           
-                                
-        # Update new hashtable with success state (Merge section)
-        hash_table[slept_state.id] = slept_state
-
-        if tick_clock_flag:
-            slept_state.tick_clock(tick_num)
-            # tick_clock_flag = False
-            
         
-        state.right = slept_state
+        # Evaluate each state before forking
+        path_eval_result = self.path_eval(state)[0]
+            
+        # Fork state only if the state path condition is satisfiable.
+        if path_eval_result == 'sat':
+            
+            # Update new hashtable with success state (Merge section)
+            hash_table[slept_state.id] = slept_state
+
+            if tick_clock_flag:
+                slept_state.tick_clock(tick_num)
+                # tick_clock_flag = False
+                
+            
+            state.right = slept_state
         
         return hash_table
     
@@ -717,6 +742,7 @@ class Simulator:
                            +'Clock: '+str(node.clock)+'\n'
                            +'Split Count: ' + str(node.split_count) +'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
+                           +f'Release Count: {node.release_count}'+'\n'
                            +f'Push Count: {node.push_count}'+'\n'
                            +repr(node), style='filled', fillcolor=fill_color, fontcolor=font_color)
                 
@@ -804,7 +830,7 @@ class Simulator:
         solver = z3.Solver()
         
         # set the initial variables
-        time_var = ['t', 'R', 'S']
+        time_var = ['t', 'R', 'S', 'a']
         variables = {}
         wrkload_var = list(state.workload.keys())
         

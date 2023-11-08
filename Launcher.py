@@ -161,14 +161,14 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
         clock += 1
 
 
+
 # === Step five ====
 def while_with_conditional_split(S=100, R=100, t_plus=200):
     print(f'Running simulation for S={S} and R={R}')
     clock = 0
     q = list()
     simu = Simulator()
-    hash_table = simu.gen_hash_table()
-
+    hash_table = dict({simu.root.id:simu.root})
     sleep_count = 0
     flow_counter = 0
     const_prob = 0.8
@@ -188,26 +188,26 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         # Split the states based on condition
         hash_table = simu.c_split(R_condition_name, tick_clock_flag=False, hash_table=hash_table)
         
+        if clock % R == clock % S and clock % S == 0 and clock % R == 0:
+            tick_flag = False
+        
         for state in list(hash_table.values()):
-            tick_flag = True
             if R_condition_name+"==0" in state.conditions:
-                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=tick_flag, tick_num=1)
-                tick_flag = False
+                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=tick_flag, tick_num=0)
                 
             else:
-                hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
-                tick_flag = False
+                hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=0)
+                
                     # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
-        
-        
-        
         
         ##### if clock % S == 0: Push section
         S_condition_name = f'(t+{clock})%{S}'
         
-        if clock % R == clock % S:
-            tick_flag_flag = True
+        # if clock % R == clock % S:
+        #     tick_flag_flag = True
+        
+        tick_flag = True
         
         # Split the states based on condition
         hash_table = simu.c_split(S_condition_name, tick_clock_flag=False, hash_table=hash_table)
@@ -221,13 +221,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                 
             if S_condition_name+"==0" in state.conditions:
                 hash_table = simu.single_pull(state, '', tick_clock_flag=tick_flag, hash_table=hash_table, tick_num=1, const_prob=const_prob)
-                tick_flag = False
+
             else:
                 hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
-                tick_flag = False
-        
-        
-        
+            
         
         ### End loop condition
         if clock == t_plus:
@@ -246,20 +243,14 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
 
 
 def kowsars_work():
-    # Initial simulator
+    
     simu = Simulator()
-    hash_table = simu.gen_hash_table()
+    hash_table = dict({simu.root.id:simu.root})
     
-    # Release a packet
     hash_table = simu.release('F0BA', hash_table=hash_table, tick_clock_flag=True, tick_num=1)
-    simu.imprint_hash_table("Kowsar",hash_table=hash_table)
     
-    # Pull the packet 
-    hash_table = simu.pull('F0BA', tick_clock_flag=True, hash_table=hash_table, const_prob=0.9)
     
-    # Show the graph and the hash table
-    simu.imprint_hash_table("Kowsar",hash_table=hash_table)
-    simu.visualize_dag(file_name="KowsarGraph", const_prob=0.9)
+    simu.visualize_dag()
     
     
 def simulate(file_name, instructions_slots):
@@ -321,7 +312,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=2, R=2, t_plus=2)
+    while_with_conditional_split(S=1, R=100, t_plus=10)
     
     # === Kowsar's ==
     # kowsars_work()
