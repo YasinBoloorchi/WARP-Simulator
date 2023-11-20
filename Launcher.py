@@ -77,7 +77,7 @@ def while_with_condition(end_clock, RS=100):
         clock += 1
         sleep_time +=1
 
-            
+
 # ===== Step three =====
 def while_with_controled_frequency(S=100, R=100):
     print(f'Running simulation for S={S} and R={R}')
@@ -174,6 +174,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     const_prob = 0.8
     threshold = 0.2
     
+    # Initial release 
+    # for i in range(5):
+    #     hash_table = simu.release(f'F{i}AA', hash_table)
+    
     
     while(True):
         tick_flag = True
@@ -230,11 +234,15 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             simulation_name = f'{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
             
-            # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+            simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
             # simu.test_of_correctenss2(hash_table, std_out=False)
             # simu.findPaths(hash_table)
+            
+            # simu.find_arrival_curve(hash_table)
             # simu.paths_to_curves(hash_table)
             simu.plot_curves(hash_table, './Output/Plots/'+simulation_name+'_Service_curve')
+            
+            
             # simu.visualize_dag(simulation_name, const_prob=const_prob)
             
             
@@ -321,7 +329,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=2, t_plus=10)
+    while_with_conditional_split(S=1, R=2, t_plus=4)
     
     # === Kowsar's ==
     # kowsars_work()

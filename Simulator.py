@@ -15,6 +15,7 @@ class State:
     def __init__(self, workload={}):
         self.workload = workload
         self.prob = Integer(1)
+        self.prob_cons = 1
         self.path_cons = str()
         self.right = None
         self.left = None
@@ -319,7 +320,8 @@ class Simulator:
             if tick_clock_flag:
                 hash_table[success_state.id].tick_clock(tick_num)
                 # tick_clock_flag = False
-
+        
+        hash_table[success_state.id].prob_cons = round(factor(hash_table[success_state.id].prob).subs(prob, const_prob), 3)
         # Last step of generating soccess state: 
         #   Adding the success state to the hash_table
         state.right = hash_table[success_state.id]
@@ -332,6 +334,7 @@ class Simulator:
 
         # Updat probability
         fail_state.prob = fail_state.prob * (1-prob)
+        fail_state.prob_cons = round(factor(fail_state.prob).subs(prob, const_prob), 3)
         
         # Update unique id
         fail_state.update_id()
@@ -478,7 +481,7 @@ class Simulator:
             hash_table[success_state.id].tick_clock(tick_num)
         
         # Remove sat model
-        success_state.model = ''
+        # success_state.model = ''
         
         # Generate unique id
         success_state.update_id()
@@ -717,7 +720,8 @@ class Simulator:
             if node not in visited:
                 
                 # Gathering node's info to use to set it's vizual atribute
-                prob_float = round(node.prob.subs(success_prob, const_prob), 3)
+                # prob_float = round(node.prob.subs(success_prob, const_prob), 3)
+                prob_float = node.prob_cons
                 probability = int(prob_float * 100)                
                 
                 # Set the vizual atribute of the node based on it's info
@@ -971,90 +975,172 @@ class Simulator:
                 largest_success = node.release_count
         
         return largest_success
-   
+    
+    
+    def find_most_released_count(self, hash_table):
+        
+        most_release_count = 0
+        time_model = '-1'
+        for node in hash_table.values():
+            if node.release_count > most_release_count and node.model != 'unsat':
+                most_release_count = node.release_count
+                time_model = node.model['t']
                 
-    def findPaths(self, hash_table):
-        largest_push_count = self.find_largest_success(hash_table)
+        return most_release_count, time_model
+    
+    
+    def is_leaf(self, hash_table, node):
+        if node.id in hash_table and node.clock == hash_table[node.id].clock:
+            return True
+        else:
+            return False
+   
+    
+    def find_arrival_curve(self, hash_table, most_released_count, time_model):
+        # Setting the target as the node with most release count
+        
         visited = set()
         paths = []
-
+        time_symbol = symbols('t')
+        
         def dfs(node, path):
-            # if node in visited:
-            #     return
-            # visited.add(node)
+            ## Disregrading visited nodes
+            if node in visited \
+                or node.model == 'unsat' \
+                or node.model['t']!= time_model:
+                return
+            
+            visited.add(node)
 
-            if node.release_count == node.push_count == largest_push_count:
+            if node.release_count == most_released_count and self.is_leaf(hash_table, node):
                 paths.append(path)
+            
             else:
+                if node.right:
+                    dfs(node.right, path + [node.right])
+
                 if node.left:
                     dfs(node.left, path + [node.left])
 
+        dfs(self.root, [self.root])
+        
+        
+        # print('Number of paths: ',len(paths))
+        # print('Output of arrival curve:')
+        # for path in paths:
+        # for node in paths[0]:
+        #     print(str(node.id)[:5], '-', node.release_count, '-', str(node.clock))
+        # print('-'*50)
+        # print('='*50)
+        # return paths[0]
+        
+        arrival_curve = dict()
+        for node in paths[0]:            
+            arrival_curve[node.clock.subs(time_symbol, node.model['t'])] = node.release_count
+
+        return arrival_curve
+
+
+    def find_all_paths(self, hash_table, most_release_count, time_model, const_prob, fail_count):
+        print('Finding all paths')
+        # Setting the target as the node with most successful transmitted packet
+        largest_push_count = self.find_largest_success(hash_table)
+        visited = set()
+        paths = []
+        success_prob = symbols('S')
+        
+        def dfs(node, path, failure=0):
+            ## Disregrading visited nodes
+            # if node in visited:
+            #     return
+            # visited.add(node)
+            
+            
+            if node.model == 'unsat':
+                return
+            
+            if node.model['t'] != time_model:
+                return
+                    #or round(factor(node.prob).subs(success_prob, const_prob), 3) < 0.22: #const_prob ** fail_count:
+            
+            if failure > fail_count:
+                return
+            
+            print("failure: ", failure)
+            
+            if self.is_leaf(hash_table, node) and\
+                most_release_count == node.release_count:# == node.push_count:
+                paths.append(path)
+                
+            else:
+                if node.left:
+                    if node.left.prob_cons < node.prob_cons:
+                        failure += 1
+                    dfs(node.left, path + [node.left], failure)
+
                 if node.right:
-                    dfs(node.right, path + [node.right])
+                    if node.right.prob_cons > node.prob_cons:
+                        failure -= 1
+                    dfs(node.right, path + [node.right], failure)
 
         dfs(self.root, [self.root])
         
         print('Number of paths: ',len(paths))
         # for path in paths:
         #     for node in path:
-        #         print(str(node.id)[:5])
+        #         print(str(node.id)[:5], '-', node.release_count, '-', str(node.clock))
         #     print('-'*50)
         return paths
     
          
-    def paths_to_curves(self, hash_table):
-        all_paths = self.findPaths(hash_table)
+    def paths_to_curves(self, hash_table, all_paths):
+        
+        time_symbol = symbols('t')
         all_curves = list()
         for path in all_paths:
-            curve = list()
-            for node in path:
-                if (node.push_count, node.release_count) not in curve:
-                    curve.append((node.push_count, node.release_count))
-            
+            curve = dict()
+            for node in path:        
+                curve[node.clock.subs(time_symbol, node.model['t'])] = node.push_count
+                # print('Appending: ', (node.clock.subs(time_symbol, node.model['t']), node.release_count))
+
             if curve not in all_curves:
                 all_curves.append(curve)
-        
-        # for c in all_curves:
-        #     print(c,',')
-        # print('LENGH OF all_curves:', len(all_curves))
-        
+                
         return all_curves
 
     
-    def path_to_id(self, hash_table):
-        all_paths = self.findPaths(hash_table)
-        all_IDs = list()
-        for path in all_paths:
-            IDs = list()
-            for node in path:
-                IDs.append([node.id, str(node.prob)])
-                
-            all_IDs.append(IDs)
-        
-        # for path in all_IDs:
-        #     for nodeID in path:
-        #         print(nodeID[0][:5], str(nodeID[1]))
-        #     print('-'*50)
-        
-        return all_IDs
-            
-            
     def plot_curves(self, hash_table, plot_name):
-        curves = self.paths_to_curves(hash_table)
+        most_release_count, time_model = self.find_most_released_count(hash_table)
+        time_model = 1
+        most_release_count = 2
+        arrival_curve = self.find_arrival_curve(hash_table, most_release_count, time_model)
         
-        for i, data_list in enumerate(curves):
-            x, y = zip(*data_list)
-            # y = [val + i * 0.01 for val in y]  # Adjust the y-values to separate the lines
-            # x = [val + i * 0.01 for val in x]  # Adjust the x-values to separate the lines
-            plt.plot(x, y, marker='o', label=f'Line {i+1}')
+        const_prob = 0.8
+        fail_count=2
+        all_paths = self.find_all_paths(hash_table, most_release_count, time_model, const_prob, fail_count)
+        
+        all_curves = self.paths_to_curves(hash_table, all_paths)
+        
+        # plot the arrival curve
+        arrival_x_values, arrival_y_values = zip(*arrival_curve.items())
+        plt.plot(arrival_x_values, arrival_y_values, marker='o', label=f'Line {0}')    
+            
+        # Plot all other curves
+        # for i, curve_dict in enumerate(all_curves):
+        #     x_values, y_values = zip(*curve_dict.items())
+        #     # y_values = [val + i * 0.03 for val in y_values]  # Adjust the y-values to separate the lines
+        #     # x_values = [val + i * 0.03 for val in x_values]  # Adjust the x-values to separate the lines
+        #     plt.plot(x_values, y_values, marker='o', label=f'Line {i + 1}')
+            
+            
 
-        plt.title('Arrival Curve and Service Curve Plot')
-        plt.xlabel(f'Successful Push Count ({len(curves)} paths)')
+        plt.title(f'Arrival Curve and Service Curve Plot (prob: {const_prob}, faile_count: {fail_count})')
+        plt.xlabel('Time')
         plt.ylabel('Release Count')
-        
-        info_text = f"Number of curves: {len(curves)}"
+
+        info_text = f"Number of curves: {len(all_curves)}"
         plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
         # plt.legend()
         plt.savefig(plot_name)
+        plt.clf()
         # plt.show()
-        
