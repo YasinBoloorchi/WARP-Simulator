@@ -173,7 +173,8 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     flow_counter = 0
     const_prob = 0.8
     threshold = 0.2
-    
+    arrival_curve = list()
+    service_curve = list()
     # Initial release 
     # for i in range(5):
     #     hash_table = simu.release(f'F{i}AA', hash_table)
@@ -205,6 +206,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                     # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
         
+        
+        
+        
+        
         ##### if clock % S == 0: Push section
         S_condition_name = f'(t+{clock})%{S}'
         
@@ -226,6 +231,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             else:
                 hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
             
+        # Gathering arrival curve and service curve data
+        arrival_curve.append(simu.most_release_count(hash_table))
+        service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
+        
         
         ### End loop condition
         if clock == t_plus:
@@ -234,14 +243,17 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             simulation_name = f'{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
             
-            simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+            # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
             # simu.test_of_correctenss2(hash_table, std_out=False)
             # simu.findPaths(hash_table)
+            print(arrival_curve)
+            print(service_curve)
+            simu.plot_a_curve(arrival_curve, f'Optimized arrival curve (S:{S}, R:{R})')
+            simu.plot_a_curve(service_curve, f'Optimized service curve (S:{S}, R:{R})')
             
             # simu.find_arrival_curve(hash_table)
             # simu.paths_to_curves(hash_table)
-            simu.plot_curves(hash_table, './Output/Plots/'+simulation_name+'_Service_curve')
-            
+            # simu.plot_curves(hash_table, './Output/Plots/'+simulation_name+'_Service_curve')
             
             # simu.visualize_dag(simulation_name, const_prob=const_prob)
             

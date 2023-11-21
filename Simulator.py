@@ -994,7 +994,21 @@ class Simulator:
             return True
         else:
             return False
-   
+    
+    
+    def most_release_count(self, hash_table):
+        """Search through all the nodes in the hash table and find the
+        largest release count 
+        """
+        
+        largest_release_count = 0
+        for node in hash_table.values():
+            if node.release_count > largest_release_count:
+                largest_release_count = node.release_count
+                largest_release_clock = node.clock
+
+        return largest_release_clock, largest_release_count
+    
     
     def find_arrival_curve(self, hash_table, most_released_count, time_model):
         # Setting the target as the node with most release count
@@ -1039,6 +1053,23 @@ class Simulator:
             arrival_curve[node.clock.subs(time_symbol, node.model['t'])] = node.release_count
 
         return arrival_curve
+
+
+    def least_push_count(self, hash_table, cons_prob, threshold):
+        """Search through all the nodes in the hash table and find the
+        least push count that is above the threshold 
+        """
+        success_prob = symbols('S')
+        least_push_count = hash_table[list(hash_table.keys())[0]].push_count
+        least_push_clock = hash_table[list(hash_table.keys())[0]].clock
+        for node in hash_table.values():
+            if node.push_count < least_push_count and\
+               node.prob.subs(success_prob, cons_prob) > threshold:
+                   
+                least_push_count = node.push_count
+                least_push_clock = node.clock
+
+        return least_push_clock, least_push_count
 
 
     def find_all_paths(self, hash_table, most_release_count, time_model, const_prob, fail_count):
@@ -1111,8 +1142,6 @@ class Simulator:
     
     def plot_curves(self, hash_table, plot_name):
         most_release_count, time_model = self.find_most_released_count(hash_table)
-        time_model = 1
-        most_release_count = 2
         arrival_curve = self.find_arrival_curve(hash_table, most_release_count, time_model)
         
         const_prob = 0.8
@@ -1144,3 +1173,24 @@ class Simulator:
         plt.savefig(plot_name)
         plt.clf()
         # plt.show()
+
+
+    def plot_a_curve(self, curve, plot_name, t_subs=''):
+        # plot the arrival curve
+        t = symbols('t')
+        
+        x_values, y_values = zip(*curve)
+        
+        # Check for time symbol substitute
+        if not t_subs:
+            x_values_str = [str(value) for value in x_values]
+        else:
+            x_values = [value.subs(t, t_subs) for value in x_values]
+        
+        plt.plot(x_values_str, y_values, marker='o', label=f'Line {0}')
+        plt.title(plot_name)
+        
+        plt.xlabel('Time')
+        plt.ylabel('Release Count')
+        plt.savefig("./Output/Plots/"+plot_name)
+        plt.clf()
