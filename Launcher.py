@@ -192,21 +192,21 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         
         # Split the states based on condition
         hash_table = simu.c_split(R_condition_name, tick_clock_flag=False, hash_table=hash_table)
-        
-        if clock % R == clock % S and clock % S == 0 and clock % R == 0:
-            tick_flag = False
+
         
         for state in list(hash_table.values()):
             if R_condition_name+"==0" in state.conditions:
-                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=tick_flag, tick_num=0)
+                hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=False, tick_num=0)
                 
             else:
-                hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=0)
+                hash_table = simu.single_sleep(tick_clock_flag=False, hash_table=hash_table, state=state, tick_num=0)
                 
                     # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
         
-        
+        # Gathering arrival curve and service curve data
+        arrival_curve.append(simu.most_release_count(hash_table))
+        print(arrival_curve)
         
         
         
@@ -219,43 +219,43 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         hash_table = simu.c_split(S_condition_name, tick_clock_flag=False, hash_table=hash_table)
 
         # Apply a pull
-        for state in list(hash_table.values()):
-            if tick_flag_flag:
-                tick_flag = False
-            else:
-                tick_flag = True
-                
+        for state in list(hash_table.values()):                
             if S_condition_name+"==0" in state.conditions:
-                hash_table = simu.single_pull(state, '', tick_clock_flag=tick_flag, hash_table=hash_table, tick_num=1, const_prob=const_prob)
+                hash_table = simu.single_pull(state, '', tick_clock_flag=True, hash_table=hash_table, tick_num=1, const_prob=const_prob)
 
             else:
-                hash_table = simu.single_sleep(tick_clock_flag=tick_flag, hash_table=hash_table, state=state, tick_num=1)
+                hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
             
-        # Gathering arrival curve and service curve data
-        arrival_curve.append(simu.most_release_count(hash_table))
+
         service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
         
         
         ### End loop condition
         if clock == t_plus:
             
-            today_date = datetime.now().strftime('%B_%d') 
-            simulation_name = f'{today_date}_controled_frequency_S{S}_R{R}_tPlus{t_plus}'
+            today_date = datetime.now().strftime('%B_%d')
+            simulation_name = f'{today_date}_S_{S}_R_{R}_clocks_{t_plus}'
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
             
             # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
             # simu.test_of_correctenss2(hash_table, std_out=False)
             # simu.findPaths(hash_table)
+            
             print(arrival_curve)
-            print(service_curve)
-            simu.plot_a_curve(arrival_curve, f'Optimized arrival curve (S:{S}, R:{R})')
-            simu.plot_a_curve(service_curve, f'Optimized service curve (S:{S}, R:{R})')
+            # x                    , y                    , z
+            # largest_release_clock, largest_release_count, largest_release_model
+            arrival_curve_2d_data = [(x, y) for x, y, z in arrival_curve]
+            simu.plot_arrival_curve_2D(arrival_curve_2d_data, simulation_name)
+            
+            arrival_curve_3d_data = [(z, str(x), y) for x, y, z in arrival_curve]
+            print("arrival_curve_3d_data: ", arrival_curve_3d_data)
+            simu.plot_arrival_curve_3D(arrival_curve_3d_data)
             
             # simu.find_arrival_curve(hash_table)
             # simu.paths_to_curves(hash_table)
-            # simu.plot_curves(hash_table, './Output/Plots/'+simulation_name+'_Service_curve')
+            # simu.plot_all_curves(hash_table, simulation_name, threshold=0)
             
-            # simu.visualize_dag(simulation_name, const_prob=const_prob)
+            simu.visualize_dag(simulation_name, const_prob=const_prob)
             
             
             # --- Verify every single curve by visualizing them all (TIME CONSUMING)

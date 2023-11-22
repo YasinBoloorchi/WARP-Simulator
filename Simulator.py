@@ -10,6 +10,8 @@ import hashlib
 import z3
 
 import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 
 class State:
     def __init__(self, workload={}):
@@ -507,7 +509,7 @@ class Simulator:
             hash_table[fail_state.id].tick_clock(tick_num)
         
         # Remove sat model
-        fail_state.model = ''
+        # fail_state.model = ''
         
         # Generate unique id
         fail_state.update_id()
@@ -1003,11 +1005,12 @@ class Simulator:
         
         largest_release_count = 0
         for node in hash_table.values():
-            if node.release_count > largest_release_count:
+            if node.release_count > largest_release_count and node.model != 'unsat':
                 largest_release_count = node.release_count
                 largest_release_clock = node.clock
-
-        return largest_release_clock, largest_release_count
+                largest_release_model = node.model['t']
+                
+        return largest_release_clock, largest_release_count, largest_release_model
     
     
     def find_arrival_curve(self, hash_table, most_released_count, time_model):
@@ -1072,7 +1075,7 @@ class Simulator:
         return least_push_clock, least_push_count
 
 
-    def find_all_paths(self, hash_table, most_release_count, time_model, const_prob, fail_count):
+    def find_all_paths(self, hash_table, most_release_count, time_model, const_prob, fail_count, threshold):
         print('Finding all paths')
         # Setting the target as the node with most successful transmitted packet
         largest_push_count = self.find_largest_success(hash_table)
@@ -1086,22 +1089,16 @@ class Simulator:
             #     return
             # visited.add(node)
             
+            node_cons_probability = round(factor(node.prob).subs(success_prob, const_prob), 3)
             
-            if node.model == 'unsat':
+            if node.model == 'unsat' or\
+                node.model['t'] != time_model or\
+                        node_cons_probability < threshold: #const_prob ** fail_count:
+                    # failure > fail_count or\
                 return
             
-            if node.model['t'] != time_model:
-                return
-                    #or round(factor(node.prob).subs(success_prob, const_prob), 3) < 0.22: #const_prob ** fail_count:
-            
-            if failure > fail_count:
-                return
-            
-            print("failure: ", failure)
-            
-            if self.is_leaf(hash_table, node) and\
-                most_release_count == node.release_count:# == node.push_count:
-                paths.append(path)
+            if self.is_leaf(hash_table, node): # and most_release_count == node.release_count:# == node.push_count:
+                paths.append(path) 
                 
             else:
                 if node.left:
@@ -1131,7 +1128,7 @@ class Simulator:
         for path in all_paths:
             curve = dict()
             for node in path:        
-                curve[node.clock.subs(time_symbol, node.model['t'])] = node.push_count
+                curve[node.clock] = node.push_count
                 # print('Appending: ', (node.clock.subs(time_symbol, node.model['t']), node.release_count))
 
             if curve not in all_curves:
@@ -1140,42 +1137,46 @@ class Simulator:
         return all_curves
 
     
-    def plot_curves(self, hash_table, plot_name):
+    def plot_all_curves(self, hash_table, plot_name, const_prob=0.8, fail_count=2, threshold=0.2, t_subs=''):
+        t = symbols('t')
         most_release_count, time_model = self.find_most_released_count(hash_table)
-        arrival_curve = self.find_arrival_curve(hash_table, most_release_count, time_model)
-        
-        const_prob = 0.8
-        fail_count=2
-        all_paths = self.find_all_paths(hash_table, most_release_count, time_model, const_prob, fail_count)
-        
+        all_paths = self.find_all_paths(hash_table, most_release_count, time_model, const_prob, fail_count, threshold)
         all_curves = self.paths_to_curves(hash_table, all_paths)
-        
-        # plot the arrival curve
-        arrival_x_values, arrival_y_values = zip(*arrival_curve.items())
-        plt.plot(arrival_x_values, arrival_y_values, marker='o', label=f'Line {0}')    
             
         # Plot all other curves
-        # for i, curve_dict in enumerate(all_curves):
-        #     x_values, y_values = zip(*curve_dict.items())
-        #     # y_values = [val + i * 0.03 for val in y_values]  # Adjust the y-values to separate the lines
-        #     # x_values = [val + i * 0.03 for val in x_values]  # Adjust the x-values to separate the lines
-        #     plt.plot(x_values, y_values, marker='o', label=f'Line {i + 1}')
+        for i, curve_dict in enumerate(all_curves):
+            x_values, y_values = zip(*curve_dict.items())
             
+            # Check for time symbol substitute
+            if not t_subs:
+                x_values = [str(value) for value in x_values]
+            else:
+                x_values = [value.subs(t, t_subs) for value in x_values]
+            
+            # Uncomment to separate lines
+            # y_values = [val + i * 0.03 for val in y_values]  # Adjust the y-values to separate the lines
+            # x_values = [val + i * 0.03 for val in x_values]  # Adjust the x-values to separate the lines
+            
+            plt.plot(x_values, y_values, marker='o', label=f'Path {i + 1}')
             
 
-        plt.title(f'Arrival Curve and Service Curve Plot (prob: {const_prob}, faile_count: {fail_count})')
+        #specify axis tick step sizes
+        # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        # plt.yticks(np.arange(min(y_values), max(y_values)+1, 1))
+        
+        plt.title(f'All possible curves (Success Probability:{const_prob}, Threshold: {threshold}, faile_count: {fail_count})')
         plt.xlabel('Time')
-        plt.ylabel('Release Count')
+        plt.ylabel('Transmitted packets')
 
         info_text = f"Number of curves: {len(all_curves)}"
         plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
-        # plt.legend()
-        plt.savefig(plot_name)
-        plt.clf()
+        plt.legend()
+        plt.savefig("./Output/Plots/"+plot_name+'_all_curve')
+        # plt.clf()
         # plt.show()
 
 
-    def plot_a_curve(self, curve, plot_name, t_subs=''):
+    def plot_arrival_curve_2D(self, curve, plot_name, t_subs=''):
         # plot the arrival curve
         t = symbols('t')
         
@@ -1183,14 +1184,49 @@ class Simulator:
         
         # Check for time symbol substitute
         if not t_subs:
-            x_values_str = [str(value) for value in x_values]
+            x_values = [str(value) for value in x_values]
         else:
             x_values = [value.subs(t, t_subs) for value in x_values]
         
-        plt.plot(x_values_str, y_values, marker='o', label=f'Line {0}')
-        plt.title(plot_name)
+        # Plot it
+        plt.plot(x_values, y_values, marker='o', label=f'Arrival Curve')
         
-        plt.xlabel('Time')
-        plt.ylabel('Release Count')
-        plt.savefig("./Output/Plots/"+plot_name)
-        plt.clf()
+        #specify axis tick step sizes
+        # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        plt.yticks(np.arange(min(y_values), max(y_values)+1, 1))
+        
+        # Plot's specifications
+        plt.title(plot_name)
+        plt.legend()
+        plt.xlabel("Time")
+        plt.ylabel('Released packets')
+        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
+        
+        # Clear plot for later use
+        # plt.clf()
+        
+        
+    def plot_arrival_curve_3D(self, data):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
+        # Extract x, y, and z values from the data
+        x_values = [entry[0] for entry in data]
+        y_values = [entry[1] for entry in data]
+        z_values = [entry[2] for entry in data]
+
+        # Convert x_values to numerical indices for categorical plotting
+        y_indices = np.arange(len(y_values))
+
+        ax.plot(x_values, y_indices, z_values, marker='o', color='r', linestyle='-', markersize=8)
+
+        ax.set_xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        ax.set_yticks(np.arange(min(y_indices), max(y_indices)+1, 1))
+        ax.set_zticks(np.arange(min(z_values), max(z_values)+1, 1))
+        ax.set_yticklabels(y_indices)
+
+        ax.set_xlabel('Time model')
+        ax.set_ylabel('Time')
+        ax.set_zlabel('Packet Released')
+
+        plt.show()

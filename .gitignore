@@ -1,2 +1,3 @@
-# ignore archive of graphs
+# ignore archive of graphs and plots
 ./Output/Graphs/Archive/
+./Output/Plots/Archive/
