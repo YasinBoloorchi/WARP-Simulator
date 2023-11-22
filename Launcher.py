@@ -164,7 +164,11 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
 
 # === Step five ====
 def while_with_conditional_split(S=100, R=100, t_plus=200):
-    print(f'Running simulation for S={S} and R={R}')
+    # print(f'Running simulation for S={S} and R={R}')
+    today_date = datetime.now().strftime('%B_%d')
+    simulation_name = f'{today_date}_S_{S}_R_{R}_clocks_{t_plus}'
+    
+    print(simulation_name)
     clock = 0
     q = list()
     simu = Simulator()
@@ -181,10 +185,8 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     
     
     while(True):
-        tick_flag = True
-        tick_flag_flag = False
         print("Clock: ", clock)
-        print('Length of hash_table: ', len(hash_table))
+        print('Length of hash_table: ', len(hash_table))    
         
         ##### if clock % R == 0: Release Section
         R_condition_name = f'(t+{clock})%{R}'
@@ -193,6 +195,8 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         # Split the states based on condition
         hash_table = simu.c_split(R_condition_name, tick_clock_flag=False, hash_table=hash_table)
 
+        # # Gathering arrival curve and service curve data
+        # arrival_curve.append(simu.most_release_count(hash_table))
         
         for state in list(hash_table.values()):
             if R_condition_name+"==0" in state.conditions:
@@ -204,16 +208,11 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                     # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
         
-        # Gathering arrival curve and service curve data
         arrival_curve.append(simu.most_release_count(hash_table))
-        print(arrival_curve)
-        
         
         
         ##### if clock % S == 0: Push section
         S_condition_name = f'(t+{clock})%{S}'
-        
-        tick_flag = True
         
         # Split the states based on condition
         hash_table = simu.c_split(S_condition_name, tick_clock_flag=False, hash_table=hash_table)
@@ -226,15 +225,17 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             else:
                 hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
             
-
-        service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
         
+        # service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
         
+        clock += 1
+        
+        # arrival_curve.append(simu.most_release_count(hash_table))
         ### End loop condition
-        if clock == t_plus:
+        if clock == t_plus:        
+            arrival_curve.append(simu.most_release_count(hash_table))
+            # print(arrival_curve)
             
-            today_date = datetime.now().strftime('%B_%d')
-            simulation_name = f'{today_date}_S_{S}_R_{R}_clocks_{t_plus}'
             # simu.test_of_correctness(hash_table=hash_table, std_out=True)
             
             # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
@@ -253,9 +254,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             
             # simu.find_arrival_curve(hash_table)
             # simu.paths_to_curves(hash_table)
-            # simu.plot_all_curves(hash_table, simulation_name, threshold=0)
+            simu.plot_all_curves(hash_table, simulation_name, threshold=0)
+            # simu.plot_all_curves(hash_table, simulation_name, threshold=0.2)
             
-            simu.visualize_dag(simulation_name, const_prob=const_prob)
+            # simu.visualize_dag(simulation_name, const_prob=const_prob)
             
             
             # --- Verify every single curve by visualizing them all (TIME CONSUMING)
@@ -268,7 +270,6 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                 
             return hash_table
         
-        clock += 1
 
 
 def kowsars_work():
@@ -341,7 +342,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=2, t_plus=4)
+    while_with_conditional_split(S=2, R=3, t_plus=18)
     
     # === Kowsar's ==
     # kowsars_work()

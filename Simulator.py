@@ -242,6 +242,10 @@ class Simulator:
         """
               
         state = hash_table.pop(state.id)
+        
+        if state.model == 'unsat':
+            return hash_table
+        
         state.instruction = f'Release({flow_name})'
         new_state = copy.deepcopy(state)
         new_state.workload[flow_name] = False
@@ -494,6 +498,7 @@ class Simulator:
         # Update new hashtable with success state
         hash_table[success_state.id] = success_state
         
+        path_eval_result = self.path_eval(success_state)
         # Add to right child of the old state
         state.right = hash_table[success_state.id]
         
@@ -520,6 +525,7 @@ class Simulator:
         # Update new hashtable with success state
         hash_table[fail_state.id] = fail_state
 
+        path_eval_result = self.path_eval(fail_state)
         # Add to right child of the old state
         state.left = hash_table[fail_state.id]
         
@@ -796,7 +802,8 @@ class Simulator:
                   'Prob(Const): '+str(round(factor(hash_table.get(state).prob).subs(success_prob, const_prob), 3))+ '\t|'+\
                   'Queue: '+ ''.join(f'|{e}' for e in hash_table.get(state).queue)+'\t|'+\
                   'Release Count: '+ str(hash_table.get(state).release_count)+'\t|'+'\n'+\
-                  'Push Count: '+ str(hash_table.get(state).push_count)+'\t|'+'\n'#+\
+                  'Push Count: '+ str(hash_table.get(state).push_count)+'\t|'+'\n'+\
+                  'Sat Model: ' + str(hash_table.get(state).model) #+\
                   
                           
                 #   'Conditions:'+ hash_table.get(state).conditions + '|'
@@ -1003,12 +1010,21 @@ class Simulator:
         largest release count 
         """
         
-        largest_release_count = 0
+        for n in list(hash_table.keys()):
+            if hash_table[n].model != 'unsat':
+            
+                first_node = hash_table[n]
+                largest_release_count = first_node.release_count
+                largest_release_clock = first_node.clock
+                largest_release_model = first_node.model['t']
+                largest_release_id = first_node.id
+                
         for node in hash_table.values():
-            if node.release_count > largest_release_count and node.model != 'unsat':
+            if node.model != 'unsat' and node.release_count > largest_release_count:
                 largest_release_count = node.release_count
                 largest_release_clock = node.clock
                 largest_release_model = node.model['t']
+                largest_release_id = node.id
                 
         return largest_release_clock, largest_release_count, largest_release_model
     
@@ -1157,12 +1173,13 @@ class Simulator:
             # y_values = [val + i * 0.03 for val in y_values]  # Adjust the y-values to separate the lines
             # x_values = [val + i * 0.03 for val in x_values]  # Adjust the x-values to separate the lines
             
-            plt.plot(x_values, y_values, marker='o', label=f'Path {i + 1}')
+            plt.plot(x_values, y_values, marker='o')#, label=f'Path {i + 1}')
             
 
         #specify axis tick step sizes
-        # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
-        # plt.yticks(np.arange(min(y_values), max(y_values)+1, 1))
+        # plt.xticks(np.arange(0, max(x_values)+1, 1))
+        plt.xticks(rotation=45)
+        plt.yticks(np.arange(0, max(y_values)+1, 1))
         
         plt.title(f'All possible curves (Success Probability:{const_prob}, Threshold: {threshold}, faile_count: {fail_count})')
         plt.xlabel('Time')
@@ -1170,7 +1187,7 @@ class Simulator:
 
         info_text = f"Number of curves: {len(all_curves)}"
         plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
-        plt.legend()
+        # plt.legend()
         plt.savefig("./Output/Plots/"+plot_name+'_all_curve')
         # plt.clf()
         # plt.show()
@@ -1189,11 +1206,12 @@ class Simulator:
             x_values = [value.subs(t, t_subs) for value in x_values]
         
         # Plot it
-        plt.plot(x_values, y_values, marker='o', label=f'Arrival Curve')
+        plt.plot(x_values, y_values, marker='s', label=f'Arrival Curve', markerfacecolor='k')
         
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
-        plt.yticks(np.arange(min(y_values), max(y_values)+1, 1))
+        plt.xticks(rotation=45)
+        plt.yticks(np.arange(0, max(y_values)+1, 1))
         
         # Plot's specifications
         plt.title(plot_name)
@@ -1215,18 +1233,20 @@ class Simulator:
         y_values = [entry[1] for entry in data]
         z_values = [entry[2] for entry in data]
 
-        # Convert x_values to numerical indices for categorical plotting
-        y_indices = np.arange(len(y_values))
-
+        # Create a mapping of unique y_values to numerical indices
+        y_unique = list(y_values)
+        y_indices = [y_unique.index(y) for y in y_values]
+        
         ax.plot(x_values, y_indices, z_values, marker='o', color='r', linestyle='-', markersize=8)
 
         ax.set_xticks(np.arange(min(x_values), max(x_values)+1, 1))
         ax.set_yticks(np.arange(min(y_indices), max(y_indices)+1, 1))
         ax.set_zticks(np.arange(min(z_values), max(z_values)+1, 1))
-        ax.set_yticklabels(y_indices)
+        ax.set_yticklabels(y_values)  # Set tick labels to the actual y_values
 
         ax.set_xlabel('Time model')
         ax.set_ylabel('Time')
         ax.set_zlabel('Packet Released')
 
         plt.show()
+            
