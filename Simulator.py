@@ -1188,12 +1188,12 @@ class Simulator:
         info_text = f"Number of curves: {len(all_curves)}"
         plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
         # plt.legend()
-        plt.savefig("./Output/Plots/"+plot_name+'_all_curve')
+        plt.savefig("./Output/Plots/"+plot_name+'_all_push_counts')
         # plt.clf()
         # plt.show()
 
 
-    def plot_arrival_curve_2D(self, curve, plot_name, t_subs=''):
+    def plot_release_curve_2D(self, curve, plot_name, t_subs=''):
         # plot the arrival curve
         t = symbols('t')
         
@@ -1206,7 +1206,7 @@ class Simulator:
             x_values = [value.subs(t, t_subs) for value in x_values]
         
         # Plot it
-        plt.plot(x_values, y_values, marker='s', label=f'Arrival Curve', markerfacecolor='k')
+        plt.plot(x_values, y_values, marker='s', label=f'Cumulative arrival process', markerfacecolor='k')
         
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
@@ -1218,13 +1218,13 @@ class Simulator:
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel('Released packets')
-        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
-        
+        plt.savefig("./Output/Plots/"+plot_name+'_release_count')
+        # plt.show()
         # Clear plot for later use
-        # plt.clf()
+        plt.clf()
         
         
-    def plot_arrival_curve_3D(self, data):
+    def plot_release_curve_3D(self, data):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
 
@@ -1250,3 +1250,42 @@ class Simulator:
 
         plt.show()
             
+            
+    def get_arrival_curve(self, data):
+        arrival_curve = list()
+        
+        # for each time duration (td: time duration)
+        for td in range(1, len(data)):
+            delta = list()
+            print('     Time Duration: ',td)
+            # we calculate maximum delta for each data[i: i+td+1]
+            for i in range(len(data)-td):
+                segment = data[i: i+td+1]
+                print(f'data[{i}: {i+td+1}]', segment, '     max - min => ', max(segment) - min(segment))
+                delta.append(max(segment) - min(segment))
+                
+            print('         Max is: ', max(delta))
+            arrival_curve.append((td, max(delta)))
+            
+        return arrival_curve
+
+   
+    def plot_arrival_curve(self, service_curve, plot_name):
+        x_values, y_values = zip(*service_curve)
+        
+        # Plot it
+        plt.plot(x_values, y_values, marker='s', label=f'Arrival Curve', markerfacecolor='k')
+        
+        # Customization
+        plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        plt.yticks(np.arange(0, max(y_values)+1, 1))
+        plt.title(plot_name)
+        plt.xlabel("Time Duration") #Δ
+        plt.ylabel('Packet Release')
+        plt.grid()
+        plt.legend()
+        # plt.show()
+        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
+        plt.clf()
+        
+        

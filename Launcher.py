@@ -177,7 +177,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     flow_counter = 0
     const_prob = 0.8
     threshold = 0.2
-    arrival_curve = list()
+    release_curve = list()
     service_curve = list()
     # Initial release 
     # for i in range(5):
@@ -195,9 +195,6 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         # Split the states based on condition
         hash_table = simu.c_split(R_condition_name, tick_clock_flag=False, hash_table=hash_table)
 
-        # # Gathering arrival curve and service curve data
-        # arrival_curve.append(simu.most_release_count(hash_table))
-        
         for state in list(hash_table.values()):
             if R_condition_name+"==0" in state.conditions:
                 hash_table = simu.single_release(flow_name=flow_name, hash_table=hash_table, state=state, tick_clock_flag=False, tick_num=0)
@@ -208,7 +205,16 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
                     # hash_table = simu.add_sleep(tick_clock_flag=True, hash_table=hash_table, tick_num=1)
         flow_counter += 1
         
-        arrival_curve.append(simu.most_release_count(hash_table))
+        # Gathering arrival curve and service curve data
+        release_curve.append(simu.most_release_count(hash_table))
+        
+        clock += 1
+        
+        # release_curve.append(simu.most_release_count(hash_table))
+        ### End loop condition
+        if clock == t_plus:
+            end_loop(simulation_name, simu, hash_table, release_curve)
+            return hash_table
         
         
         ##### if clock % S == 0: Push section
@@ -227,48 +233,6 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             
         
         # service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
-        
-        clock += 1
-        
-        # arrival_curve.append(simu.most_release_count(hash_table))
-        ### End loop condition
-        if clock == t_plus:        
-            arrival_curve.append(simu.most_release_count(hash_table))
-            # print(arrival_curve)
-            
-            # simu.test_of_correctness(hash_table=hash_table, std_out=True)
-            
-            # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
-            # simu.test_of_correctenss2(hash_table, std_out=False)
-            # simu.findPaths(hash_table)
-            
-            print(arrival_curve)
-            # x                    , y                    , z
-            # largest_release_clock, largest_release_count, largest_release_model
-            arrival_curve_2d_data = [(x, y) for x, y, z in arrival_curve]
-            simu.plot_arrival_curve_2D(arrival_curve_2d_data, simulation_name)
-            
-            arrival_curve_3d_data = [(z, str(x), y) for x, y, z in arrival_curve]
-            print("arrival_curve_3d_data: ", arrival_curve_3d_data)
-            simu.plot_arrival_curve_3D(arrival_curve_3d_data)
-            
-            # simu.find_arrival_curve(hash_table)
-            # simu.paths_to_curves(hash_table)
-            simu.plot_all_curves(hash_table, simulation_name, threshold=0)
-            # simu.plot_all_curves(hash_table, simulation_name, threshold=0.2)
-            
-            # simu.visualize_dag(simulation_name, const_prob=const_prob)
-            
-            
-            # --- Verify every single curve by visualizing them all (TIME CONSUMING)
-            # ids_of_paths = simu.path_to_id(hash_table)
-            # path_counter = 0
-            # for path in ids_of_paths:
-            #     simu.visualize_dag(simulation_name+f'Path#{path_counter}', const_prob=const_prob, path_trace=path)
-            #     path_counter += 1
-                
-                
-            return hash_table
         
 
 
@@ -325,6 +289,56 @@ def run_loop(instruction_file_path):
     return
 
 
+def end_loop(simulation_name, simu, hash_table, release_curve):
+    # print(release_curve)
+    
+    # simu.test_of_correctness(hash_table=hash_table, std_out=True)
+    # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+    # simu.test_of_correctenss2(hash_table, std_out=False)
+    # simu.findPaths(hash_table)
+    
+    print("release_curve: ", release_curve)
+    # x                    , y                    , z
+    # largest_release_clock, largest_release_count, largest_release_model
+    #   ^
+    #   |
+    #   |
+    #   |_________>
+    release_curve_2d_data = [(x, y) for x, y, z in release_curve]
+    simu.plot_release_curve_2D(release_curve_2d_data, simulation_name)
+    
+    
+    #     ___
+    #    /__/|
+    #    |__|/
+    # release_curve_3d_data = [(z, str(x), y) for x, y, z in release_curve]
+    # print("release_curve_3d_data: ", release_curve_3d_data)
+    # simu.plot_release_curve_3D(release_curve_3d_data)
+    
+    # simu.find_release_curve(hash_table)
+    # simu.paths_to_curves(hash_table)
+    # simu.plot_all_curves(hash_table, simulation_name, threshold=0)
+    # simu.plot_all_curves(hash_table, simulation_name, threshold=0.3)
+    
+    
+    release_curve_1d_data = release_curve_2d_data = [y for x, y, z in release_curve]
+    print("release curve 1d data: ", release_curve_1d_data)
+    ac = simu.get_arrival_curve(release_curve_1d_data)
+    print(ac)
+    simu.plot_arrival_curve(ac, simulation_name)
+    
+    
+    # simu.visualize_dag(simulation_name, const_prob=const_prob)
+    
+    
+    # --- Verify every single curve by visualizing them all (TIME CONSUMING)
+    # ids_of_paths = simu.path_to_id(hash_table)
+    # path_counter = 0
+    # for path in ids_of_paths:
+    #     simu.visualize_dag(simulation_name+f'Path#{path_counter}', const_prob=const_prob, path_trace=path)
+    #     path_counter += 1
+            
+
 def main():
     # ========== Costum simulations ===========
     
@@ -342,7 +356,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=2, R=3, t_plus=18)
+    while_with_conditional_split(S=1, R=2, t_plus=8)
     
     # === Kowsar's ==
     # kowsars_work()
