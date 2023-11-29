@@ -163,7 +163,7 @@ def while_with_controled_frequency_new(S=100, R=100, t=0, t_plus=200):
 
 
 # === Step five ====
-def while_with_conditional_split(S=100, R=100, t_plus=200):
+def while_with_conditional_split(S=100, R=100, t_plus=200, sc_threashold=0.1):
     # print(f'Running simulation for S={S} and R={R}')
     today_date = datetime.now().strftime('%B_%d')
     simulation_name = f'{today_date}_S_{S}_R_{R}_clocks_{t_plus}'
@@ -178,6 +178,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
     const_prob = 0.8
     threshold = 0.2
     release_curve = list()
+    push_curve = list()
     service_curve = list()
     # Initial release 
     # for i in range(5):
@@ -207,14 +208,11 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         
         # Gathering arrival curve and service curve data
         release_curve.append(simu.most_release_count(hash_table))
-        
+        push_curve.append(simu.least_push_count(hash_table, threashold=sc_threashold))
 
         
         # release_curve.append(simu.most_release_count(hash_table))
-        ### End loop condition
-        if clock == t_plus:
-            end_loop(simulation_name, simu, hash_table, release_curve)
-            return hash_table
+        
         
         
         ##### if clock % S == 0: Push section
@@ -233,6 +231,11 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             
         
         # service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
+        
+        ### End loop condition
+        if clock == t_plus:
+            end_loop(simulation_name, simu, hash_table, release_curve, push_curve)
+            return hash_table
         
         clock += 1
         
@@ -291,7 +294,7 @@ def run_loop(instruction_file_path):
     return
 
 
-def end_loop(simulation_name, simu, hash_table, release_curve):
+def end_loop(simulation_name, simu, hash_table, release_curve, push_curve):
     
     # ?????????????????????????????????????????????????????????????
     # simu.test_of_correctness(hash_table=hash_table, std_out=True)
@@ -307,12 +310,22 @@ def end_loop(simulation_name, simu, hash_table, release_curve):
     print("release_curve: ", release_curve)
     # x                    , y                    , z
     # largest_release_clock, largest_release_count, largest_release_model
-    #   ^
-    #   |
+    #   ^    ____
+    #   |___/
     #   |
     #   |---------->
     release_curve_2d_data = [(x, y) for x, y, z in release_curve]
+    print(release_curve_2d_data)
     simu.plot_release_curve_2D(release_curve_2d_data, simulation_name)
+    
+    # Push Curve
+    #   ^
+    #   |     ____
+    #   |____/
+    #   |---------->
+    # print("Push curve:    ", push_curve)
+    push_curve_2d_data = [(x, y) for x, y, z in push_curve]
+    simu.plot_push_curve_2D(push_curve_2d_data, simulation_name)
     
     
     #     ___
@@ -333,11 +346,21 @@ def end_loop(simulation_name, simu, hash_table, release_curve):
     #   |   __/
     #   |__/
     #   |---------->
-    release_curve_1d_data = release_curve_2d_data = [y for x, y, z in release_curve]
-    print("release curve 1d data: ", release_curve_1d_data)
-    ac = simu.get_arrival_curve(release_curve_1d_data)
+    release_curve_1d_data =  [y for x, y, z in release_curve]
+    ac = simu.get_the_curve(release_curve_1d_data)
     print("Arrival curve: ", ac)
     simu.plot_arrival_curve(ac, simulation_name)
+    
+    
+    # Service Curve
+    #   ^      __
+    #   |   __/
+    #   |__/
+    #   |---------->
+    push_curve_1d_data = [y for x, y, z in push_curve]
+    sc = simu.get_the_curve(push_curve_1d_data)
+    print("Service curve: ", sc)
+    simu.plot_service_curve(sc, simulation_name)
     
     
     
@@ -382,7 +405,9 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=2, t_plus=4)
+    
+    
+    while_with_conditional_split(S=1, R=2, t_plus=6, sc_threashold=0.3)
     
     # === Kowsar's ==
     # kowsars_work()

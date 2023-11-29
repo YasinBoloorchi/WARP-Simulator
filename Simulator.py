@@ -1036,7 +1036,7 @@ class Simulator:
         """
         
         for n in list(hash_table.keys()):
-            if hash_table[n].model != 'unsat' and hash_table[n].path_cons >= threashold:
+            if hash_table[n].model != 'unsat' and hash_table[n].prob_cons >= threashold:
                 first_node = hash_table[n]
                 least_push_count = first_node.push_count
                 least_push_clock = first_node.clock
@@ -1045,11 +1045,12 @@ class Simulator:
                 break
                 
         for node in hash_table.values():
+            # print('Push count: ', node.prob_)
             if node.model != 'unsat' and\
                 node.push_count < least_push_count and\
-                    node.path_cons >= threashold:
+                    node.prob_cons >= threashold:
                     
-                least_push_count = node.release_count
+                least_push_count = node.push_count
                 least_push_clock = node.clock
                 least_push_model = node.model['t']
                 least_push_id = node.id
@@ -1102,7 +1103,7 @@ class Simulator:
         return arrival_curve
 
 
-    def least_push_count(self, hash_table, cons_prob, threshold):
+    def search_for_least_push_count(self, hash_table, cons_prob, threshold):
         """Search through all the nodes in the hash table and find the
         least push count that is above the threshold 
         """
@@ -1244,12 +1245,13 @@ class Simulator:
         # Plot's specifications
         plt.title(plot_name)
         plt.legend()
+        plt.grid()
         plt.xlabel("Time")
-        plt.ylabel('Released packets')
+        plt.ylabel('Number of packets')
         plt.savefig("./Output/Plots/"+plot_name+'_release_count')
         # plt.show()
         # Clear plot for later use
-        plt.clf()
+        # plt.clf()
         
         
     def plot_release_curve_3D(self, data):
@@ -1277,13 +1279,45 @@ class Simulator:
         ax.set_zlabel('Packet Released')
 
         plt.show()
+    
+        
+    def plot_push_curve_2D(self, curve, plot_name, t_subs=''):
+        # plot the arrival curve
+        t = symbols('t')
+        
+        x_values, y_values = zip(*curve)
+        
+        # Check for time symbol substitute
+        if not t_subs:
+            x_values = [str(value) for value in x_values]
+        else:
+            x_values = [value.subs(t, t_subs) for value in x_values]
+        
+        # Plot it
+        plt.plot(x_values, y_values, marker='s', label=f'Cumulative pushed packets', markerfacecolor='k')
+        
+        #specify axis tick step sizes
+        # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        plt.xticks(rotation=45)
+        plt.yticks(np.arange(0, max(y_values)+1, 1))
+        
+        # Plot's specifications
+        plt.title(plot_name)
+        plt.legend()
+        # plt.grid()
+        plt.xlabel("Time")
+        plt.ylabel('Number of packets')
+        plt.savefig("./Output/Plots/"+plot_name+'_push_count')
+        # plt.show()
+        # Clear plot for later use
+        plt.clf()
             
             
-    def get_arrival_curve(self, data, verbose=False):
+    def get_the_curve(self, data, verbose=False):
         arrival_curve = list()
         
         # for each time duration (td: time duration)
-        for td in range(1, len(data)):
+        for td in range(0, len(data)):
             delta = list()
             if verbose: print('     Time Duration: ',td)
             
@@ -1310,10 +1344,34 @@ class Simulator:
         plt.yticks(np.arange(0, max(y_values)+1, 1))
         plt.title(plot_name)
         plt.xlabel("Time Duration") #Δ
-        plt.ylabel('Packet Release')
+        plt.ylabel('Number of packets')
         plt.grid()
         plt.legend()
         # plt.show()
         plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
-        plt.clf()
+        # plt.clf()
         
+    
+    def plot_service_curve(self, service_curve, plot_name):
+        x_values, y_values = zip(*service_curve)
+        
+        # Customization
+        
+        # x_values = [val - 1 * 0.05 for val in x_values]  # Adjust the x-values to separate the lines
+        # y_values = [val + 1 * 0.05 for val in y_values]  # Adjust the y-values to separate the lines
+            
+        
+        # Plot it
+        plt.plot(x_values, y_values, marker='s', label=f'Service Curve', markerfacecolor='k')
+        
+        plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        plt.yticks(np.arange(0, max(y_values)+1, 1))
+        plt.title(plot_name)
+        plt.xlabel("Time Duration") #Δ
+        plt.ylabel('Number of packets')
+        # plt.grid()
+        plt.legend()
+        # plt.show()
+        plt.savefig("./Output/Plots/"+plot_name+'_service_curve')
+        plt.clf()
+    
