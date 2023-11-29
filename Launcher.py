@@ -208,7 +208,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
         # Gathering arrival curve and service curve data
         release_curve.append(simu.most_release_count(hash_table))
         
-        clock += 1
+
         
         # release_curve.append(simu.most_release_count(hash_table))
         ### End loop condition
@@ -233,6 +233,8 @@ def while_with_conditional_split(S=100, R=100, t_plus=200):
             
         
         # service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
+        
+        clock += 1
         
 
 
@@ -290,11 +292,16 @@ def run_loop(instruction_file_path):
 
 
 def end_loop(simulation_name, simu, hash_table, release_curve):
-    # print(release_curve)
     
+    # ?????????????????????????????????????????????????????????????
     # simu.test_of_correctness(hash_table=hash_table, std_out=True)
-    # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
     # simu.test_of_correctenss2(hash_table, std_out=False)
+    # ?????????????????????????????????????????????????????????????
+    
+    # LOG |||| ||||| ||||| |||||||||||| |||||||| || ||||||||||||||||||||||
+    # simu.imprint_hash_table(simulation_name, hash_table, const_prob=0.9)
+    
+    
     # simu.findPaths(hash_table)
     
     print("release_curve: ", release_curve)
@@ -303,7 +310,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve):
     #   ^
     #   |
     #   |
-    #   |_________>
+    #   |---------->
     release_curve_2d_data = [(x, y) for x, y, z in release_curve]
     simu.plot_release_curve_2D(release_curve_2d_data, simulation_name)
     
@@ -321,16 +328,35 @@ def end_loop(simulation_name, simu, hash_table, release_curve):
     # simu.plot_all_curves(hash_table, simulation_name, threshold=0.3)
     
     
+    # Arrival Curve
+    #   ^      __
+    #   |   __/
+    #   |__/
+    #   |---------->
     release_curve_1d_data = release_curve_2d_data = [y for x, y, z in release_curve]
     print("release curve 1d data: ", release_curve_1d_data)
     ac = simu.get_arrival_curve(release_curve_1d_data)
-    print(ac)
+    print("Arrival curve: ", ac)
     simu.plot_arrival_curve(ac, simulation_name)
     
     
+    
+    # DAG Viz
+    #               ( )
+    #              /   \
+    #           ( )     ( )
+    #          /   \   /   \
+    #        ( )  ( ) ( )  ( )
     # simu.visualize_dag(simulation_name, const_prob=const_prob)
     
     
+    
+    # DAG Viz
+    #               ( )
+    #              /   \\
+    #           ( )     ( )
+    #          /   \   //  \
+    #        ( )  ( ) ( )  ( )
     # --- Verify every single curve by visualizing them all (TIME CONSUMING)
     # ids_of_paths = simu.path_to_id(hash_table)
     # path_counter = 0
@@ -356,7 +382,7 @@ def main():
     # while_with_controled_frequency_new(S=50, R=100, t=0, t_plus=150)
     
     # === Step five ===
-    while_with_conditional_split(S=1, R=2, t_plus=8)
+    while_with_conditional_split(S=1, R=2, t_plus=4)
     
     # === Kowsar's ==
     # kowsars_work()

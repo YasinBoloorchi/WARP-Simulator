@@ -2,7 +2,7 @@ l = [1,2,3,4,5]
 
 for i in range(1, len(l)+1):
     print("i: ", i)
-    print('Duration: ', i+1)
+    print('Duration: ', i+2)
     for j in range(len(l)-i):
         print("     j: ",j, ':',j+i+1)
         print('     l: ', l[j: j+i+1])

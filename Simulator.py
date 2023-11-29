@@ -1018,7 +1018,8 @@ class Simulator:
                 largest_release_clock = first_node.clock
                 largest_release_model = first_node.model['t']
                 largest_release_id = first_node.id
-                
+                break
+            
         for node in hash_table.values():
             if node.model != 'unsat' and node.release_count > largest_release_count:
                 largest_release_count = node.release_count
@@ -1028,6 +1029,33 @@ class Simulator:
                 
         return largest_release_clock, largest_release_count, largest_release_model
     
+    
+    def least_push_count(self, hash_table, threashold):
+        """Search through all the nodes in the hash table and find the
+        least push counts which's probability is higher than a threashold
+        """
+        
+        for n in list(hash_table.keys()):
+            if hash_table[n].model != 'unsat' and hash_table[n].path_cons >= threashold:
+                first_node = hash_table[n]
+                least_push_count = first_node.push_count
+                least_push_clock = first_node.clock
+                least_push_model = first_node.model['t']
+                least_push_id = first_node.id
+                break
+                
+        for node in hash_table.values():
+            if node.model != 'unsat' and\
+                node.push_count < least_push_count and\
+                    node.path_cons >= threashold:
+                    
+                least_push_count = node.release_count
+                least_push_clock = node.clock
+                least_push_model = node.model['t']
+                least_push_id = node.id
+        
+        return least_push_clock, least_push_count, least_push_model
+   
     
     def find_arrival_curve(self, hash_table, most_released_count, time_model):
         # Setting the target as the node with most release count
@@ -1251,20 +1279,21 @@ class Simulator:
         plt.show()
             
             
-    def get_arrival_curve(self, data):
+    def get_arrival_curve(self, data, verbose=False):
         arrival_curve = list()
         
         # for each time duration (td: time duration)
         for td in range(1, len(data)):
             delta = list()
-            print('     Time Duration: ',td)
+            if verbose: print('     Time Duration: ',td)
+            
             # we calculate maximum delta for each data[i: i+td+1]
             for i in range(len(data)-td):
                 segment = data[i: i+td+1]
-                print(f'data[{i}: {i+td+1}]', segment, '     max - min => ', max(segment) - min(segment))
+                if verbose: print(f'data[{i}: {i+td+1}]', segment, '     max - min => ', max(segment) - min(segment))
                 delta.append(max(segment) - min(segment))
                 
-            print('         Max is: ', max(delta))
+            if verbose: print('         Max is: ', max(delta))
             arrival_curve.append((td, max(delta)))
             
         return arrival_curve
@@ -1287,5 +1316,4 @@ class Simulator:
         # plt.show()
         plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
         plt.clf()
-        
         
