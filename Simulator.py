@@ -12,6 +12,7 @@ import z3
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
+from math import ceil
 
 class State:
     def __init__(self, workload={}):
@@ -676,7 +677,7 @@ class Simulator:
         return hash_table
     
 
-    def visualize_dag(self, file_name='Digraph' ,const_prob=0.8, path_trace=[]):
+    def visualize_dag(self, file_name='Digraph' , path_trace=[]):
         """Visualize the graph of the simulator and
         save it with the given file name in the ./Output/Graphs/ directory
 
@@ -699,14 +700,14 @@ class Simulator:
         graph = Digraph(f'./Output/Graphs/{file_name}', format='png')
         
         # Calling the helper function to draw the graph with the given parameters
-        self.draw_nodes_and_edges(root, graph, const_prob, path_trace)
+        self.draw_nodes_and_edges(root, graph, path_trace)
         
         # Generate the graph and clean the redundent files
         graph.view(cleanup=True)
         return
 
 
-    def draw_nodes_and_edges(self, root, graph, const_prob, path_trace):
+    def draw_nodes_and_edges(self, root, graph, path_trace):
         """Helpper function for the visualize_dag function to generate
         every node accessible from the root
 
@@ -754,14 +755,14 @@ class Simulator:
                 
                 
                     
-               # Generate node's vizual reperesentation
+                # Generate node's vizual reperesentation
                 graph.node(repr(node), 
                            label='ID: '+str(node.id)+'\n'
                            +'Path_cons: '+str(node.path_cons)+'\n'
                            +'Workload: '+str(node.get_workload_string())+'\n'
                            +'Sat model: '+str(node.model)+'\n'
                            +'Prob:'+str(factor(node.prob))+'\n'
-                           +f'prob (S={const_prob}): '+str(prob_float)+'\n'
+                           +f'prob Cons(S=0.8): '+str(prob_float)+'\n'
                            +'Clock: '+str(node.clock)+'\n'
                            +'Split Count: ' + str(node.split_count) +'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
@@ -799,7 +800,7 @@ class Simulator:
                   'Path Cons: '+hash_table.get(state).path_cons + '\t|'+\
                   str(hash_table.get(state).workload)+'\t|'+\
                   'Prob(Symbo): '+str(factor(hash_table.get(state).prob))+ '\t|'+\
-                  'Prob(Const): '+str(round(factor(hash_table.get(state).prob).subs(success_prob, const_prob), 3))+ '\t|'+\
+                  'Prob(Const): '+str(hash_table.get(state).prob_cons)+ '\t|'+\
                   'Queue: '+ ''.join(f'|{e}' for e in hash_table.get(state).queue)+'\t|'+\
                   'Release Count: '+ str(hash_table.get(state).release_count)+'\t|'+'\n'+\
                   'Push Count: '+ str(hash_table.get(state).push_count)+'\t|'+'\n'+\
@@ -1112,7 +1113,7 @@ class Simulator:
         least_push_clock = hash_table[list(hash_table.keys())[0]].clock
         for node in hash_table.values():
             if node.push_count < least_push_count and\
-               node.prob.subs(success_prob, cons_prob) > threshold:
+               node.prob_cons > threshold:
                    
                 least_push_count = node.push_count
                 least_push_clock = node.clock
@@ -1235,7 +1236,7 @@ class Simulator:
             x_values = [value.subs(t, t_subs) for value in x_values]
         
         # Plot it
-        plt.plot(x_values, y_values, marker='s', label=f'Cumulative arrival process', markerfacecolor='k')
+        plt.plot(x_values, y_values, marker='s', label=f'Cumulative release count', markerfacecolor='k')
         
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
@@ -1294,7 +1295,7 @@ class Simulator:
             x_values = [value.subs(t, t_subs) for value in x_values]
         
         # Plot it
-        plt.plot(x_values, y_values, marker='s', label=f'Cumulative pushed packets', markerfacecolor='k')
+        plt.plot(x_values, y_values, marker='s', label=f'Cumulative push count', markerfacecolor='k')
         
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
@@ -1313,7 +1314,7 @@ class Simulator:
         plt.clf()
             
             
-    def get_the_curve(self, data, verbose=False):
+    def get_arrival_curve(self, data, verbose=False):
         arrival_curve = list()
         
         # for each time duration (td: time duration)
@@ -1332,12 +1333,33 @@ class Simulator:
             
         return arrival_curve
 
+
+    def get_service_curve(self, data, verbose=False):
+        arrival_curve = list()
+        
+        # for each time duration (td: time duration)
+        for td in range(0, len(data)):
+            delta = list()
+            if verbose: print('     Time Duration: ',td)
+            
+            # we calculate maximum delta for each data[i: i+td+1]
+            for i in range(len(data)-td):
+                segment = data[i: i+td+1]
+                if verbose: print(f'data[{i}: {i+td+1}]', segment, '     max - min => ', max(segment) - min(segment))
+                delta.append(max(segment) - min(segment))
+            
+            print('delta :', delta)
+            if verbose: print('         Max is: ', min(delta))
+            arrival_curve.append((td, min(delta)))
+            
+        return arrival_curve
+
    
     def plot_arrival_curve(self, service_curve, plot_name):
         x_values, y_values = zip(*service_curve)
         
         # Plot it
-        plt.plot(x_values, y_values, marker='s', label=f'Arrival Curve', markerfacecolor='k')
+        plt.step(x_values, y_values, marker='s', label=f'Arrival Curve', markerfacecolor='k', where='pre')
         
         # Customization
         plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
@@ -1357,14 +1379,14 @@ class Simulator:
         
         # Customization
         
-        # x_values = [val - 1 * 0.05 for val in x_values]  # Adjust the x-values to separate the lines
-        # y_values = [val + 1 * 0.05 for val in y_values]  # Adjust the y-values to separate the lines
+        x_values = [val - 1 * 0.05 for val in x_values]  # Adjust the x-values to separate the lines
+        y_values = [val + 1 * 0.05 for val in y_values]  # Adjust the y-values to separate the lines
             
         
         # Plot it
-        plt.plot(x_values, y_values, marker='s', label=f'Service Curve', markerfacecolor='k')
+        plt.step(x_values, y_values, marker='s', label=f'Service Curve', markerfacecolor='k', where='pre')
         
-        plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
+        plt.xticks(np.arange(ceil(min(x_values)), ceil(max(x_values))+1, 1))
         plt.yticks(np.arange(0, max(y_values)+1, 1))
         plt.title(plot_name)
         plt.xlabel("Time Duration") #Δ
