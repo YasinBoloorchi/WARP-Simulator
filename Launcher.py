@@ -213,7 +213,10 @@ def while_with_conditional_split(S=100, R=100, t_plus=200, sc_threshold=0.1):
         
         # release_curve.append(simu.most_release_count(hash_table))
         
-        
+        ### End loop condition
+        if clock == t_plus:
+            end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_threshold)
+            return hash_table
         
         ##### if clock % S == 0: Push section
         S_condition_name = f'(t+{clock})%{S}'
@@ -232,10 +235,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200, sc_threshold=0.1):
         
         # service_curve.append(simu.least_push_count(hash_table, const_prob, 0.23))
         
-        ### End loop condition
-        if clock == t_plus:
-            end_loop(simulation_name, simu, hash_table, release_curve, push_curve)
-            return hash_table
+        
         
         clock += 1
         
@@ -294,7 +294,7 @@ def run_loop(instruction_file_path):
     return
 
 
-def end_loop(simulation_name, simu, hash_table, release_curve, push_curve):
+def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_threshold):
     
     # ?????????????????????????????????????????????????????????????
     # simu.test_of_correctness(hash_table=hash_table, std_out=True)
@@ -357,10 +357,41 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve):
     #   |__/
     #   |---------->
     push_curve_1d_data = [y for x, y, z in push_curve]
-    sc = simu.get_service_curve(push_curve_1d_data, verbose=True)
+    print("push_curve_1d_data: ", push_curve_1d_data)
+    sc = simu.get_service_curve(push_curve_1d_data, verbose=False)
     print("Service curve: ", sc)
-    simu.plot_service_curve(sc, simulation_name)
+    simu.plot_service_curve(sc, simulation_name, curve_name='Service Curve')
     
+    
+    # Service Curve with DFS
+    #   ^      __       |#               ( )
+    #   |   __/         |#              /   \\
+    #   |__/            |#           ( )     ( )
+    #   |---------->    |#          /   \   //  \
+    #   |               |#        ( )  ( ) ( )  ( )
+    #
+    #
+    all_founded_paths = simu.find_all_paths(hash_table, sc_threshold)
+    all_founded_paths_push_data = simu.all_paths_to_push_data(all_founded_paths)
+    # least_founded_path_push_data = simu.least_path_push_data(all_founded_paths_push_data)
+    # print("least_founded_path_push_data: ", least_founded_path_push_data)
+    
+    # sc = simu.get_service_curve(least_founded_path_push_data, verbose=False)
+    # print("DFS Service curve: ", sc)
+    # simu.plot_service_curve(sc, simulation_name+"_DFS", curve_name='DFS Service Curve')
+    
+    all_service_curves = list()
+    path_counter = 0
+    for path in all_founded_paths_push_data:
+        # print("path: ", path)
+        path_counter += 1
+        sc = simu.get_service_curve(path, verbose=False)
+        all_service_curves.append(sc)
+        print(f'Service Curve #{path_counter}: ', sc)
+        # simu.plot_service_curve(sc, simulation_name+"_DFS"+f"_Path#{path_counter}", curve_name=f'DFS Service Curve #{path_counter}')
+        
+    print("Minimum service curve: " ,min(all_service_curves))
+    simu.plot_service_curve(min(all_service_curves), simulation_name+"_DFS", curve_name='DFS Service Curve')
     
     
     # DAG Viz
@@ -380,11 +411,11 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve):
     #          /   \   //  \
     #        ( )  ( ) ( )  ( )
     # --- Verify every single curve by visualizing them all (TIME CONSUMING)
-    # simu.find_all_paths(hash_table, )
-    # ids_of_paths = simu.path_to_id(hash_table)
+    # All possible paths
+    # all_founded_paths = simu.find_all_paths(hash_table, threshold=0.3)
     # path_counter = 0
-    # for path in ids_of_paths:
-    #     simu.visualize_dag(simulation_name+f'Path#{path_counter}', const_prob=0.8, path_trace=path)
+    # for path in all_founded_paths:
+    #     simu.visualize_dag(simulation_name+f'Path#{path_counter}', path_trace=path)
     #     path_counter += 1
             
 
@@ -407,7 +438,7 @@ def main():
     # === Step five ===
     
     
-    while_with_conditional_split(S=1, R=2, t_plus=8, sc_threshold=0.8)
+    while_with_conditional_split(S=1, R=2, t_plus=8, sc_threshold=0.012)
     
     # === Kowsar's ==
     # kowsars_work()

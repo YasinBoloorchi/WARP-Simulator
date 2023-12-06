@@ -748,8 +748,8 @@ class Simulator:
                     else:
                         font_color = 'Black'
                 
-                for nodeID_prob in path_trace:
-                    if nodeID_prob[0] == node.id and nodeID_prob[1] == str(node.prob):
+                for target_node in path_trace:
+                    if target_node.id == node.id and str(target_node.prob) == str(node.prob):
                         fill_color = 'gold'
                         font_color = 'Black'
                 
@@ -974,7 +974,10 @@ class Simulator:
             print('final_result: (prob/count): ', final_result)
             return 1
 
-
+    
+    
+    # ---------- ARRIVAL CURVE & SERVICE CURVE ----------------
+    
     def find_largest_success(self, hash_table):
         """Search through all the nodes in the hash table and find the
         largest release count that is the same as successful push_count
@@ -1121,10 +1124,12 @@ class Simulator:
         return least_push_clock, least_push_count
 
 
-    def find_all_paths(self, hash_table, most_release_count, time_model, const_prob, fail_count, threshold):
+    # =========== UNDER CONSTRUCTION AREA =============
+    
+    def find_all_paths(self, hash_table, threshold, fail_count=2):
         print('Finding all paths')
-        # Setting the target as the node with most successful transmitted packet
-        largest_push_count = self.find_largest_success(hash_table)
+        # Setting the target as the leaf nodes
+        
         visited = set()
         paths = []
         success_prob = symbols('S')
@@ -1135,12 +1140,8 @@ class Simulator:
             #     return
             # visited.add(node)
             
-            node_cons_probability = round(factor(node.prob).subs(success_prob, const_prob), 3)
-            
             if node.model == 'unsat' or\
-                node.model['t'] != time_model or\
-                        node_cons_probability < threshold: #const_prob ** fail_count:
-                    # failure > fail_count or\
+                node.prob_cons < threshold:          # Other ideas: #const_prob ** fail_count: # failure > fail_count or\
                 return
             
             if self.is_leaf(hash_table, node): # and most_release_count == node.release_count:# == node.push_count:
@@ -1166,7 +1167,44 @@ class Simulator:
         #     print('-'*50)
         return paths
     
-         
+    
+    def all_paths_to_push_data(self, all_founded_paths):
+        
+        all_founded_paths_push_data = list()
+        
+        for path in all_founded_paths:
+            data = list()
+            for node in path:
+                clock_push_info = (node.clock, node.push_count)
+                if clock_push_info not in data:
+                    data.append(clock_push_info)
+
+            data = [y for x, y in data]
+            all_founded_paths_push_data.append(list(data))
+            
+        print("All founded push data: ")
+        counter = 0
+        for data in all_founded_paths_push_data:
+            print(f"Path #{counter}:", data)
+        
+        return all_founded_paths_push_data    
+            
+    
+    def least_path_push_data(self, all_founded_paths_push_data):
+        least_founded_path_push_data = list()
+        
+        for i in range(len(all_founded_paths_push_data[0])):
+            
+            least_founded_path_push_data.append(all_founded_paths_push_data[0][i])
+            
+            for data in all_founded_paths_push_data:
+                if data[i] < least_founded_path_push_data[i]:
+                    least_founded_path_push_data[i] = data[i]
+            
+        return least_founded_path_push_data
+            
+    
+      
     def paths_to_curves(self, hash_table, all_paths):
         
         time_symbol = symbols('t')
@@ -1223,6 +1261,8 @@ class Simulator:
         # plt.show()
 
 
+    # =========== UNDER CONSTRUCTION AREA =============
+    
     def plot_release_curve_2D(self, curve, plot_name, t_subs=''):
         # plot the arrival curve
         t = symbols('t')
@@ -1300,7 +1340,7 @@ class Simulator:
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
         plt.xticks(rotation=45)
-        plt.yticks(np.arange(0, max(y_values)+1, 1))
+        # plt.yticks(np.arange(0, max(y_values)+1, 1))
         
         # Plot's specifications
         plt.title(plot_name)
@@ -1348,7 +1388,7 @@ class Simulator:
                 if verbose: print(f'data[{i}: {i+td+1}]', segment, '     max - min => ', max(segment) - min(segment))
                 delta.append(max(segment) - min(segment))
             
-            print('delta :', delta)
+            if verbose: print('delta :', delta)
             if verbose: print('         Max is: ', min(delta))
             arrival_curve.append((td, min(delta)))
             
@@ -1359,7 +1399,7 @@ class Simulator:
         x_values, y_values = zip(*service_curve)
         
         # Plot it
-        plt.step(x_values, y_values, marker='s', label=f'Arrival Curve', markerfacecolor='k', where='pre')
+        plt.plot(x_values, y_values, marker='o', label=f'Arrival Curve', markerfacecolor='k')#, where='pre')
         
         # Customization
         plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
@@ -1374,7 +1414,7 @@ class Simulator:
         # plt.clf()
         
     
-    def plot_service_curve(self, service_curve, plot_name):
+    def plot_service_curve(self, service_curve, plot_name, curve_name):
         x_values, y_values = zip(*service_curve)
         
         # Customization
@@ -1384,7 +1424,7 @@ class Simulator:
             
         
         # Plot it
-        plt.step(x_values, y_values, marker='s', label=f'Service Curve', markerfacecolor='k', where='pre')
+        plt.plot(x_values, y_values, marker='s', label=curve_name, markerfacecolor='k')#, where='pre')
         
         plt.xticks(np.arange(ceil(min(x_values)), ceil(max(x_values))+1, 1))
         plt.yticks(np.arange(0, max(y_values)+1, 1))
@@ -1395,5 +1435,5 @@ class Simulator:
         plt.legend()
         # plt.show()
         plt.savefig("./Output/Plots/"+plot_name+'_service_curve')
-        plt.clf()
+        # plt.clf()
     
