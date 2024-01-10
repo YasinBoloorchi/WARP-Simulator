@@ -1,1 +1,0 @@
-[ ] c7727...	|Path Cons: t>=0	|{}	|Prob(Symbo): -S*(S - 2)	|Prob(Const): 0.960	|Queue: 	|Push Count: 25	|

@@ -1,2 +1,0 @@
-[ ] 3ca5b...	|Path Cons: F0AB==True && t>=0	|{'F0AB': True}	|Prob(Symbo): S	|Prob(Const): 0.800	|Queue: 	|Push Count: 1	|
-[ ] 2f4be...	|Path Cons: F0AB==False && t>=0	|{'F0AB': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.200	|Queue: |F0AB	|Push Count: 1	|

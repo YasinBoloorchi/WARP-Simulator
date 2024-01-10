@@ -1,0 +1,4 @@
+[ ] d8708...	|Path Cons: t>=0 && (t+0)%100!=0 && (t+0)%100!=0 && (t+100)%100!=0 && (t+100)%100==0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] 0e398...	|Path Cons: t>=0 && (t+0)%100!=0 && (t+0)%100!=0 && (t+100)%100!=0 && (t+100)%100!=0	|{}	|Prob(Symbo): 1	|Prob(Const): 1	|Queue: 	|Push Count: 0	|
+[ ] 11062...	|Path Cons: t>=0 && (t+0)%100==0 && (t+0)%100==0 && (t+100)%100==0 && (t+100)%100==0	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|
+[ ] 764f1...	|Path Cons: t>=0 && (t+0)%100==0 && (t+0)%100==0 && (t+100)%100==0 && (t+100)%100!=0	|{'F0AB': True, 'F1AB': True}	|Prob(Symbo): S**2	|Prob(Const): 0.810	|Queue: 	|Push Count: 2	|

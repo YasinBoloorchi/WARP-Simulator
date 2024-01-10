@@ -1,0 +1,1 @@
+[ ] 457b6...	|Path Cons: t>=0	|{'F0BA': True, 'F1BA': True, 'F2BA': True}	|Prob(Symbo): -S**3*(S - 2)**3	|Prob(Const): 0.885	|Queue: 	|Push Count: 12	|

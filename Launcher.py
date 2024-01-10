@@ -227,6 +227,9 @@ def while_with_conditional_split(S=100, R=100, t_plus=200, sc_threshold=0.1):
         # Apply a pull
         for state in list(hash_table.values()):                
             if S_condition_name+"==0" in state.conditions:
+                # Split the states based on the nested condition for the queue
+                # hash_table = simu.c_split('queue', tick_clock_flag=False, hash_table=hash_table)
+
                 hash_table = simu.single_pull(state, '', tick_clock_flag=True, hash_table=hash_table, tick_num=1, const_prob=const_prob)
 
             else:
@@ -400,7 +403,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
     #           ( )     ( )
     #          /   \   /   \
     #        ( )  ( ) ( )  ( )
-    # simu.visualize_dag(simulation_name)
+    simu.visualize_dag(simulation_name)
     
     
     
@@ -438,7 +441,7 @@ def main():
     # === Step five ===
     
     
-    while_with_conditional_split(S=1, R=2, t_plus=8, sc_threshold=0.012)
+    while_with_conditional_split(S=1, R=5, t_plus=10, sc_threshold=0.012)
     
     # === Kowsar's ==
     # kowsars_work()

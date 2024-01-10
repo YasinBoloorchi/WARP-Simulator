@@ -755,20 +755,22 @@ class Simulator:
                 
                 
                     
-                # Generate node's vizual reperesentation
+                # Graph information and style for the report
                 graph.node(repr(node), 
-                           label='ID: '+str(node.id)+'\n'
-                           +'Path_cons: '+str(node.path_cons)+'\n'
-                           +'Workload: '+str(node.get_workload_string())+'\n'
-                           +'Sat model: '+str(node.model)+'\n'
-                           +'Prob:'+str(factor(node.prob))+'\n'
-                           +f'prob Cons(S=0.8): '+str(prob_float)+'\n'
-                           +'Clock: '+str(node.clock)+'\n'
-                           +'Split Count: ' + str(node.split_count) +'\n'
+                        #    label='ID: '+str(node.id)+'\n'+
+                        #    'Workload: '+str(node.get_workload_string())+'\n'
+                           'Clock: '+str(node.clock)+'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
                            +f'Release Count: {node.release_count}'+'\n'
                            +f'Push Count: {node.push_count}'+'\n'
-                           +repr(node), style='filled', fillcolor=fill_color, fontcolor=font_color)
+                           +'Path_cons: '+str(node.path_cons).replace('&&', '&&\n')+'\n'
+                           +'Sat model: '+str(node.model)+'\n'
+                        #    +'Split Count: ' + str(node.split_count) +'\n'
+                           +'Prob:'+str(factor(node.prob))+'\n'
+                           +f'prob Cons(S=0.8): '+str(prob_float)+'\n',
+                        #    +repr(node), 
+                           style='filled', fillcolor=fill_color, fontcolor=font_color)
+                
                 
                 # Add node to the visited nodes
                 visited.add(node)
@@ -1185,6 +1187,7 @@ class Simulator:
         print("All founded push data: ")
         counter = 0
         for data in all_founded_paths_push_data:
+            counter += 1
             print(f"Path #{counter}:", data)
         
         return all_founded_paths_push_data    

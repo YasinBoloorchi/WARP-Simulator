@@ -1,2 +1,0 @@
-[ ] c6119...	|Path Cons: t>=0	|{'F0BA': True}	|Prob(Symbo): S	|Prob(Const): 0.800	|Queue: 	|Push Count: 1	|
-[ ] a837e...	|Path Cons: t>=0	|{'F0BA': False}	|Prob(Symbo): 1 - S	|Prob(Const): 0.200	|Queue: |F0BA	|Push Count: 1	|
