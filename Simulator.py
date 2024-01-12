@@ -697,7 +697,7 @@ class Simulator:
         root = self.root
 
         # Defining the file and format of the output graph
-        graph = Digraph(f'./Output/Graphs/{file_name}', format='png')
+        graph = Digraph(f'./Output/Graphs/{file_name}', format='pdf')
         
         # Calling the helper function to draw the graph with the given parameters
         self.draw_nodes_and_edges(root, graph, path_trace)
@@ -1283,16 +1283,16 @@ class Simulator:
         
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
-        plt.xticks(rotation=45)
+        # plt.xticks(rotation=45)
         plt.yticks(np.arange(0, max(y_values)+1, 1))
         
         # Plot's specifications
-        plt.title(plot_name)
+        # plt.title(plot_name)
         plt.legend()
         plt.grid()
         plt.xlabel("Time")
         plt.ylabel('Number of packets')
-        plt.savefig("./Output/Plots/"+plot_name+'_release_count')
+        plt.savefig("./Output/Plots/"+plot_name+'_release_count'+'.pdf', format='pdf')
         # plt.show()
         # Clear plot for later use
         # plt.clf()
@@ -1346,12 +1346,12 @@ class Simulator:
         # plt.yticks(np.arange(0, max(y_values)+1, 1))
         
         # Plot's specifications
-        plt.title(plot_name)
+        # plt.title(plot_name)
         plt.legend()
         # plt.grid()
         plt.xlabel("Time")
         plt.ylabel('Number of packets')
-        plt.savefig("./Output/Plots/"+plot_name+'_push_count')
+        plt.savefig("./Output/Plots/"+plot_name+'_push_count'+'.pdf', format='pdf')
         # plt.show()
         # Clear plot for later use
         plt.clf()
@@ -1407,13 +1407,13 @@ class Simulator:
         # Customization
         plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
         plt.yticks(np.arange(0, max(y_values)+1, 1))
-        plt.title(plot_name)
+        # plt.title(plot_name)
         plt.xlabel("Time Duration") #Δ
         plt.ylabel('Number of packets')
         plt.grid()
         plt.legend()
         # plt.show()
-        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
+        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve'+'.pdf', format="pdf")
         # plt.clf()
         
     
@@ -1431,12 +1431,12 @@ class Simulator:
         
         plt.xticks(np.arange(ceil(min(x_values)), ceil(max(x_values))+1, 1))
         plt.yticks(np.arange(0, max(y_values)+1, 1))
-        plt.title(plot_name)
+        # plt.title(plot_name)
         plt.xlabel("Time Duration") #Δ
         plt.ylabel('Number of packets')
         # plt.grid()
         plt.legend()
         # plt.show()
-        plt.savefig("./Output/Plots/"+plot_name+'_service_curve')
+        plt.savefig("./Output/Plots/"+plot_name+'_service_curve'+'.pdf', format="pdf")
         # plt.clf()
     

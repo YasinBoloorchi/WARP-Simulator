@@ -329,7 +329,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
     push_curve_2d_data = [(x, y) for x, y, z in push_curve]
     simu.plot_push_curve_2D(push_curve_2d_data, simulation_name)
     
-    
+    #   3D Plot
     #     ___ 
     #    /__/|
     #    |__|/
@@ -359,11 +359,11 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
     #   |   __/
     #   |__/
     #   |---------->
-    push_curve_1d_data = [y for x, y, z in push_curve]
-    print("push_curve_1d_data: ", push_curve_1d_data)
-    sc = simu.get_service_curve(push_curve_1d_data, verbose=False)
-    print("Service curve: ", sc)
-    simu.plot_service_curve(sc, simulation_name, curve_name='Service Curve')
+    # push_curve_1d_data = [y for x, y, z in push_curve]
+    # print("push_curve_1d_data: ", push_curve_1d_data)
+    # sc = simu.get_service_curve(push_curve_1d_data, verbose=False)
+    # print("Service curve: ", sc)
+    # simu.plot_service_curve(sc, simulation_name, curve_name='Service Curve')
     
     
     # Service Curve with DFS
@@ -394,7 +394,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
         # simu.plot_service_curve(sc, simulation_name+"_DFS"+f"_Path#{path_counter}", curve_name=f'DFS Service Curve #{path_counter}')
         
     print("Minimum service curve: " ,min(all_service_curves))
-    simu.plot_service_curve(min(all_service_curves), simulation_name+"_DFS", curve_name='DFS Service Curve')
+    simu.plot_service_curve(min(all_service_curves), simulation_name, curve_name='Service Curve')
     
     
     # DAG Viz
@@ -403,7 +403,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
     #           ( )     ( )
     #          /   \   /   \
     #        ( )  ( ) ( )  ( )
-    simu.visualize_dag(simulation_name)
+    # simu.visualize_dag(simulation_name)
     
     
     
@@ -441,7 +441,7 @@ def main():
     # === Step five ===
     
     
-    while_with_conditional_split(S=1, R=5, t_plus=10, sc_threshold=0.012)
+    while_with_conditional_split(S=1, R=2, t_plus=6, sc_threshold=0.012)
     
     # === Kowsar's ==
     # kowsars_work()
