@@ -285,7 +285,7 @@ class Simulator:
             state.tick_clock(tick_num)
             hash_table[state.id] = state
             return hash_table
-
+        
         state.instruction = f'Pull ({flow_name})'
         
         # -------- Copy fail_state --------
@@ -302,6 +302,10 @@ class Simulator:
         # Create a new state for success -----
 
         # Update workloads and probablity
+        # if state.prob_cons <= threshold:
+            
+        
+        
         if state.workload[flow_name] != True:
             success_state.workload[flow_name] = True
             success_state.prob = success_state.prob * prob  # Multiply S probability
@@ -328,7 +332,7 @@ class Simulator:
                 hash_table[success_state.id].tick_clock(tick_num)
                 # tick_clock_flag = False
         
-        hash_table[success_state.id].prob_cons = round(factor(hash_table[success_state.id].prob).subs(prob, const_prob), 3)
+        hash_table[success_state.id].prob_cons = round(float(factor(hash_table[success_state.id].prob).subs(prob, const_prob)),3)
         # Last step of generating soccess state: 
         #   Adding the success state to the hash_table
         state.right = hash_table[success_state.id]
@@ -341,7 +345,7 @@ class Simulator:
 
         # Updat probability
         fail_state.prob = fail_state.prob * (1-prob)
-        fail_state.prob_cons = round(factor(fail_state.prob).subs(prob, const_prob), 3)
+        fail_state.prob_cons = round(float(factor(fail_state.prob).subs(prob, const_prob)), 3)
         
         # Update unique id
         fail_state.update_id()
@@ -359,6 +363,63 @@ class Simulator:
 
         return hash_table
  
+    
+    def apply_drop(self, flow_name, tick_clock_flag, state, hash_table, prob=symbols('S'), tick_num=1, threshold=0, const_prob=0.8):
+        
+        
+        if flow_name == '':
+            state.tick_clock(tick_num)
+            hash_table[state.id] = state
+            return hash_table
+        
+        state.instruction = f'Drop ({flow_name})'
+        
+        
+        # ------ Copy success_state --------
+        success_state = copy.deepcopy(state)
+        # ----------------------------------
+        
+        
+        
+        # ------------------------------------
+        # Create a new state for success -----
+        
+        
+        if state.workload[flow_name] != True:
+            success_state.workload[flow_name] = True
+            success_state.prob = success_state.prob  # Multiply S probability # changed from: success_state.prob * prob --to--> success_state.prob
+            success_state.queue.pop(0)
+        else:
+            success_state.prob *= 1
+        
+        # Generate unique id
+        success_state.update_id()
+        
+        # Update new hashtable with success state (Merge section)
+        if success_state.id in hash_table:
+            hash_table[success_state.id].prob = hash_table[success_state.id].prob + success_state.prob  # Sum similar state probablity
+            
+            if hash_table[success_state.id].push_count == state.push_count: # Golden fix of push count
+                # Add to push count of the state
+                hash_table[success_state.id].push_count += 1
+        
+        else:
+            hash_table[success_state.id] = success_state
+            hash_table[success_state.id].push_count += 0  # changed from 1 to 0
+            # if flow_name != '':
+            if tick_clock_flag:
+                hash_table[success_state.id].tick_clock(tick_num)
+                # tick_clock_flag = False
+        
+        hash_table[success_state.id].prob_cons = round(float(factor(hash_table[success_state.id].prob).subs(prob, const_prob)), 3)
+        # Last step of generating soccess state: 
+        #   Adding the success state to the hash_table
+        state.right = hash_table[success_state.id]
+        
+
+        return hash_table
+        
+              
     
     def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0, const_prob=0.8):
         """Applying the pull function for all the states in the hash_table.
@@ -430,6 +491,9 @@ class Simulator:
             
         # Fork state only if the state path condition is satisfiable.
         if path_eval_result == 'sat':
+            
+            
+            
                 
             # If a flow name has been given, then pull the flow with the given name
             if flow_name != '':
@@ -437,7 +501,10 @@ class Simulator:
             
             # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
             elif len(state.queue) > 0:
-                hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+                if state.prob_cons <= threshold:
+                    self.apply_drop(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
+                else:
+                    hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
             
             # If no flow has been left in the queue then just go to sleep
             else:
@@ -697,7 +764,8 @@ class Simulator:
         root = self.root
 
         # Defining the file and format of the output graph
-        graph = Digraph(f'./Output/Graphs/{file_name}', format='pdf')
+        # graph = Digraph(f'./Output/Graphs/{file_name}', format='pdf')
+        graph = Digraph(f'./Output/Graphs/{file_name}')
         
         # Calling the helper function to draw the graph with the given parameters
         self.draw_nodes_and_edges(root, graph, path_trace)
@@ -758,7 +826,7 @@ class Simulator:
                 # Graph information and style for the report
                 graph.node(repr(node), 
                         #    label='ID: '+str(node.id)+'\n'+
-                        #    'Workload: '+str(node.get_workload_string())+'\n'
+                           'Workload: '+str(node.get_workload_string())+'\n'
                            'Clock: '+str(node.clock)+'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
                            +f'Release Count: {node.release_count}'+'\n'
@@ -1041,6 +1109,11 @@ class Simulator:
         least push counts which's probability is higher than a threashold
         """
         
+        # for node in hash_table.values():
+            # print(node, type(node))
+            # print('**** Clock: ', node.clock, '-- model: ', node.model, '-- push count: ', node.push_count, '-- cons prob:', node.prob_cons)
+        
+        
         for n in list(hash_table.keys()):
             if hash_table[n].model != 'unsat' and hash_table[n].prob_cons >= threashold:
                 first_node = hash_table[n]
@@ -1061,6 +1134,7 @@ class Simulator:
                 least_push_model = node.model['t']
                 least_push_id = node.id
         
+        # print('====> Returning result=> Least push clock:', least_push_clock, " -- least push count:", least_push_count, "-- least push model", least_push_model)
         return least_push_clock, least_push_count, least_push_model
    
     
@@ -1292,7 +1366,8 @@ class Simulator:
         plt.grid()
         plt.xlabel("Time")
         plt.ylabel('Number of packets')
-        plt.savefig("./Output/Plots/"+plot_name+'_release_count'+'.pdf', format='pdf')
+        # plt.savefig("./Output/Plots/"+plot_name+'_release_count'+'.pdf', format='pdf')
+        plt.savefig("./Output/Plots/"+plot_name+'_release_count')
         # plt.show()
         # Clear plot for later use
         # plt.clf()
@@ -1351,7 +1426,8 @@ class Simulator:
         # plt.grid()
         plt.xlabel("Time")
         plt.ylabel('Number of packets')
-        plt.savefig("./Output/Plots/"+plot_name+'_push_count'+'.pdf', format='pdf')
+        # plt.savefig("./Output/Plots/"+plot_name+'_push_count'+'.pdf', format='pdf')
+        plt.savefig("./Output/Plots/"+plot_name+'_push_count')
         # plt.show()
         # Clear plot for later use
         plt.clf()
@@ -1413,7 +1489,8 @@ class Simulator:
         plt.grid()
         plt.legend()
         # plt.show()
-        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve'+'.pdf', format="pdf")
+        # plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve'+'.pdf', format="pdf")
+        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
         # plt.clf()
         
     
@@ -1437,6 +1514,7 @@ class Simulator:
         # plt.grid()
         plt.legend()
         # plt.show()
-        plt.savefig("./Output/Plots/"+plot_name+'_service_curve'+'.pdf', format="pdf")
+        # plt.savefig("./Output/Plots/"+plot_name+'_service_curve'+'.pdf', format="pdf")
+        plt.savefig("./Output/Plots/"+plot_name+'_service_curve')
         # plt.clf()
     
