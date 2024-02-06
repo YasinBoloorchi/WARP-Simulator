@@ -58,7 +58,9 @@ class State:
 
     def update_id(self):
         self.update_path_cons()
-        data = self.get_workload_string() + " | " + self.path_cons
+        # self.queue.sort()
+        queue = ''.join(f'|{e}' for e in self.queue)
+        data = queue + " | " + self.path_cons + " | R:"  + str(self.release_count) + " | P:" + str(self.push_count)
         sha256_hash = hashlib.sha256()
         sha256_hash.update(data.encode('utf-8'))
         result = sha256_hash.hexdigest()
@@ -300,13 +302,7 @@ class Simulator:
         
         # ------------------------------------
         # Create a new state for success -----
-
-        # Update workloads and probablity
-        # if state.prob_cons <= threshold:
-            
-        
-        
-        if state.workload[flow_name] != True:
+        if flow_name in state.queue: # changed from: "if state.workload[flow_name] != True:" to "if flow_name not in state.queue"
             success_state.workload[flow_name] = True
             success_state.prob = success_state.prob * prob  # Multiply S probability
             success_state.queue.pop(0)
@@ -340,7 +336,7 @@ class Simulator:
         
         # ------------------------------------
         # Create a new state for failure -----
-        if state.workload[flow_name] == True:
+        if flow_name not in state.queue: # changed from: "if state.workload[flow_name] == True:" to "if flow_name not in state.queue:"
             return hash_table
 
         # Updat probability
@@ -385,7 +381,7 @@ class Simulator:
         # Create a new state for success -----
         
         
-        if state.workload[flow_name] != True:
+        if flow_name in state.queue: # changed from "if state.workload[flow_name] != True:" to "if flow_name in state.queue:"
             success_state.workload[flow_name] = True
             success_state.prob = success_state.prob  # Multiply S probability # changed from: success_state.prob * prob --to--> success_state.prob
             success_state.queue.pop(0)
@@ -418,9 +414,8 @@ class Simulator:
         
 
         return hash_table
-        
-              
-    
+               
+
     def pull(self, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0, const_prob=0.8):
         """Applying the pull function for all the states in the hash_table.
             Replacing each state with two new fork of it (Success and failure)
@@ -642,7 +637,7 @@ class Simulator:
             reduced_state = copy.deepcopy(state)
 
             # Drop the flow name from the workload
-            reduced_state.workload.pop(flow_name)
+            reduced_state.queue.pop(reduced_state.queue.index(flow_name)) # changed from "reduced_state.workload.pop(flow_name)" to "reduced_state.queue.pop(reduced_state.queue.index(flow_name))"
             reduced_state.update_id()
             
             # Update new hashtable with success state (Merge section)
@@ -825,8 +820,8 @@ class Simulator:
                     
                 # Graph information and style for the report
                 graph.node(repr(node), 
-                        #    label='ID: '+str(node.id)+'\n'+
-                           'Workload: '+str(node.get_workload_string())+'\n'
+                           label='ID: '+str(node.id)+'\n'+
+                        #    'Workload: '+str(node.get_workload_string())+'\n'
                            'Clock: '+str(node.clock)+'\n'
                            +'Queue: '+''.join(f'|{e}' for e in node.queue)+'\n'
                            +f'Release Count: {node.release_count}'+'\n'
@@ -868,7 +863,6 @@ class Simulator:
         for state in hash_table:
             log = '[ ] '+str(state)[:5]+ "..." +'\t|'+\
                   'Path Cons: '+hash_table.get(state).path_cons + '\t|'+\
-                  str(hash_table.get(state).workload)+'\t|'+\
                   'Prob(Symbo): '+str(factor(hash_table.get(state).prob))+ '\t|'+\
                   'Prob(Const): '+str(hash_table.get(state).prob_cons)+ '\t|'+\
                   'Queue: '+ ''.join(f'|{e}' for e in hash_table.get(state).queue)+'\t|'+\
@@ -930,10 +924,12 @@ class Simulator:
         # set the initial variables
         time_var = ['t', 'R', 'S', 'a']
         variables = {}
-        wrkload_var = list(state.workload.keys())
+        # wrkload_var = list(state.workload.keys()) # changed from this
+        wrkload_var = list()                        # to this
         
         # Converting the workload variables of a state 
         # to valid python variabl so they can be evaluate
+        
         for var_name in wrkload_var + time_var:
             locals()[var_name] = z3.Int(var_name)
             variables[var_name] = locals()[var_name]
@@ -1025,7 +1021,7 @@ class Simulator:
             
             for state in const_to_state_dict.get(const):
                 if std_out:
-                    print(state.get_workload_string() , '--Prob-->',state.prob.subs(symbols('S'), 0.8))
+                    print(state.queue , '--Prob-->',state.prob.subs(symbols('S'), 0.8)) # changed from "print(state.get_workload_string() ," to "print(state.queue ,"
                     
                 sum_of_probabilities += state.prob
 
@@ -1115,27 +1111,22 @@ class Simulator:
         
         
         for n in list(hash_table.keys()):
-            if hash_table[n].model != 'unsat' and hash_table[n].prob_cons >= threashold:
-                first_node = hash_table[n]
-                least_push_count = first_node.push_count
-                least_push_clock = first_node.clock
-                least_push_model = first_node.model['t']
-                least_push_id = first_node.id
+            if hash_table[n].model != 'unsat' and\
+                hash_table[n].prob_cons >= threashold:
+                    
+                least_node = hash_table[n]
+                max_delta = least_node.release_count - least_node.push_count
                 break
                 
         for node in hash_table.values():
-            # print('Push count: ', node.prob_)
+            delta = node.release_count - node.push_count
             if node.model != 'unsat' and\
-                node.push_count < least_push_count and\
+                node.push_count < least_node.push_count and\
                     node.prob_cons >= threashold:
-                    
-                least_push_count = node.push_count
-                least_push_clock = node.clock
-                least_push_model = node.model['t']
-                least_push_id = node.id
+                
+                least_node = node
         
-        # print('====> Returning result=> Least push clock:', least_push_clock, " -- least push count:", least_push_count, "-- least push model", least_push_model)
-        return least_push_clock, least_push_count, least_push_model
+        return least_node.clock, least_node.push_count, least_node.model
    
     
     def find_arrival_curve(self, hash_table, most_released_count, time_model):
@@ -1333,7 +1324,7 @@ class Simulator:
         info_text = f"Number of curves: {len(all_curves)}"
         plt.text(0.5, 0.95, info_text, transform=plt.gcf().transFigure, fontsize=12, ha='center')
         # plt.legend()
-        plt.savefig("./Output/Plots/"+plot_name+'_all_push_counts')
+        plt.savefig("./Output/Plots/"+plot_name+'_all_push_counts', dpi=300)
         # plt.clf()
         # plt.show()
 
@@ -1367,7 +1358,7 @@ class Simulator:
         plt.xlabel("Time")
         plt.ylabel('Number of packets')
         # plt.savefig("./Output/Plots/"+plot_name+'_release_count'+'.pdf', format='pdf')
-        plt.savefig("./Output/Plots/"+plot_name+'_release_count')
+        plt.savefig("./Output/Plots/"+plot_name+'_release_count', dpi=300)
         # plt.show()
         # Clear plot for later use
         # plt.clf()
@@ -1413,7 +1404,7 @@ class Simulator:
             x_values = [value.subs(t, t_subs) for value in x_values]
         
         # Plot it
-        plt.plot(x_values, y_values, marker='s', label=f'Cumulative push count', markerfacecolor='k')
+        plt.plot(x_values, y_values, marker='s', label=f'Cumulative least push count', markerfacecolor='k')
         
         #specify axis tick step sizes
         # plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
@@ -1427,7 +1418,7 @@ class Simulator:
         plt.xlabel("Time")
         plt.ylabel('Number of packets')
         # plt.savefig("./Output/Plots/"+plot_name+'_push_count'+'.pdf', format='pdf')
-        plt.savefig("./Output/Plots/"+plot_name+'_push_count')
+        plt.savefig("./Output/Plots/"+plot_name+'_push_count', dpi=300)
         # plt.show()
         # Clear plot for later use
         plt.clf()
@@ -1454,7 +1445,7 @@ class Simulator:
 
 
     def get_service_curve(self, data, verbose=False):
-        arrival_curve = list()
+        service_curve = list()
         
         # for each time duration (td: time duration)
         for td in range(0, len(data)):
@@ -1469,9 +1460,9 @@ class Simulator:
             
             if verbose: print('delta :', delta)
             if verbose: print('         Max is: ', min(delta))
-            arrival_curve.append((td, min(delta)))
+            service_curve.append((td, min(delta)))
             
-        return arrival_curve
+        return service_curve
 
    
     def plot_arrival_curve(self, service_curve, plot_name):
@@ -1490,7 +1481,7 @@ class Simulator:
         plt.legend()
         # plt.show()
         # plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve'+'.pdf', format="pdf")
-        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve')
+        plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve', dpi=300)
         # plt.clf()
         
     
@@ -1515,6 +1506,6 @@ class Simulator:
         plt.legend()
         # plt.show()
         # plt.savefig("./Output/Plots/"+plot_name+'_service_curve'+'.pdf', format="pdf")
-        plt.savefig("./Output/Plots/"+plot_name+'_service_curve')
+        plt.savefig("./Output/Plots/"+plot_name+'_service_curve', dpi=300)
         # plt.clf()
     

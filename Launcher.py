@@ -388,7 +388,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
     for path in all_founded_paths_push_data:
         # print("path: ", path)
         path_counter += 1
-        sc = simu.get_service_curve(path, verbose=False)
+        sc = simu.get_service_curve(path, verbose=True)
         all_service_curves.append(sc)
         print(f'Service Curve #{path_counter}: ', sc)
         # simu.plot_service_curve(sc, simulation_name+"_DFS"+f"_Path#{path_counter}", curve_name=f'DFS Service Curve #{path_counter}')
@@ -440,7 +440,7 @@ def main():
     
     # === Step five ===
     
-    while_with_conditional_split(S=1, R=5, t_plus=8, sc_threshold=0.2)
+    while_with_conditional_split(S=1, R=2, t_plus=4, sc_threshold=0.04)
     
     # === Kowsar's ==
     # kowsars_work()
