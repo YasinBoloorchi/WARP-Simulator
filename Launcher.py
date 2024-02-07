@@ -170,16 +170,13 @@ def while_with_conditional_split(S=100, R=100, t_plus=200, sc_threshold=0.1):
     
     print(simulation_name)
     clock = 0
-    q = list()
     simu = Simulator()
     hash_table = dict({simu.root.id:simu.root})
-    sleep_count = 0
     flow_counter = 0
     const_prob = 0.8
-    threshold = 0.2
     release_curve = list()
     push_curve = list()
-    service_curve = list()
+    
     # Initial release 
     # for i in range(5):
     #     hash_table = simu.release(f'F{i}AA', hash_table)
@@ -230,7 +227,7 @@ def while_with_conditional_split(S=100, R=100, t_plus=200, sc_threshold=0.1):
                 # Split the states based on the nested condition for the queue
                 # hash_table = simu.c_split('queue', tick_clock_flag=False, hash_table=hash_table)
 
-                hash_table = simu.single_pull(state, '', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=sc_threshold,const_prob=const_prob)
+                hash_table = simu.single_pull(state, '', tick_clock_flag=True, hash_table=hash_table, tick_num=1, threshold=sc_threshold, failure_threshold=2, const_prob=const_prob)
 
             else:
                 hash_table = simu.single_sleep(tick_clock_flag=True, hash_table=hash_table, state=state, tick_num=1)
@@ -388,7 +385,7 @@ def end_loop(simulation_name, simu, hash_table, release_curve, push_curve, sc_th
     for path in all_founded_paths_push_data:
         # print("path: ", path)
         path_counter += 1
-        sc = simu.get_service_curve(path, verbose=True)
+        sc = simu.get_service_curve(path, verbose=False)
         all_service_curves.append(sc)
         print(f'Service Curve #{path_counter}: ', sc)
         # simu.plot_service_curve(sc, simulation_name+"_DFS"+f"_Path#{path_counter}", curve_name=f'DFS Service Curve #{path_counter}')

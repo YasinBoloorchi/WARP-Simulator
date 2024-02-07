@@ -59,8 +59,8 @@ class State:
     def update_id(self):
         self.update_path_cons()
         # self.queue.sort()
-        queue = ''.join(f'|{e}' for e in self.queue)
-        data = queue + " | " + self.path_cons + " | R:"  + str(self.release_count) + " | P:" + str(self.push_count)
+        queue = ''.join(f'|{e[0]}' for e in self.queue)
+        data = queue + " | " + self.path_cons
         sha256_hash = hashlib.sha256()
         sha256_hash.update(data.encode('utf-8'))
         result = sha256_hash.hexdigest()
@@ -212,8 +212,8 @@ class Simulator:
 
 
     def release(self, flow_name, hash_table, tick_clock_flag=False, tick_num=1):
-        """Add the given flow_name with False status
-        to all the states' workloads in the hash table
+        """Add the given flow_name with zero number of failure as a list
+        to the queue of all the states
         """
         
         if not hash_table:
@@ -226,7 +226,7 @@ class Simulator:
             state.instruction = f'Release({flow_name})'
             new_state = copy.deepcopy(state)
             new_state.workload[flow_name] = False
-            new_state.queue.append(flow_name)
+            new_state.queue.append([flow_name, 0]) # add flow name & the number of failed transmition for that flow which initially is zero
             new_state.release_count += 1
             new_state.update_id()
             hash_table[new_state.id] = new_state
@@ -240,8 +240,8 @@ class Simulator:
     
 
     def single_release(self, flow_name, hash_table, state, tick_clock_flag=False, tick_num=1):
-        """Add the given flow_name with False status
-        to the given state's workload
+        """Add the given flow_name with zero number of failure as a list
+        to the queue of the given states
         """
               
         state = hash_table.pop(state.id)
@@ -252,7 +252,7 @@ class Simulator:
         state.instruction = f'Release({flow_name})'
         new_state = copy.deepcopy(state)
         new_state.workload[flow_name] = False
-        new_state.queue.append(flow_name)
+        new_state.queue.append([flow_name, 0]) # add flow name & the number of failed transmition for that flow which initially is zero
         new_state.release_count += 1
         new_state.update_id()
         hash_table[new_state.id] = new_state
@@ -288,7 +288,7 @@ class Simulator:
             hash_table[state.id] = state
             return hash_table
         
-        state.instruction = f'Pull ({flow_name})'
+        state.instruction = f'Pull ({flow_name[0]})'
         
         # -------- Copy fail_state --------
         fail_state = copy.deepcopy(state)
@@ -302,8 +302,9 @@ class Simulator:
         
         # ------------------------------------
         # Create a new state for success -----
-        if flow_name in state.queue: # changed from: "if state.workload[flow_name] != True:" to "if flow_name not in state.queue"
-            success_state.workload[flow_name] = True
+        # if flow_name in state.queue: # changed from: "if state.workload[flow_name] != True:" to "if flow_name not in state.queue"
+        if any(flow_name[0] == flow[0] for flow in state.queue):
+            # success_state.workload[flow_name[0]] = True
             success_state.prob = success_state.prob * prob  # Multiply S probability
             success_state.queue.pop(0)
         else:
@@ -336,8 +337,12 @@ class Simulator:
         
         # ------------------------------------
         # Create a new state for failure -----
-        if flow_name not in state.queue: # changed from: "if state.workload[flow_name] == True:" to "if flow_name not in state.queue:"
+        # if flow_name not in state.queue: # changed from: "if state.workload[flow_name] == True:" to "if flow_name not in state.queue:"
+        if not any(flow_name[0] == f[0] for f in state.queue):
             return hash_table
+
+        # Update flow failure count
+        fail_state.queue[fail_state.queue.index(flow_name)][1] += 1
 
         # Updat probability
         fail_state.prob = fail_state.prob * (1-prob)
@@ -381,8 +386,9 @@ class Simulator:
         # Create a new state for success -----
         
         
-        if flow_name in state.queue: # changed from "if state.workload[flow_name] != True:" to "if flow_name in state.queue:"
-            success_state.workload[flow_name] = True
+        # if flow_name in state.queue: # changed from "if state.workload[flow_name] != True:" to "if flow_name in state.queue:"
+        if any(flow_name == f for f in state.queue):
+            # success_state.workload[flow_name] = True
             success_state.prob = success_state.prob  # Multiply S probability # changed from: success_state.prob * prob --to--> success_state.prob
             success_state.queue.pop(0)
         else:
@@ -460,7 +466,7 @@ class Simulator:
         return hash_table
 
     
-    def single_pull(self, state, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.2, const_prob=0.8):
+    def single_pull(self, state, flow_name, tick_clock_flag, hash_table, prob=symbols('S'), tick_num=1, threshold=0.2, failure_threshold=3, const_prob=0.8):
         """Apply a pull only on the given state
 
         Args:
@@ -496,7 +502,7 @@ class Simulator:
             
             # If no flow name has been given, then pick one from the queue to pull (If there is one to pick)
             elif len(state.queue) > 0:
-                if state.prob_cons <= threshold:
+                if state.queue[0][1] >= failure_threshold: # changed from "if state.prob_cons <= threshold:" 
                     self.apply_drop(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
                 else:
                     hash_table = self.apply_pull(state.queue[0], tick_clock_flag, state, hash_table, prob, tick_num, threshold, const_prob)
