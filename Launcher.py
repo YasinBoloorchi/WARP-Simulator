@@ -437,7 +437,7 @@ def main():
     
     # === Step five ===
     
-    while_with_conditional_split(S=1, R=2, t_plus=4, sc_threshold=0.04)
+    while_with_conditional_split(S=1, R=2, t_plus=6, sc_threshold=0.04)
     
     # === Kowsar's ==
     # kowsars_work()

@@ -10,14 +10,14 @@ def plot_arrival_curve(arrival_curve, plot_name='Arrival Curve Examples'):
     # Customization
     plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
     plt.yticks(np.arange(0, max(y_values)+1, 1))
-    # plt.title(plot_name)
+    plt.title(plot_name)
     plt.xlabel("Time Duration") #Δ
     plt.ylabel('Number of packets')
     plt.grid()
     plt.legend()
-    plt.show()
+    # plt.show()
     # plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve'+'.pdf', format="pdf")
-    # plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve', dpi=300)
+    plt.savefig("./Output/Plots/"+plot_name+'_arrival_curve', dpi=300)
     # plt.clf()
 
 
@@ -44,15 +44,17 @@ def get_arrival_curve(data, verbose=False):
     
 # CNP = [0,0,1,1,1,2,2,2,2,2,3,3,3,3,3,4]
 
+
 # case 1
 CNP = [0,0,1,1,2,2,3]
 
 # case 2
 # CNP = [0,1,1,2,2,3,3]
 
-# case 3?
-# CNP = [1,1,2,2,3,3,4,4,5,5]
+# case 3
+# CNP = [1,1,2,2,3,3,4]
 
-result = get_arrival_curve(CNP)
-print(result)
-plot_arrival_curve(result)
+
+arrival_curve = get_arrival_curve(CNP)
+print(arrival_curve)
+plot_arrival_curve(arrival_curve, str(CNP))

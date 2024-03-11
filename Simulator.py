@@ -1475,7 +1475,7 @@ class Simulator:
         x_values, y_values = zip(*service_curve)
         
         # Plot it
-        plt.plot(x_values, y_values, marker='o', label=f'Arrival Curve', markerfacecolor='k')#, where='pre')
+        plt.step(x_values, y_values, marker='o', label=f'Arrival Curve', markerfacecolor='k', where='pre')
         
         # Customization
         plt.xticks(np.arange(min(x_values), max(x_values)+1, 1))
